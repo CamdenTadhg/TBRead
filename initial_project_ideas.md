@@ -1,3 +1,7 @@
 # Project Ideas
 
-In this file (but not restricted to), you can use to get used to working on this repository and jot down project ideas to easily be shared with your mentors and to keep the history of!
+ToBeRead List Manager: This is a tool designed for content creators in Bookstagram or BookTok or BookTube or other book-related communities where managing a TBR list is relevant. The site will allow you to create an account and create a TBR list. You will then be able to set your reading speed and time per day spent reading and the system will automatically estimate how long each book will take to read. You can then schedule your TBR list on a calendar so you know when to request books from the library, when to start reading and whn you need to be done to post your new content on time. 
+
+Texting Flash Cards: This is a tool designed for language study. You can create an account and enter your vocabulary words. Based on the options you select, the system will text you a vocabulary word on a regular basis. You will respond with the translation and receive feedback of whether you were correct or not. The system will track how often you get a vocabulary word correct and will take it off your study list when you have mastered it. 
+
+Plant Care Manager: This is a tool for managing care of your house plants. You can create an account and create a listing of all your house plants. Then you can set frequency for watering, fertilizing, and up-potting. The system will create a calendar to show you when each task needs to be completed and optionally will text you to remind you. 
