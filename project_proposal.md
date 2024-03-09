@@ -22,6 +22,6 @@ Schedule books on a calendar or have the system schedule books randomly for you.
 Set up email or text reminders for key events from the calendar such as requesting the book from the library and starting reading
 Create and join reading challenges and track your completion of the challenge
 Become "friends" with other users and challenge them to reading challenges
-Maintain notes & scripts for content production
+Maintain notes & scripts for content production 
 
 
