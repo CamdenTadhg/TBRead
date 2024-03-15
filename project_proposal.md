@@ -11,11 +11,11 @@ Social media content producers who are part of Booktok, Booktube, and other soci
 Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTForms
 
 ## Data
-Google Books API to import titles into the database
-Library of Congress API to import titles into the database
-Google Calendar API to add scheduled events to a google calendar
-Twilio API for text messaging
-OpenAI for script drafts? 
+- Google Books API to import titles into the database
+- Library of Congress API to import titles into the database
+- Google Calendar API to add scheduled events to a google calendar
+- Twilio API for text messaging
+- OpenAI for script drafts? 
 
 ## Features
 - Create new TBR list by importing titles from Google Books
