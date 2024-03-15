@@ -17,11 +17,18 @@ Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTF
 - Twilio API for text messaging
 - OpenAI for script drafts? 
 
-## Features
+## Features: Essentials
 - Create new TBR list by importing titles from Google Books
-- Import existing TBR list from a spreadsheet
 - Schedule books on a calendar or have the system schedule books randomly for you. 
 - Set up email or text reminders for key events from the calendar such as requesting the book from the library and starting reading
 - Create and join reading challenges and track your completion of the challenge
+- Maintain notes & scripts for content production
+
+## Features: Stretch Goals
+- Import existing TBR list from a spreadsheet
+- OpenAI connection for script drafts
 - Become "friends" with other users and challenge them to reading challenges
-- Maintain notes & scripts for content production                 
+
+## Database Schema
+
+## Sample of User Flow
