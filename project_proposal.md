@@ -32,3 +32,7 @@ Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTF
 ## Database Schema
 
 ## Sample of User Flow
+
+## Potential Issues
+
+## Security Considerations
