@@ -32,6 +32,7 @@ Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTF
 - Link to local library for requesting books
 
 ## Database Schema
+![database schema](/Planning/Initial%20Schema%20Sketch.jpg)
 
 ## Sample of User Flow
 
