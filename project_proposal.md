@@ -28,11 +28,20 @@ Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTF
 - Import existing TBR list from a spreadsheet
 - OpenAI connection for script drafts
 - Become "friends" with other users and challenge them to reading challenges
+- Option to purchase the book from a local bookstore
+- Link to local library for requesting books
 
 ## Database Schema
 
 ## Sample of User Flow
 
 ## Potential Issues
+- I haven't done a ton of testing with the API, but Google Book's normal interface can be a bit finicky about finding the right book. Sometimes it pulls results that don't make a lot of sense. I have selected the Library of Congress API as a backup in case I have trouble getting the Google Book API to be accurate enough in its searching.
+- My major potential issue will be time. I'd like to make a very full-featured website and I have a limited amount of time in which to do it.
+- I doubt that I will predict everything I need the database to contain before I start coding, so if I don't want to delete my whole database every time I realize I need a new field, I'll need to learn to use Alter statements to alter my model after it has been created.
+- I expect learning how to export the calendar data into a google calendar to be one of the more challenging tasks. 
 
 ## Security Considerations
+- User security will be handled by bcrypt using hashed passwords.
+- User records will all be private by default. If I implement the friends feature, I would try to make it so you can open your record to your friends if you want.
+- No financial information will be involved in the website. Even if I figure out the links to local bookstores, all the purchasing would happen on the bookstore's website, not on my website. 
