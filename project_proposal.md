@@ -35,6 +35,7 @@ Python, Flask, PostgreSQL, SQLAlchemy, Render, Jinja, Javascript, HTML, CSS, WTF
 ![database schema](/Planning/Initial%20Schema%20Sketch.jpg)
 
 ## Sample of User Flow
+![sample user flow](/Planning/Sample%20User%20Flow.jpg)
 
 ## Potential Issues
 - I haven't done a ton of testing with the API, but Google Book's normal interface can be a bit finicky about finding the right book. Sometimes it pulls results that don't make a lot of sense. I have selected the Library of Congress API as a backup in case I have trouble getting the Google Book API to be accurate enough in its searching.
