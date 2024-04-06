@@ -1,9 +1,3 @@
-## Create models
-    ## figure out enum in sqlalchemy
-    ## relationships
-    ## on delete cascade
-    ## methods
-    ## testing
 ## set up app.py
 ## set up base.html
 ## Implement user functionality
