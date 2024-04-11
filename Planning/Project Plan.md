@@ -31,6 +31,7 @@ TO DO LIST:
     route: https://www.googleapis.com/books/v2/volumes
     requests: query field: intitle, inauthor, isbn
     data fields:    items[].volumeInfo.title
+                    items[].volumeInfo.subtitle
                     items[].volumeInfo.authors
                     items[].volumeInfo.publisher
                     items[].volumeInfo.publishedDate

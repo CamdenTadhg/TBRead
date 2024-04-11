@@ -1,0 +1,28 @@
+.homepage {
+    width: 200px;
+}
+
+.dark {
+    background-color: black;
+    color: white;
+}
+
+.dark a:hover{
+    color: white;
+}
+
+.navbar-link{
+    margin: 10px;
+}
+
+.navbar-button {
+    color: white;
+}
+
+.form-control{
+    margin: 10px;
+}
+
+.user_image {
+    width: 50px;
+}

@@ -4,6 +4,7 @@ import enum
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
+from datetime import datetime
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -19,13 +20,13 @@ class EventCategory(enum.Enum):
     Finish = 3
     Post = 4
 
-class Friendship(db.Model):
-    """connection between friending user and friended user"""
+# class Friendship(db.Model):
+#     """connection between friending user and friended user"""
 
-    __tablename__ = "friendships"
+#     __tablename__ = "friendships"
 
-    friending_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-    friended_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+#     friending_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+#     friended_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
 
 class User(db.Model): 
     """ User in the TBRead system"""
@@ -36,7 +37,7 @@ class User(db.Model):
     username = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
-    user_image = db.Column(db.Text, default = '/static/images/default-pic.png')
+    user_image = db.Column(db.Text, default = '/static/images/image.png')
     reading_time_work_day = db.Column(db.Float(precision=2))
     reading_time_day_off = db.Column(db.Float(precision=2))
     reading_speed_adult = db.Column(db.Integer)
@@ -44,19 +45,19 @@ class User(db.Model):
     reading_speed_children = db.Column(db.Integer)
     calendar_id = db.Column(db.Text, unique=True)
     posting_frequency = db.Column(db.Text)
-    posting_day = db.Column(db.Array)
+    posting_day = db.Column(db.Text)
     prep_days = db.Column(db.Integer)
     content_account = db.Column(db.Text)
-    calendar = db.Column(db.Array)
+    calendar = db.Column(db.Text)
+    email_reminders = db.Column(db.Boolean)
 
-    user_books = db.relationship("User_Book", backref="users", ondelete="cascade")
-    books = db.relationship("Book", secondary="users_books", backref="users")
-    lists = db.relationship("List", seconary="users_books_lists", backref="users", ondelete="cascade")
-    friends = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friending_user == user_id), ondelete="cascade")
-    friends_of = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friended_user == user_id), ondelete="cascade")
-    events = db.relationship("Event", backref="users", ondelete="cascade")
+    user_books = db.relationship("User_Book", backref="users", cascade="all, delete-orphan")
+    lists = db.relationship("List", backref="users", cascade="all, delete-orphan")
+    # friends = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friending_user == user_id), cascade="all, delete-orphan")
+    # friends_of = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friended_user == user_id), cascade="all, delete-orphan")
+    events = db.relationship("Event", backref="users", cascade="all, delete-orphan")
     challenges = db.relationship("Challenge", secondary="users_challenges", backref="users")
-    user_challenges = db.relationship("User_Challenge", backref="users", ondelete="cascade")
+    user_challenges = db.relationship("User_Challenge", backref="users", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.user_id}: {self.username}, {self.email}>"
@@ -81,7 +82,7 @@ class User(db.Model):
 
         user = User(
             username=username, 
-            password=password, 
+            password=hashed_pwd, 
             email=email, 
             user_image=user_image
         )
@@ -114,9 +115,10 @@ class Book(db.Model):
     publisher = db.Column(db.Text, nullable=False)
     pub_date = db.Column(db.Text)
     description = db.Column(db.Text)
-    isbn = db.Column(db.Integer(13))
+    isbn = db.Column(db.BigInteger)
     page_count = db.Column(db.Integer)
     thumbnail = db.Column(db.Text)
+    added = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     authors = db.relationship("Author", secondary="books_authors", backref="books")
 
@@ -173,7 +175,7 @@ class User_Book(db.Model):
     publisher = db.Column(db.Text)
     pub_date = db.Column(db.Text)
     description = db.Column(db.Text)
-    isbn = db.Column(db.Integer(13))
+    isbn = db.Column(db.Integer)
     page_count = db.Column(db.Integer)
     age_category = db.Column(db.Enum(AgeCategory))
     thumbnail = db.Column(db.Text)
