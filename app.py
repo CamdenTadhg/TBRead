@@ -94,22 +94,18 @@ def login():
     if g.user: 
         flash('You are already logged in.', 'danger')
         return redirect('/')
-    
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        user = User.authenticate(form.login_username.data,
-                                 form.login_password.data)
+      
+    user = User.authenticate(request.json['username'],
+                                 request.json['password'])
         
-        if user: 
-            do_login(user)
-            flash(f'Hello, {user.username}', 'success')
-            return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
-        
-        flash('Invalid credentials', 'danger')
-        return redirect('/#signupModal')
-
-
+    if user: 
+        do_login(user)
+        flash(f'Hello, {user.username}', 'success')
+        return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
+    elif not db.session.execute(db.select(User).where(User.username == request.json['username'])).scalar():
+        return jsonify({'error': 'Invalid username'})
+    else:
+        return jsonify({'error': 'Invalid password'})
     
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -120,7 +116,6 @@ def logout():
         return redirect('/')
     else:
         do_logout()
-        ## flash not working
         flash('You have logged out', 'success')
         return redirect('/')
 
@@ -163,17 +158,6 @@ def homepage():
 
 
 ## Implement user functionality
-    ## login form validation
-        ## is username incorrect?
-            ## define objects to work with
-            ## send data via axios
-            ## deal with returned error
-        ## is password incorrect?
-            ## define objects to work with
-            ## send data via axios
-            ## deal with returned error
-    ## clear errors when new error is posted
-    ## clear forms when cancel is pressed
     ## create form for user profile page
     ## create user profile page
     ## patch user
@@ -193,6 +177,7 @@ def homepage():
 ## Implement challenge functionality 
 ## Styling
     ## favicon.ico
+    ## fix it so that on login, you get the appropriate flash message
 ## Documentation
 ## Deployment
 ## Small Screen Styling
