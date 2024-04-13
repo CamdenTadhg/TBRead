@@ -8,7 +8,7 @@ class UserAddForm(FlaskForm):
     signup_username = StringField('Username', validators=[DataRequired()])
     signup_password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8)])
-    email = EmailField('E-mail', validators=[DataRequired()])
+    signup_email = EmailField('E-mail', validators=[DataRequired()])
     user_image = StringField('(Optional) User Image URL')
 
 class LoginForm(FlaskForm):

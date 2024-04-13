@@ -3,10 +3,12 @@ let $signupPassword2 = $('#password2');
 let $signupUsername = $('#signup_username');
 let $loginUsername = $('#login_username');
 let $loginPassword = $('#login_password');
+let $signup_email = $('#signup_email');
 let $email = $('#email');
 let $userImage = $('#user_image');
 let $signupButton = $('#signup_button');
 let $loginButton = $('#login_button')
+let $sendreminderButton = $('#send_reminder_button');
 let $modalBody = $('.modal-body')
 let $cancelButton = $('.cancel-button');
 let $closeButton = $('.close-button');
@@ -37,17 +39,18 @@ $signupButton.on('click', async function(event){
     }
 });
 
-//send data via axios
+//send signup data via axios
 async function signupViaAxios(){
     const username = $signupUsername.val();
     const password = $signupPassword.val();
-    const email = $email.val();
+    const email = $signup_email.val();
     const userImage = $userImage.val();
     const userData = {username: username, password: password, email: email, userImage: userImage};
     const response = await axios.post('/signup', userData)
     return response.data
 }
 
+//deal with signup returned error
 function signupReturnedErrorHandler(response){
     if (response['error'] === 'Email already taken'){
         $errorDiv = $('<div class="alert alert-danger error-div">Email already registered. Please try logging in.</div>');
@@ -72,7 +75,7 @@ $loginButton.on('click', async function(event){
     }
 });
 
-//send data via axios
+//send login data via axios
 async function loginViaAxios(){
     const username = $loginUsername.val();
     const password = $loginPassword.val();
@@ -81,7 +84,7 @@ async function loginViaAxios(){
     return response.data;
 }
 
-//deal with returned error
+//deal with login returned error
 function loginReturnedErrorHandler(response){
     if (response['error'] === 'Invalid username'){
         $errorDiv = $('<div class="alert alert-danger error-div">Invalid username</div>');
@@ -91,6 +94,27 @@ function loginReturnedErrorHandler(response){
         $errorDiv = $('<div class="alert alert-danger error-div">Invalid password</div>');
         $modalBody.append($errorDiv);
     }
+}
+
+//send username reminder event handler
+$sendreminderButton.on('click', async function(event){
+    console.log('send reminder button clicked')
+    event.preventDefault();
+    $modalBody.find('.error-div').remove();
+    response = await usernameReminderViaAxios();
+    if (response['error'])
+        $errorDiv = $('<div class="alert alert-danger error-div">Email not in database. Please signup.</div>');
+        $modalBody.append($errorDiv);
+})
+
+//send email via axios to send username reminder
+async function usernameReminderViaAxios(){
+    console.log('entering usernameReminderViaAxios');
+    const email = $email.val();
+    const data = {email: email};
+    const response = await axios.post('/forgotusername', data);
+    console.log(response);
+    return response.data;
 }
 
 //clear forms and errors when cancel button is pressed

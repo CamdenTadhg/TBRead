@@ -124,7 +124,7 @@ def logout():
         flash('You have logged out', 'success')
         return redirect('/')
     
-@app.route('/forgotusername', methods=['GET', 'POST'])
+@app.route('/forgotusername', methods=['POST'])
 def send_username_reminder():
     """Sends user an email reminding them of their username"""
 
@@ -132,21 +132,16 @@ def send_username_reminder():
         flash('You are already logged in', 'danger')
         return redirect(f'/users/${g.user.user_id}/lists/tbr')
     
-    form=EmailForm()
-
-    if form.validate_on_submit():
-        email = form.email.data
-        user = db.session.execute(db.select(User).where(User.email == email)).scalar()
-        if user:
-            msg = Message(subject='Username reminder', sender='theenbydeveloper@gmail.com', recipients=[email])
-            msg.html = render_template('emails/usernamereminderemail.html', username=user.username)
-            mail.send(msg)
-            return redirect ('/')
-        else: 
-            form.email.errors = ['Email not in database. Please signup.']
+    email = request.json['email']
+    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+    if user:
+        msg = Message(subject='Username reminder', sender='theenbydeveloper@gmail.com', recipients=[user.email])
+        msg.html = render_template('emails/usernamereminderemail.html', username=user.username)
+        mail.send(msg)
+        return redirect('/')
+    else: 
+        return jsonify({'error': 'Email not in database. Please signup.'})
     
-    return render_template('forgotusername.html', form=form)
-
 #########################################################################################
 # User Routes
 
@@ -229,20 +224,31 @@ def homepage():
     else: 
         form = UserAddForm()
         form2 = LoginForm()
+        form3 = EmailForm()
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
-        return render_template('home-anon.html', display_books=display_books, form=form, form2=form2)
+        return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
 
 
 
 ## Implement user functionality
-    ## put in 4 users
-    ## create page for password reset
-    ## password reset
+    ## create modal for password reset
+    ## send email via axios
+    ## route to send password reset
     ## testing routes
     ## testing javascript
+    ## switch to test database
+    ## run all tests (include test_models.py)
 ## Implement create lists functionality 
+    ## automatically create three lists when a user is created (TBR, DNF, Done)
+    ## add books button
+    ## add books to TBR functionality
+    ## display TBR appropriately
+    ## move books from one list to another functionality
+    ## display other two lists appropriately
+    ## testing routes
+    ## testing javascript
 ## Implement schedule books functionality 
 ## Implement email reminders functionality 
 ## Implement scripts & notes functionality 
@@ -251,7 +257,6 @@ def homepage():
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message
     ## reformat user profile 
-    ## username/password reminder as modal (https://stackoverflow.com/questions/19528173/bootstrap-open-another-modal-in-modal)
 ## Documentation
 ## Deployment
 ## Small Screen Styling
