@@ -37,7 +37,7 @@ class User(db.Model):
     username = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
-    user_image = db.Column(db.Text, default = '/static/images/image.png')
+    user_image = db.Column(db.Text)
     reading_time_work_day = db.Column(db.Float(precision=2))
     reading_time_day_off = db.Column(db.Float(precision=2))
     reading_speed_adult = db.Column(db.Integer)
@@ -50,6 +50,7 @@ class User(db.Model):
     content_account = db.Column(db.Text)
     calendar = db.Column(db.Text)
     email_reminders = db.Column(db.Boolean)
+    password_reset_token = db.Column(db.String)
 
     user_books = db.relationship("User_Book", backref="users", cascade="all, delete-orphan")
     lists = db.relationship("List", backref="users", cascade="all, delete-orphan")

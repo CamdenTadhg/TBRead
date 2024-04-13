@@ -58,22 +58,18 @@ def signup():
 
     if g.user: 
         flash('You are already logged in', 'danger')
-        return redirect(f'/users/{g.user.user_id}/lists/tbr')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')    
 
-    print('**************************')
-    print(list(request.json))
-    print(request.json['username'])
-    print(request.json['password'])
-    print(request.json['email'])
-    print(request.json['userImage'])
-    print('*********************')    
+    user_image = request.json['userImage']
+    if user_image == '':
+        user_image = '/static/images/image.png'
 
     try: 
         user = User.signup(
             username=request.json['username'],
             password=request.json['password'], 
             email=request.json['email'],
-            user_image = request.json['userImage']
+            user_image = user_image
         )
         db.session.commit()
     except IntegrityError as e:
@@ -170,8 +166,21 @@ def display_tbr_list(user_id):
     
     return render_template('tbrlist.html')
 
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """ Delete user"""
 
+    if not g.user:
+        flash('Please log in', 'danger')
+    else:
+        do_logout()
 
+        db.session.delete(g.user)
+        db.session.commit()
+
+        flash('Account deleted', 'danger')
+
+    return redirect('/')
 
 #########################################################################################
 # Homepage
