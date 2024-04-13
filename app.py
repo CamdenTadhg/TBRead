@@ -162,7 +162,6 @@ def homepage():
 
 
 
-## Select a free theme
 ## Implement user functionality
     ## login form validation
         ## is username incorrect?
@@ -180,10 +179,11 @@ def homepage():
     ## patch user
     ## form validation
     ## delete user
-    ## create modal for password reset
-    ## password reset
-    ## create modal for sending username
+    ## create page for sending username
     ## forgot username
+    ## put in 4 users
+    ## create page for password reset
+    ## password reset
     ## testing routes
     ## testing javascript
 ## Implement create lists functionality 

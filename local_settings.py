@@ -1,0 +1,1 @@
+MAIL_PASSWORD = 'srql lgzm ujsz alpq'
