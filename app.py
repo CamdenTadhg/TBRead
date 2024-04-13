@@ -4,6 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Book
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_mail import Mail, Message
+from local_settings import MAIL_PASSWORD
 import pdb
 
 CURR_USER_KEY = "curr_user"
@@ -19,6 +21,13 @@ app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 app.config['SESSION_COOKIE_HTTPONLY'] = False
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'theenbydeveloper@gmail.com'
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
+
+mail=Mail(app)
 
 debug=DebugToolbarExtension(app)
 
@@ -114,6 +123,29 @@ def logout():
         do_logout()
         flash('You have logged out', 'success')
         return redirect('/')
+    
+@app.route('/forgotusername', methods=['GET', 'POST'])
+def send_username_reminder():
+    """Sends user an email reminding them of their username"""
+
+    if g.user: 
+        flash('You are already logged in', 'danger')
+        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+    
+    form=EmailForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+        if user:
+            msg = Message(subject='Username reminder', sender='theenbydeveloper@gmail.com', recipients=[email])
+            msg.html = render_template('emails/usernamereminderemail.html', username=user.username)
+            mail.send(msg)
+            return redirect ('/')
+        else: 
+            form.email.errors = ['Email not in database. Please signup.']
+    
+    return render_template('forgotusername.html', form=form)
 
 #########################################################################################
 # User Routes
@@ -205,9 +237,6 @@ def homepage():
 
 
 ## Implement user functionality
-    ## delete user
-    ## create page for sending username
-    ## forgot username
     ## put in 4 users
     ## create page for password reset
     ## password reset
@@ -221,6 +250,8 @@ def homepage():
 ## Styling
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message
+    ## reformat user profile 
+    ## username/password reminder as modal (https://stackoverflow.com/questions/19528173/bootstrap-open-another-modal-in-modal)
 ## Documentation
 ## Deployment
 ## Small Screen Styling
