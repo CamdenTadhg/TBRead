@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure? </h1>
+                <button type="button" class="btn-close close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <p>Accounts cannot be recovered once they are deleted. Are you sure you want to delete your account?</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
+                    <form id="delete_form" method="POST" action="/users/delete">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h1>User Profile</h1>
+    <form method="POST" id="user_profile">
+        {{ form.hidden_tag() }}
+    
+        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'email_reminders' %}
+            {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %} 
+            {{field.label}}
+            {{ field(class_="form-control") }}
+        {% endfor %}
+
+        {{form.email_reminders.label}}
+        {{ form.email_reminders}}
+        {% for error in form.email_reminders.errors %}
+            <span class="text-danger">{{error}}</span>
+        {% endfor %}
+
+      <div class="profile-edit-btn-area">
+        <button class="btn btn-success">Save your changes</button>
+        <a href="/users/{{user.user_id}}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+    <button type="button" class="btn btn-danger delete-form" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
+</div>
+
+{% endblock %}

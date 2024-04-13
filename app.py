@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Book
-from forms import UserAddForm, LoginForm
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm
 from flask_debugtoolbar import DebugToolbarExtension
 import pdb
 
@@ -122,6 +122,44 @@ def logout():
 #########################################################################################
 # User Routes
 
+@app.route('/users/<user_id>', methods=['GET', 'POST'])
+def display_user_profile(user_id):
+    """Display user's profile for editing"""
+
+    if int(g.user.user_id) != int(user_id):
+        flash('You do not have permission to view this page', 'danger')
+        return redirect('/')
+        
+    form=UserProfileForm(obj=g.user)
+
+    if form.validate_on_submit():
+        user = db.session.query(User).get(user_id)
+        user.username = form.username.data
+        user.email = form.email.data
+        user.user_image = form.user_image.data
+        user.reading_time_work_day = form.reading_time_work_day.data
+        user.reading_time_day_off = form.reading_time_day_off.data
+        user.reading_speed_adult = form.reading_speed_adult.data
+        user.reading_speed_YA = form.reading_speed_YA.data
+        user.reading_speed_children = form.reading_speed_children.data
+        user.posting_frequency = form.posting_frequency.data
+        user.posting_day = form.posting_day.data
+        user.prep_days = form.prep_days.data
+        user.content_account = form.content_account.data
+        user.email_reminders = form.email_reminders.data
+        try: 
+            db.session.add(user)
+            db.session.commit()
+            flash('Changes saved', 'success')
+        except IntegrityError as e:
+            db.session.rollback()
+            if 'users_email_key' in str(e):
+                flash('Email already in use', 'danger')
+            if 'users_username_key' in str(e):
+                flash('Username already in use', 'danger')
+        
+    return render_template('profile.html', form=form, user=g.user)
+
 @app.route('/users/<user_id>/lists/tbr')
 def display_tbr_list(user_id):
     """Display user's tbr list. Also functions as homepage for logged in user."""
@@ -158,10 +196,6 @@ def homepage():
 
 
 ## Implement user functionality
-    ## create form for user profile page
-    ## create user profile page
-    ## patch user
-    ## form validation
     ## delete user
     ## create page for sending username
     ## forgot username

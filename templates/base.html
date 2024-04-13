@@ -20,7 +20,7 @@
                 <li><button type="button" class="btn text-decoration-none navbar-button" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button></li>
                 {% else %}
                 <li>
-                    <a id="current-user-link" href="/users/{{g.user.id}}">
+                    <a id="current-user-link" href="/users/{{g.user.user_id}}">
                         <img class="user_image navbar-button" src="{{g.user.user_image}}" alt="{{g.user.username}}">
                     </a>
                 </li>
