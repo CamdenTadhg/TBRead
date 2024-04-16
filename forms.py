@@ -1,7 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField
-from wtforms.validators import DataRequired, Email, Length, InputRequired
+from wtforms.validators import DataRequired, Email, Length, InputRequired, ValidationError
+import re
 
+
+def password_requirements(form, field):
+    password_regex = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
+    if not password_regex.match(form.password.data):
+        raise ValidationError('Password must include one capital letter, one lowercase letter, one number, and one special character')
+    
+def matching_passwords(form, field):
+    if form.password.data != form.password2.data:
+        raise ValidationError('Passwords do not match. Please try again.')
+    
 class UserAddForm(FlaskForm):
     """Form for adding users to the system."""
 
@@ -31,16 +42,15 @@ class UserProfileForm(FlaskForm):
     prep_days = IntegerField('How many days before posting would you like to finish books?', default=0)
     content_account = StringField('URL of posting account')
     email_reminders = BooleanField('Do you want email reminders?')
-
-    def matching_passwords(self):
-        rv = FlaskForm.validate(self)
-        if not rv: 
-            return False
-        
-        if self.password.data != self.password2.data:
-            self.password.errors.append('Passwords do not match')
-            return False
-        return True
     
 class EmailForm(FlaskForm):
     email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email")])
+
+class UpdatePasswordForm(FlaskForm):
+    password = PasswordField("Password", validators=[InputRequired(message='Password is required'), password_requirements, matching_passwords])
+    password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
+
+
+    
+
+        

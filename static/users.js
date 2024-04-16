@@ -5,10 +5,14 @@ let $loginUsername = $('#login_username');
 let $loginPassword = $('#login_password');
 let $signup_email = $('#signup_email');
 let $email = $('#email');
+let $password = $('#password');
 let $userImage = $('#user_image');
 let $signupButton = $('#signup_button');
-let $loginButton = $('#login_button')
+let $loginButton = $('#login_button');
+let $updatePassword = $('.update-password');
+let $forgotLink = $('.forgot-link')
 let $sendreminderButton = $('#send_reminder_button');
+let $sendResetButton = $('#send_reset_button');
 let $modalBody = $('.modal-body')
 let $cancelButton = $('.cancel-button');
 let $closeButton = $('.close-button');
@@ -102,9 +106,14 @@ $sendreminderButton.on('click', async function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     response = await usernameReminderViaAxios();
-    if (response['error'])
+    if (response['error']) {
         $errorDiv = $('<div class="alert alert-danger error-div">Email not in database. Please signup.</div>');
         $modalBody.append($errorDiv);
+    }
+    if (response['success']){
+        $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
+        $modalBody.append($errorDiv)
+    }
 })
 
 //send email via axios to send username reminder
@@ -114,6 +123,55 @@ async function usernameReminderViaAxios(){
     const data = {email: email};
     const response = await axios.post('/forgotusername', data);
     console.log(response);
+    return response.data;
+}
+
+//send password reset email event handler
+$sendResetButton.on('click', async function(event){
+    event.preventDefault();
+    $modalBody.find('.error-div').remove();
+    response = await passwordResetViaAxios();
+    if (response['error']){
+        $errorDiv = $('<div class="alert alert-danger error-div">Email not in database. Please signup.</div>');
+        $modalBody.append($errorDiv);
+    }
+    if (response['success']){
+        $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
+        $modalBody.append($errorDiv);
+    }
+})
+
+//send email via axios to send password reset
+async function passwordResetViaAxios(){
+    const email = $email.val()
+    console.log(email);
+    const data = {email: email};
+    const response = await axios.post('/forgotpassword', data);
+    console.log(response);
+    return response.data;
+}
+
+//update password event handler
+$updatePassword.on('click', async function(event){
+    event.preventDefault();
+    $modalBody.find('.error-div').remove();
+    response = await updatePasswordViaAxios();
+    console.log(response);
+    if (response['error']){
+        $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
+        $modalBody.append($errorDiv);
+    }
+    if (response['success']){
+        $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
+        $modalBody.append($errorDiv);
+    }
+})
+
+//send updated password via axios
+async function updatePasswordViaAxios(){
+    const password = $password.val()
+    const data = {password: password};
+    const response = await axios.post('/updatepassword', data);
     return response.data;
 }
 
@@ -141,4 +199,9 @@ $closeButton.on('click', function(event){
     $loginPassword.val('');
     $email.val('');
     $userImage.val('');
+})
+
+$forgotLink.on('click', function(event){
+    event.preventDefault();
+    $modalBody.find('.error-div').remove();
 })

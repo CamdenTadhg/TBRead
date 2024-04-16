@@ -19,21 +19,51 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="updatePasswordModal" tabindex="-1" aria-labelledby="updatePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updatePasswordModalLabel">Update Password</h1>
+                <button type="button" class="btn-close close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <form id="update-password" method="POST" action="/updatepassword">
+                    {% for field in form2 if field.widget.input_type !='hidden' %}
+
+                    <p>
+                        {{field.label}}
+                        {{field}}
+
+                        {% for error in field.errors %}
+                            <div class="text-sm text-danger">
+                                {{error}}
+                            </div>
+                        {% endfor %}
+                    </p>
+                    {% endfor %}
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary update-password">Update Password</button>
+                </form>
+                </div>
+        </div>
+    </div>
+</div>
 <div class="container">
     <h1>User Profile</h1>
     <form method="POST" id="user_profile">
-        {{ form.hidden_tag() }}
+        {{form.hidden_tag()}}
     
-        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'email_reminders' %}
+        {% for field in form if field.widget.input_type !='hidden' and field.name !='email_reminders' %}
             {% for error in field.errors %}
-                <span class="text-danger">{{ error }}</span>
+                <span class="text-danger">{{error}}</span>
             {% endfor %} 
             {{field.label}}
-            {{ field(class_="form-control") }}
+            {{field(class_="form-control")}}
         {% endfor %}
 
         {{form.email_reminders.label}}
-        {{ form.email_reminders}}
+        {{form.email_reminders}}
         {% for error in form.email_reminders.errors %}
             <span class="text-danger">{{error}}</span>
         {% endfor %}
@@ -44,6 +74,7 @@
       </div>
     </form>
     <button type="button" class="btn btn-danger delete-form" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">Update Password</button>
 </div>
 
 {% endblock %}

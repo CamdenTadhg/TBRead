@@ -5,6 +5,9 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from datetime import datetime
+import secrets
+from sqlalchemy import update
+
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -38,15 +41,15 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
     user_image = db.Column(db.Text)
-    reading_time_work_day = db.Column(db.Float(precision=2))
-    reading_time_day_off = db.Column(db.Float(precision=2))
-    reading_speed_adult = db.Column(db.Integer)
-    reading_speed_YA = db.Column(db.Integer)
-    reading_speed_children = db.Column(db.Integer)
+    reading_time_work_day = db.Column(db.Float(precision=2), default=0)
+    reading_time_day_off = db.Column(db.Float(precision=2), default=0)
+    reading_speed_adult = db.Column(db.Integer, default=0)
+    reading_speed_YA = db.Column(db.Integer, default=0)
+    reading_speed_children = db.Column(db.Integer, default=0)
     calendar_id = db.Column(db.Text, unique=True)
-    posting_frequency = db.Column(db.Text)
+    posting_frequency = db.Column(db.Integer, default=0)
     posting_day = db.Column(db.Text)
-    prep_days = db.Column(db.Integer)
+    prep_days = db.Column(db.Integer, default=0)
     content_account = db.Column(db.Text)
     calendar = db.Column(db.Text)
     email_reminders = db.Column(db.Boolean)
@@ -103,6 +106,15 @@ class User(db.Model):
                 return user
             
         return False
+    
+    def get_password_reset_token(self):
+        """creates a pssword reset token"""
+        return secrets.token_hex(16)
+    
+    def update_password(self, pwd, email):
+        hashed = bcrypt.generate_password_hash(pwd)
+        hashed_utf8 = hashed.decode('utf8')
+        return update(User).where(User.email == email).values(password=hashed_utf8)
 
 
 class Book(db.Model):

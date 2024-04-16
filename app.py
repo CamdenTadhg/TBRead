@@ -1,8 +1,9 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import update
 from models import db, connect_db, User, Book
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 from local_settings import MAIL_PASSWORD
@@ -138,9 +139,82 @@ def send_username_reminder():
         msg = Message(subject='Username reminder', sender='theenbydeveloper@gmail.com', recipients=[user.email])
         msg.html = render_template('emails/usernamereminderemail.html', username=user.username)
         mail.send(msg)
-        return redirect('/')
+        return jsonify({'success': 'Email sent'})
     else: 
         return jsonify({'error': 'Email not in database. Please signup.'})
+    
+@app.route('/forgotpassword', methods=['POST'])
+def send_password_reset():
+    """Send user a password reset email"""
+
+    if g.user:
+        flash('You are already logged in', 'danger')
+        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+    
+    email = request.json['email']
+    print('*********************')
+    print(email)
+    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+    if user:
+        prt = user.get_password_reset_token()
+        stmt = update(User).where(User.email == email).values(password_reset_token=prt)
+        db.session.execute(stmt)
+        db.session.commit()
+        msg = Message(subject='Password Reset Link', sender='theenbydeveloper@gmail.com', recipients=[email])
+        msg.html = render_template('emails/passwordresetemail.html', prt=prt, email=email)
+        mail.send(msg)
+        return jsonify({'success': 'Email sent'})
+    else:
+        return jsonify({'error': 'Email not in database. Please signup.'})
+    
+@app.route('/passwordreset', methods=['GET', 'POST'])
+def password_reset():
+    """Displays password reset form and resets password from password reset link"""
+    if g.user:
+        flash('You are already logged in', 'danger')
+        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+    
+    form = UpdatePasswordForm()
+    email = request.args.get('email')
+    prt = request.args.get('prt')
+    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        stmt = user.update_password(pwd=password, email=email)
+        db.session.execute(stmt)
+        try:
+            db.session.commit()
+        except:
+            flash('Something went wrong. Please try again')
+        stmt2 = update(User).where(User.email == email).values(password_reset_token=None)
+        db.session.execute(stmt2)
+        try:
+            db.session.commit()
+        except:
+            flash('Something went wrong. Please try again')
+        return redirect('/')
+    elif user and user.password_reset_token == prt:
+        return render_template('passwordreset.html', form=form)
+    else: 
+        flash('Unauthorized password reset attempt', 'danger')
+        return redirect('/')
+    
+@app.route('/updatepassword', methods=["POST"])
+def update_password():
+    """Updates user's password"""
+
+    user=db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+
+    password=request.json['password']
+    stmt = user.update_password(pwd=password, email=user.email)
+    db.session.execute(stmt)
+    try:
+        db.session.commit()
+    except:
+        return jsonify({'error': 'Something went wrong'})
+    return jsonify({'success': 'Password updated'})
+
     
 #########################################################################################
 # User Routes
@@ -154,6 +228,7 @@ def display_user_profile(user_id):
         return redirect('/')
         
     form=UserProfileForm(obj=g.user)
+    form2= UpdatePasswordForm()
 
     if form.validate_on_submit():
         user = db.session.query(User).get(user_id)
@@ -181,7 +256,7 @@ def display_user_profile(user_id):
             if 'users_username_key' in str(e):
                 flash('Username already in use', 'danger')
         
-    return render_template('profile.html', form=form, user=g.user)
+    return render_template('profile.html', form=form, form2=form2, user=g.user)
 
 @app.route('/users/<user_id>/lists/tbr')
 def display_tbr_list(user_id):
@@ -219,8 +294,6 @@ def homepage():
     if g.user: 
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
-
-
     else: 
         form = UserAddForm()
         form2 = LoginForm()
@@ -233,9 +306,8 @@ def homepage():
 
 
 ## Implement user functionality
-    ## create modal for password reset
-    ## send email via axios
-    ## route to send password reset
+    ## change password route
+    ## testing additional methods on model
     ## testing routes
     ## testing javascript
     ## switch to test database
@@ -244,6 +316,8 @@ def homepage():
     ## automatically create three lists when a user is created (TBR, DNF, Done)
     ## add books button
     ## add books to TBR functionality
+    ## edit book
+    ## delete book
     ## display TBR appropriately
     ## move books from one list to another functionality
     ## display other two lists appropriately
