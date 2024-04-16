@@ -59,7 +59,7 @@ class BookEditForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     authors = StringField('Authors', validators=[DataRequired()])
     publisher = StringField('Publisher')
-    pub_date = IntegerField('Publication Date')
+    pub_date = StringField('Publication Date')
     description = StringField('Description')
     isbn = StringField('ISBN')
     page_count = IntegerField('Page Count')

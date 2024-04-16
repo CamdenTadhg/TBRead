@@ -7,6 +7,8 @@ from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePass
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 import requests
+from io import StringIO
+from html.parser import HTMLParser
 from local_settings import MAIL_PASSWORD
 import calendar
 import pdb
@@ -296,15 +298,60 @@ def delete_user():
 # Book Routes
 
 def addBookToDatabase(google_id):
-    api_url = f"https://www.googleapis.com/books/v1/volumes/${google_id}"
+    api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
+    print('***********************')
+    print(api_url)
     response = requests.get(api_url)
     data = response.json()
-    for item in data.volumeInfo.authors:
+    print('************************')
+    print(data)
+    google_id = data['id']
+    if data['volumeInfo'].get('subtitle'):
+        title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
+    else: 
+        title = data['volumeInfo']['title']
+    publisher = data['volumeInfo']['publisher']
+    pub_date = data['volumeInfo']['publishedDate'][0:4]
+    description = data['volumeInfo']['description']
+    for item in data['volumeInfo']['industryIdentifiers']:
+        if item['type'] == "ISBN_13":
+            isbn = item['identifier']
+    page_count = data['volumeInfo']['pageCount']
+    thumbnail = data['volumeInfo']['imageLinks']['smallThumbnail']
+    new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+    db.session.add(new_book)
+    db.session.commit()
+    for item in data['volumeInfo']['authors']:
         author = db.session.execute(db.select(Author).where(Author.name == item)).scalar()
-        if not author:
+        if author:
+            new_book.authors.append(author)
+            db.session.add(new_book)
+            db.session.commit()
+        else:
             new_author = Author(name=item)
             db.session.add(new_author)
             db.session.commit()
+            new_book.authors.append(new_author)
+            db.session.add(new_book)
+            db.session.commit()
+    return new_book
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict=False
+        self.convert_charrefs=True
+        self.text = StringIO()
+    def handle_data(self, d):
+        self.text.write(d)
+    def get_data(self):
+        return self.text.getvalue()
+    
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 @app.route('/books', methods=['GET', 'POST'])
 def add_books():
@@ -330,9 +377,13 @@ def edit_book(google_id):
     if book:
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
+        new_book = addBookToDatabase(google_id)
+        description = strip_tags(new_book.description)
+        form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
-        addBookToDatabase(google_id)
-
+        
+    
+    return render_template('books/editbook.html', form=form)
 
 
 @app.route('/users/<user_id>/lists/tbr')
@@ -366,12 +417,6 @@ def homepage():
 
 ## Implement create lists functionality 
     ## add books
-        ## select correct title & add to database
-            ## route
-                ## if id already in database, pull up that record
-                ## if id not in database, add to database
-                ## add author if not already in database
-                ## display book editing page
             ## on click of save, add book to user_books
             ## add book to list
     ## add book manually
@@ -394,6 +439,8 @@ def homepage():
     ## list displays
     ## add books button to the right place
     ## search results display
+    ## display of authors on edit form
+    ## display of description on edit form
 ## Documentation
 ## Deployment
 ## Small Screen Styling
