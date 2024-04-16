@@ -2,11 +2,13 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm
+from models import db, connect_db, User, Book, List, Author
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
+import requests
 from local_settings import MAIL_PASSWORD
+import calendar
 import pdb
 
 CURR_USER_KEY = "curr_user"
@@ -60,16 +62,7 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
-def create_lists(user):
-    """Create three lists when new user is created"""
 
-    stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
-    stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
-    stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
-    db.session.execute(stmt)
-    db.session.execute(stmt2)
-    db.session.execute(stmt3)
-    db.session.commit()
 
 
 @app.route('/signup', methods=["POST"])
@@ -232,6 +225,17 @@ def update_password():
 #########################################################################################
 # User Routes
 
+def create_lists(user):
+    """Create three lists when new user is created"""
+
+    stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
+    stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
+    stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
+    db.session.execute(stmt)
+    db.session.execute(stmt2)
+    db.session.execute(stmt3)
+    db.session.commit()
+    
 @app.route('/users/<user_id>', methods=['GET', 'POST'])
 def display_user_profile(user_id):
     """Display user's profile for editing"""
@@ -271,15 +275,6 @@ def display_user_profile(user_id):
         
     return render_template('profile.html', form=form, form2=form2, user=g.user)
 
-@app.route('/users/<user_id>/lists/tbr')
-def display_tbr_list(user_id):
-    """Display user's tbr list. Also functions as homepage for logged in user."""
-
-    if not g.user:
-        flash('Please log in', 'danger')
-        return redirect('/')
-    
-    return render_template('tbrlist.html')
 
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
@@ -296,6 +291,60 @@ def delete_user():
         flash('Account deleted', 'danger')
 
     return redirect('/')
+
+#########################################################################################
+# Book Routes
+
+def addBookToDatabase(google_id):
+    api_url = f"https://www.googleapis.com/books/v1/volumes/${google_id}"
+    response = requests.get(api_url)
+    data = response.json()
+    for item in data.volumeInfo.authors:
+        author = db.session.execute(db.select(Author).where(Author.name == item)).scalar()
+        if not author:
+            new_author = Author(name=item)
+            db.session.add(new_author)
+            db.session.commit()
+
+@app.route('/books', methods=['GET', 'POST'])
+def add_books():
+    """Add books to a user's TBR list"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    form = BookSearchForm()
+
+    return render_template('books/addbooks.html', form=form)
+
+@app.route('/books/<google_id>', methods=['GET', 'POST'])
+def edit_book(google_id):
+    """Add book to database, edit record, add to user's lists of books"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
+    if book:
+        form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
+    else:
+
+        addBookToDatabase(google_id)
+
+
+
+@app.route('/users/<user_id>/lists/tbr')
+def display_tbr_list(user_id):
+    """Display user's tbr list. Also functions as homepage for logged in user."""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('books/tbrlist.html')
+
 
 #########################################################################################
 # Homepage
@@ -316,12 +365,21 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## automatically create three lists when a user is created (TBR, DNF, Done)
-    ## add books button
-    ## add books to TBR functionality
+    ## add books
+        ## select correct title & add to database
+            ## route
+                ## if id already in database, pull up that record
+                ## if id not in database, add to database
+                ## add author if not already in database
+                ## display book editing page
+            ## on click of save, add book to user_books
+            ## add book to list
+    ## add book manually
     ## edit book
     ## delete book
     ## display TBR appropriately
+        ## search field
+        ## each title should be a link to open the edit book form
     ## move books from one list to another functionality
     ## display other two lists appropriately
 ## Implement schedule books functionality 
@@ -333,6 +391,9 @@ def homepage():
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message
     ## reformat user profile 
+    ## list displays
+    ## add books button to the right place
+    ## search results display
 ## Documentation
 ## Deployment
 ## Small Screen Styling

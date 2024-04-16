@@ -50,7 +50,17 @@ class UpdatePasswordForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(message='Password is required'), password_requirements, matching_passwords])
     password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
 
+class BookSearchForm(FlaskForm):
+    title = StringField('Title')
+    author = StringField('Author')
+    ISBN = IntegerField('ISBN')
 
-    
-
-        
+class BookEditForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    authors = StringField('Authors', validators=[DataRequired()])
+    publisher = StringField('Publisher')
+    pub_date = IntegerField('Publication Date')
+    description = StringField('Description')
+    isbn = StringField('ISBN')
+    page_count = IntegerField('Page Count')
+    thumbnail = StringField('Cover Image')
