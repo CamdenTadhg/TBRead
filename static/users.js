@@ -158,10 +158,12 @@ $updatePassword.on('click', async function(event){
     response = await updatePasswordViaAxios();
     console.log(response);
     if (response['error']){
+        console.log('entering error if')
         $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
         $modalBody.append($errorDiv);
     }
     if (response['success']){
+        console.log('entering success if')
         $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
         $modalBody.append($errorDiv);
     }

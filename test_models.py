@@ -3,7 +3,7 @@
 import os
 from unittest import TestCase
 from sqlalchemy.exc import IntegrityError
-from models import db, User, Book, Friendship
+from models import db, User, Book
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -18,7 +18,6 @@ class UserModelTestCase(TestCase):
         """Clear out old data, create test client, add sample data"""
 
         User.query.delete()
-        Friendship.query.delete()
 
         u1 = User(
             email="janedoe@test.com", 
@@ -38,11 +37,7 @@ class UserModelTestCase(TestCase):
             password="HASHED_PASSWORD"
         )
 
-        db.session.add_all([u1, u2])
-        db.session.commit()
-
-        u1.friends.append(u2)
-        db.session.add(u1)
+        db.session.add_all([u1, u2, u3])
         db.session.commit()
 
         self.client = app.test_client()
@@ -66,38 +61,6 @@ class UserModelTestCase(TestCase):
 
         self.assertEqual(f'<User {u.user_id}: testuser, test@test.com>', str(u))
     
-    def test_is_friend_true(self):
-        """Does is_friend correctly identify when the relationship exists?"""
-
-        janedoe = db.session.query(User).filter(User.username == "janedoe").first()
-        johndoe = db.session.query(User).filter(User.username == "johndoe").first()
-
-        self.assertTrue(janedoe.is_friend(johndoe))
-
-    def test_is_friend_false(self):
-        """Does is_friend correctly identify when the relationship does not exist?"""
-
-        janedoe = db.session.query(User).filter(User.username == "janedoe").first()
-        johndoe = db.session.query(User).filter(User.username == "johndoe").first()
-
-        self.assertFalse(johndoe.is_friend(janedoe))
-
-    def test_is_friended_true(self):
-        """Does is_friended correctly identify when the relationship exists?"""
-
-        janedoe = db.session.query(User).filter(User.username == "janedoe").first()
-        johndoe = db.session.query(User).filter(User.username == "johndoe").first()
-
-        self.assertTrue(johndoe.is_friended(janedoe))
-    
-    def test_is_friended_false(self):
-        """Does is_friended correctly identify when the relationship does not exist?"""
-
-        janedoe = db.session.query(User).filter(User.username == "janedoe").first()
-        johndoe = db.session.query(User).filter(User.username == "johndoe").first()
-
-        self.assertFalse(janedoe.is_friend(johndoe))
-    
     def test_signup_correct(self):
         """Does signup correctly create a user when appropriate data is given?"""
 
@@ -107,7 +70,6 @@ class UserModelTestCase(TestCase):
         self.assertIsInstance(u, User)
         self.assertNotEqual(7, len(u.password))
         self.assertEqual(u.username, "testing")
-        self.assertEqual(u.user_image, "/static/images/default-pic.png")
 
     def test_signup_duplicate_username(self):
         """Does signup fail to return a user when a duplicate username is entered?"""
@@ -186,6 +148,23 @@ class UserModelTestCase(TestCase):
 
         self.assertNotIsInstance(test_user, User)
         self.assertFalse(test_user)
+    
+    def test_get_password_reset_token(self):
+        user = db.session.execute(db.select(User).where(User.username=="janedoe")).scalar()
+        prt = user.get_password_reset_token()
+
+        self.assertEqual(len(prt), 32)
+
+    def test_update_password(self):
+        user = db.session.execute(db.select(User).where(User.username=="janedoe")).scalar()
+        oldpassword = user.password
+        stmt = user.update_password('passwordpassword!', 'janedoe@test.com')
+        db.session.execute(stmt)
+        db.session.commit()
+        user2 = db.session.execute(db.select(User).where(User.username == "janedoe")).scalar()
+        newpassword = user2.password
+
+        self.assertNotEqual(oldpassword, newpassword)
 
 class BookModelTestCase(TestCase):
     """Test methods for book model"""

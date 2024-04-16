@@ -1,8 +1,8 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import update
-from models import db, connect_db, User, Book
+from sqlalchemy import update, insert
+from models import db, connect_db, User, Book, List
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
-# os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
+# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -60,6 +60,18 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+def create_lists(user):
+    """Create three lists when new user is created"""
+
+    stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
+    stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
+    stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
+    db.session.execute(stmt)
+    db.session.execute(stmt2)
+    db.session.execute(stmt3)
+    db.session.commit()
+
+
 @app.route('/signup', methods=["POST"])
 def signup():
     """Handle user signup. Create new user, add to DB and redirect to main list page.
@@ -90,6 +102,7 @@ def signup():
             return jsonify({'error': 'Username already taken'})
     
     do_login(user)
+    create_lists(user)
 
     return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     
@@ -302,16 +315,6 @@ def homepage():
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
-
-
-
-## Implement user functionality
-    ## change password route
-    ## testing additional methods on model
-    ## testing routes
-    ## testing javascript
-    ## switch to test database
-    ## run all tests (include test_models.py)
 ## Implement create lists functionality 
     ## automatically create three lists when a user is created (TBR, DNF, Done)
     ## add books button
@@ -321,12 +324,11 @@ def homepage():
     ## display TBR appropriately
     ## move books from one list to another functionality
     ## display other two lists appropriately
-    ## testing routes
-    ## testing javascript
 ## Implement schedule books functionality 
 ## Implement email reminders functionality 
 ## Implement scripts & notes functionality 
 ## Implement challenge functionality 
+## Write tests for all routes & for javascript
 ## Styling
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message

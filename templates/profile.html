@@ -27,6 +27,7 @@
                 <button type="button" class="btn-close close-button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <form id="update-password" method="POST" action="/updatepassword">
+                    <div class="modal-body">
                     {% for field in form2 if field.widget.input_type !='hidden' %}
 
                     <p>
@@ -40,7 +41,7 @@
                         {% endfor %}
                     </p>
                     {% endfor %}
-            
+                    </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
                         <button class="btn btn-secondary update-password">Update Password</button>

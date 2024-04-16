@@ -23,14 +23,6 @@ class EventCategory(enum.Enum):
     Finish = 3
     Post = 4
 
-# class Friendship(db.Model):
-#     """connection between friending user and friended user"""
-
-#     __tablename__ = "friendships"
-
-#     friending_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-#     friended_user = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-
 class User(db.Model): 
     """ User in the TBRead system"""
 
@@ -57,26 +49,11 @@ class User(db.Model):
 
     user_books = db.relationship("User_Book", backref="users", cascade="all, delete-orphan")
     lists = db.relationship("List", backref="users", cascade="all, delete-orphan")
-    # friends = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friending_user == user_id), cascade="all, delete-orphan")
-    # friends_of = db.relationship("Friendship", backref="users", primaryjoin=(Friendship.friended_user == user_id), cascade="all, delete-orphan")
     events = db.relationship("Event", backref="users", cascade="all, delete-orphan")
     challenges = db.relationship("Challenge", secondary="users_challenges", backref="users")
-    user_challenges = db.relationship("User_Challenge", backref="users", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.user_id}: {self.username}, {self.email}>"
-    
-    def is_friend(self, other_user):
-        """Has this user friended 'other user'"""
-
-        found_user_list = [user for user in self.friends if user == other_user]
-        return len(found_user_list) == 1
-    
-    def is_friended(self, other_user):
-        """Has this user been friended by 'other user'"""
-
-        found_user_list = [user for user in self.friends_of if user == other_user]
-        return len(found_user_list) == 1
     
     @classmethod
     def signup(cls, username, password, email, user_image):
