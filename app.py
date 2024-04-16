@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, Author
+from models import db, connect_db, User, Book, List, Author, User_Book, User_Book_List
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -11,6 +11,7 @@ from io import StringIO
 from html.parser import HTMLParser
 from local_settings import MAIL_PASSWORD
 import calendar
+import random
 import pdb
 
 CURR_USER_KEY = "curr_user"
@@ -353,9 +354,16 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
-@app.route('/books', methods=['GET', 'POST'])
+def add_book_to_tbr(userbook_id):
+    list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    list.user_books.append(userbook)
+    db.session.add(list)
+    db.session.commit()
+
+@app.route('/books', methods=['GET'])
 def add_books():
-    """Add books to a user's TBR list"""
+    """Search for a book to add to the database"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -378,12 +386,75 @@ def edit_book(google_id):
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
         new_book = addBookToDatabase(google_id)
+        ## remove html tags from description
         description = strip_tags(new_book.description)
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
-        
+    if form.validate_on_submit():
+        adding_book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
+        title = form.title.data
+        publisher = form.publisher.data
+        pub_date = form.pub_date.data
+        description = form.description.data
+        isbn = form.isbn.data
+        page_count = form.page_count.data
+        age_category = form.age_category.data
+        thumbnail = form.thumbnail.data
+        notes = form.notes.data
+        script = form.script.data
+        ## check if user has already added this book
+        check_book = db.session.execute(db.select(User_Book).where(User_Book.user_id == g.user.user_id).where(User_Book.book_id == adding_book.book_id)).scalar()
+        if not check_book:
+            new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
+            db.session.add(new_user_book)
+            db.session.commit()
+            add_book_to_tbr(new_user_book.userbook_id)
+            return redirect(f'/users/{g.user.user_id}/lists/tbr')
+        else:
+            flash('This book is already on your lists', 'danger')
     
     return render_template('books/editbook.html', form=form)
+
+@app.route('/books/manual', methods=['GET', 'POST'])
+def add_book_manually():
+    """Add a custom book, not found in GoogleAPI to your TBR list"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    form=BookEditForm()
+
+    if form.validate_on_submit():
+        google_id = random.randint(10000000, 99999999)
+        title = form.title.data
+        author = form.authors.data
+        publisher = form.publisher.data
+        pub_date = form.pub_date.data
+        description = form.description.data
+        isbn = form.isbn.data
+        page_count = form.page_count.data
+        age_category = form.age_category.data
+        thumbnail = form.thumbnail.data
+        notes = form.notes.data
+        script = form.script.data
+        ## add the book to the books table in the database
+        new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+        new_author = Author(name=author)
+        db.session.add(new_book)
+        db.session.add(new_author)
+        db.session.commit()
+        new_book.authors.append(new_author)
+        db.session.add(new_book)
+        db.session.commit()
+        ## add the book to the users_books table in the database
+        new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
+        db.session.add(new_user_book)
+        db.session.commit()
+        add_book_to_tbr(new_user_book.userbook_id)
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
+    
+    return render_template('books/manualbook.html', form=form)
 
 
 @app.route('/users/<user_id>/lists/tbr')
@@ -416,17 +487,15 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## add books
-            ## on click of save, add book to user_books
-            ## add book to list
-    ## add book manually
-    ## edit book
-    ## delete book
     ## display TBR appropriately
         ## search field
         ## each title should be a link to open the edit book form
+    ## edit book
+    ## delete book
     ## move books from one list to another functionality
     ## display other two lists appropriately
+    ## add 3 other users
+    ## add 10 books to each TBR
 ## Implement schedule books functionality 
 ## Implement email reminders functionality 
 ## Implement scripts & notes functionality 

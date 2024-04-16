@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Book</h1>
+
+<form method="POST" id="manual_book_form">
+    {{form.hidden_tag()}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+            <span class="text-sm text-danger">{{error}}</span>
+        {% endfor %}
+        {{field.label}}
+        {{field(class_="form-control")}}
+    {% endfor %}
+    <a href="/users/{{g.user.user_id}}/lists/tbr" class="btn btn-secondary">Cancel</a>
+    <button class="btn btn-primary manual-book-button">Add to TBR</button>
+</form>
+
+{% endblock %}

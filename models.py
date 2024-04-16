@@ -16,6 +16,7 @@ class AgeCategory(enum.Enum):
     Adult = 1
     YA = 2
     Childrens = 3
+    NA = 4
 
 class EventCategory(enum.Enum):
     Order = 1
@@ -161,16 +162,16 @@ class User_Book(db.Model):
 
     __tablename__ = "users_books"
 
-    userbook_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
+    userbook_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), primary_key=True)
     title = db.Column(db.Text)
     publisher = db.Column(db.Text)
     pub_date = db.Column(db.Text)
     description = db.Column(db.Text)
-    isbn = db.Column(db.Integer)
+    isbn = db.Column(db.BigInteger)
     page_count = db.Column(db.Integer)
-    age_category = db.Column(db.Enum(AgeCategory))
+    age_category = db.Column(db.Enum(AgeCategory), default='NA')
     thumbnail = db.Column(db.Text)
     notes = db.Column(db.Text)
     script = db.Column(db.Text)
@@ -186,13 +187,18 @@ class List(db.Model):
     list_type = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
+    user_books = db.relationship("User_Book", secondary="users_books_lists", backref="lists")
+
+    def __repr__(self):
+        return f"<List {self.list_id} {self.list_type}>"
+
 class User_Book_List(db.Model):
     """connection between user copy of books and lists"""
 
     __tablename__ = "users_books_lists"
 
-    list_id = db.Column(db.Integer, primary_key=True)
-    userbook_id = db.Column(db.Integer, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.list_id'), primary_key=True)
+    userbook_id = db.Column(db.Integer, db.ForeignKey('users_books.userbook_id'), primary_key=True)
 
 
 class Event(db.Model):
