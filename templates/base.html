@@ -35,7 +35,7 @@
     </nav>
     {% if g.user %}
     <ul class="nav flex-column">
-        <li class="nav-item">Lists</li>
+        <li class="nav-item"><a href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a></li>
         <li class="nav-item">Calendar</li>
         <li class="nav-item">Challenges</li>
         <li class="nav-item">Notes & Scripts</li>

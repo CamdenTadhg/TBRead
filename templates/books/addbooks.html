@@ -9,7 +9,7 @@
                 {% for field in form if field.widget.input_type !='hidden' %}
                 <p>
                     {{field.label}}
-                    {{field(class_="form-control")}}
+                    {{field}}
 
                     {% for error in field.errors %}
                         <div class="text-sm text-danger">

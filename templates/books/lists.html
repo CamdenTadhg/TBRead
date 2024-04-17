@@ -1,0 +1,13 @@
+{% block lists %}
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/users/{{g.user.user_id}}/lists/tbr">TBR</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/users/{{g.user.user_id}}/lists/dnf">DNF</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/users/{{g.user.user_id}}/lists/complete">Complete</a>
+    </li>
+</ul>
+{% endblock %}

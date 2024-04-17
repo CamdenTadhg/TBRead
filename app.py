@@ -311,14 +311,19 @@ def addBookToDatabase(google_id):
         title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
     else: 
         title = data['volumeInfo']['title']
-    publisher = data['volumeInfo']['publisher']
-    pub_date = data['volumeInfo']['publishedDate'][0:4]
-    description = data['volumeInfo']['description']
-    for item in data['volumeInfo']['industryIdentifiers']:
+    publisher = data['volumeInfo'].get('publisher')
+    if data['volumeInfo'].get('publishedDate'):
+        pub_date = data['volumeInfo']['publishedDate'][0:4]
+    else:
+        pub_date = '0000'
+    description = data['volumeInfo'].get('description')
+    for item in data['volumeInfo'].get('industryIdentifiers'):
         if item['type'] == "ISBN_13":
             isbn = item['identifier']
-    page_count = data['volumeInfo']['pageCount']
-    thumbnail = data['volumeInfo']['imageLinks']['smallThumbnail']
+    if isbn == '':
+        isbn = 0
+    page_count = data['volumeInfo'].get('pageCount')
+    thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
     new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
     db.session.add(new_book)
     db.session.commit()
@@ -487,15 +492,15 @@ def homepage():
 
 
 ## Implement create lists functionality 
+    ## add 10 books to each TBR
     ## display TBR appropriately
+        ## show a list of titles, covers, etc.
         ## search field
         ## each title should be a link to open the edit book form
     ## edit book
     ## delete book
     ## move books from one list to another functionality
     ## display other two lists appropriately
-    ## add 3 other users
-    ## add 10 books to each TBR
 ## Implement schedule books functionality 
 ## Implement email reminders functionality 
 ## Implement scripts & notes functionality 
@@ -507,9 +512,11 @@ def homepage():
     ## reformat user profile 
     ## list displays
     ## add books button to the right place
+    ## search form display
     ## search results display
     ## display of authors on edit form
     ## display of description on edit form
+    ## fix tabs to be visible
 ## Documentation
 ## Deployment
 ## Small Screen Styling

@@ -1,7 +1,6 @@
 const $bookSearchButton = $('.book-search-button');
-const $title = $('#title');
-const $author = $('#author');
-const $ISBN = $('#ISBN');
+const $field = $('#field');
+const $term = $('#term');
 const $apiSearchResults = $('.api-search-results')
 
 //book search click event handler
@@ -9,18 +8,26 @@ $bookSearchButton.on('click', async function(event) {
     console.log('search button pressed')
     event.preventDefault();
     $apiSearchResults.empty();
-    let title = $title.val();
-    let author = $author.val();
-    let isbn = $ISBN.val();
-    let response = await searchGoogleBooks(title, author, isbn);
+    let field = $field.val();
+    let term = $term.val();
+    let response = await searchGoogleBooks(field, term);
     displaySearchResults(response);
 })
 
 //send book search query to GoogleBooks
-async function searchGoogleBooks(title, author, isbn){
-    title = title.replace(/ /g, '%20')
-    author = author.replace(/ /g, '%20');
-    let url = `https://www.googleapis.com/books/v1/volumes?q=intitle%3A%22${title}%22&inauthor%3A%22${author}%22&isbn%3A${isbn}`;
+async function searchGoogleBooks(field, term){
+
+    if (field === 'isbn'){
+        var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${term}`
+    }
+    else if (field === 'title'){
+        let term = term.replace(/ /g, '%20')
+        var url = `https://www.googleapis.com/books/v1/volumes?q=intitle%3A%22${term}%22`
+    } else {
+        term = term.replace(/ /g, '%20');
+        var url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
+    }
+    console.log(url);
     let response = await axios.get(url)
     console.log(response);
     return response.data.items;
