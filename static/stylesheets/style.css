@@ -30,3 +30,7 @@
 .list-cover{
     width:50px;
 }
+
+th {
+    cursor: pointer;
+}
