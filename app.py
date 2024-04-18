@@ -510,7 +510,7 @@ def edit_book(userbook_id):
         db.session.commit()
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
-    return render_template('books/editbook.html', form=form)
+    return render_template('books/editbook.html', form=form, userbook=userbook)
 
 #########################################################################################
 # Homepage
