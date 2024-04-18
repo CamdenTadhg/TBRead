@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'books/lists.html' %}
+
+    <a href="/books" class="btn btn-primary mt-5">Add Books</a>
+    <table class="table-bordered table-striped book-list-table" id="completelistTable">
+        <thead>
+            <tr>
+                <th >Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Pub Date</th>
+                <th>Pages</th>
+            </tr>
+        </thead>
+        <tbody class="user-book-list">
+
+        </tbody>
+    </table>
+
+    <script>
+        let g_user_id = "{{g.user.user_id}}";
+        let type = 'complete';
+    </script>
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.fancytable/dist/fancyTable.min.js"></script>
+    <script src="/static/lists.js"></script>
+{% endblock %}

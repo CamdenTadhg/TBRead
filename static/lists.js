@@ -42,7 +42,9 @@ function displayUserBooks(array){
         let $publisher = $(`<td>${book.publisher}</td>`);
         let $pub_date = $(`<td>${book.pub_date}</td>`)
         let $pages = $(`<td>${book.pages}</td>`)
-        let $delete = $(`<td><a href="/users_books/${book.id}/delete" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>`)
+        let $delete = $(`<td><form method="POST" action="/users_books/${book.id}/delete"><button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button></form></td>`)
+        let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/dnf"<button class="btn btn-info">DNF</button></form></td>`)
+        let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/complete"<button class="btn btn-info">Complete</button></form></td>`)
         $bookTr.append($cover);
         $bookTr.append($title);
         $bookTr.append($author);
@@ -50,6 +52,8 @@ function displayUserBooks(array){
         $bookTr.append($pub_date);
         $bookTr.append($pages);
         $bookTr.append($delete)
+        $bookTr.append($DNF)
+        $bookTr.append($complete)
         $userBookList.append($bookTr);
     }
 }

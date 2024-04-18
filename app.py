@@ -298,6 +298,44 @@ def return_tbr_list(user_id):
     serialized_user_books
     return jsonify(serialized_user_books)
 
+@app.route('/users/<user_id>/lists/dnf', methods=['GET'])
+def display_dnf_list(user_id):
+    """Display user's tbr list. Also functions as homepage for logged in user."""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('books/dnflist.html')
+
+@app.route('/api/<user_id>/lists/dnf', methods=['GET'])
+def return_dnf_list(user_id):
+    """Returns contents of dnf list to axios request"""
+
+    list = db.session.execute(db.select(List).where(List.list_type == 'DNF').where(List.user_id == g.user.user_id)).scalar()
+    serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
+    serialized_user_books
+    return jsonify(serialized_user_books)
+
+@app.route('/users/<user_id>/lists/complete', methods=['GET'])
+def display_complete_list(user_id):
+    """Display user's tbr list. Also functions as homepage for logged in user."""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('books/dnflist.html')
+
+@app.route('/api/<user_id>/lists/complete', methods=['GET'])
+def return_complete_list(user_id):
+    """Returns contents of dnf list to axios request"""
+
+    list = db.session.execute(db.select(List).where(List.list_type == 'Complete').where(List.user_id == g.user.user_id)).scalar()
+    serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
+    serialized_user_books
+    return jsonify(serialized_user_books)
+
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
     """ Delete user"""
@@ -479,15 +517,13 @@ def add_book_manually():
 
 @app.route('/users_books/<userbook_id>', methods=['GET', 'POST'])
 def edit_book(userbook_id):
-    """Add book to database, edit record, add to user's lists of books"""
+    """Edit user copy of book in database"""
 
     if not g.user:
         flash('Please log in', 'danger')
         return redirect('/')
     
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
-    print('********************************')
-    print(userbook)
     if userbook:
         form=BookEditForm(title=userbook.title, authors=userbook.authors, publisher=userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, thumbnail=userbook.thumbnail)
     else: 
@@ -512,6 +548,28 @@ def edit_book(userbook_id):
 
     return render_template('books/editbook.html', form=form, userbook=userbook)
 
+@app.route('/users_books/<userbook_id>/delete', methods=["POST"])
+def delete_book(userbook_id):
+    """Delete user copy of book from database"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    if userbook:
+        if g.user.user_id == userbook.user_id:
+            db.session.delete(userbook)
+            db.session.commit()
+        else: 
+            flash('You do not have permission to do that', 'danger')
+    else:
+        flash('Book not found. Please try again')
+    
+    return redirect(f'/users/{g.user.user_id}/lists/tbr')
+
+@app.route
+
 #########################################################################################
 # Homepage
 
@@ -531,9 +589,9 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## delete book
-    ## move books from one list to another functionality
     ## display other two lists appropriately
+        ## routes to display the other two lists
+    ## move books from one list to another functionality
     ## figure out how to sort a table
 ## Implement schedule books functionality 
     ## create calendar

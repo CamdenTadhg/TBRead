@@ -109,7 +109,9 @@
     </div>
     <a href="/users/{{g.user.user_id}}/lists/tbr" class="btn btn-secondary">Cancel</a>
     <button class="btn btn-primary book-edit-button">Save changes</button>
-    <a href="/users_books/{{userbook.userbook_id}}/delete" class="btn btn-danger">Delete Book</a>
+    <form method="POST" action="/users_books/{{userbook.userbook_id}}/delete">
+        <button class="btn btn-danger">Delete Book</button>
+    </form>
 </form>
 
 {% endblock %}
