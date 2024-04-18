@@ -16,7 +16,8 @@ class AgeCategory(enum.Enum):
     Adult = 1
     YA = 2
     Childrens = 3
-    NA = 4
+    Graphic = 4
+    NA = 5
 
 class EventCategory(enum.Enum):
     Order = 1
@@ -39,6 +40,7 @@ class User(db.Model):
     reading_speed_adult = db.Column(db.Integer, default=0)
     reading_speed_YA = db.Column(db.Integer, default=0)
     reading_speed_children = db.Column(db.Integer, default=0)
+    reading_speed_graphic = db.Column(db.Integer, default=0)
     calendar_id = db.Column(db.Text, unique=True)
     posting_frequency = db.Column(db.Integer, default=0)
     posting_day = db.Column(db.Text)
@@ -103,6 +105,7 @@ class Book(db.Model):
     book_id = db.Column(db.Integer, primary_key=True)
     google_id = db.Column(db.Text, unique=True)
     title = db.Column(db.Text, nullable=False)
+    authors = db.Column(db.Text, nullable=False)
     publisher = db.Column(db.Text, nullable=False)
     pub_date = db.Column(db.Text)
     description = db.Column(db.Text)
@@ -111,22 +114,8 @@ class Book(db.Model):
     thumbnail = db.Column(db.Text)
     added = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    authors = db.relationship("Author", secondary="books_authors", backref="books")
-
     def __repr__(self):
         return f"<Book {self.google_id}: {self.title}, {self.pub_date}>"
-
-class Author(db.Model):
-    """Author in database"""
-
-    __tablename__ = "authors"
-
-    author_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
-
-    def __repr__(self):
-        return f"{self.name}"
-
 
 class Challenge(db.Model):
     """Challenge in database"""
@@ -149,14 +138,6 @@ class Category(db.Model):
     category_name = db.Column(db.Text, nullable=False)
     category_desc = db.Column(db.Text)
 
-class Book_Author(db.Model):
-    """Connection of book and author"""
-
-    __tablename__ = 'books_authors'
-
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('authors.author_id'), primary_key=True)
-
 class User_Book(db.Model):
     """copy of book data specific to a certain user"""
 
@@ -166,6 +147,7 @@ class User_Book(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), primary_key=True)
     title = db.Column(db.Text)
+    authors = db.Column(db.Text)
     publisher = db.Column(db.Text)
     pub_date = db.Column(db.Text)
     description = db.Column(db.Text)
@@ -181,8 +163,9 @@ class User_Book(db.Model):
 
     def serialize_user_book(self):
         return {
+            "id": self.userbook_id,
             "title": self.title,
-            "author": self.book.authors[0].name, 
+            "author": self.authors, 
             "publisher": self.publisher, 
             "pub_date": self.pub_date,
             "cover": self.thumbnail,

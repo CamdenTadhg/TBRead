@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, Author, User_Book, User_Book_List
+from models import db, connect_db, User, Book, List, User_Book
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -260,6 +260,7 @@ def display_user_profile(user_id):
         user.reading_speed_adult = form.reading_speed_adult.data
         user.reading_speed_YA = form.reading_speed_YA.data
         user.reading_speed_children = form.reading_speed_children.data
+        user.reading_speed_graphic = form.reading_speed_graphic.data
         user.posting_frequency = form.posting_frequency.data
         user.posting_day = form.posting_day.data
         user.prep_days = form.prep_days.data
@@ -318,46 +319,39 @@ def delete_user():
 
 def addBookToDatabase(google_id):
     api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
-    print('***********************')
-    print(api_url)
     response = requests.get(api_url)
     data = response.json()
-    print('************************')
-    print(data)
     google_id = data['id']
     if data['volumeInfo'].get('subtitle'):
         title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
     else: 
         title = data['volumeInfo']['title']
+    author = data['volumeInfo'].get('authors')
     publisher = data['volumeInfo'].get('publisher')
     if data['volumeInfo'].get('publishedDate'):
         pub_date = data['volumeInfo']['publishedDate'][0:4]
     else:
         pub_date = '0000'
     description = data['volumeInfo'].get('description')
-    for item in data['volumeInfo'].get('industryIdentifiers'):
-        if item['type'] == "ISBN_13":
-            isbn = item['identifier']
-    if isbn == '':
-        isbn = 0
-    page_count = data['volumeInfo'].get('pageCount')
-    thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
+    if data['volumeInfo'].get('industryIdentifiers'):
+        for item in data['volumeInfo'].get('industryIdentifiers'):
+            if item['type'] == "ISBN_13":
+                isbn = item['identifier']
+        if isbn == '':
+            isbn = 0
+    else:
+        isbn=0
+    if data['volumeInfo'].get('pageCount'):
+        page_count = data['volumeInfo'].get('pageCount')
+    else:
+        page_count = 0
+    if data['volumeInfo'].get('imageLinks'):
+        thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
+    else: 
+        thumbnail = ''
     new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
     db.session.add(new_book)
     db.session.commit()
-    for item in data['volumeInfo']['authors']:
-        author = db.session.execute(db.select(Author).where(Author.name == item)).scalar()
-        if author:
-            new_book.authors.append(author)
-            db.session.add(new_book)
-            db.session.commit()
-        else:
-            new_author = Author(name=item)
-            db.session.add(new_author)
-            db.session.commit()
-            new_book.authors.append(new_author)
-            db.session.add(new_book)
-            db.session.commit()
     return new_book
 
 class MLStripper(HTMLParser):
@@ -397,7 +391,7 @@ def add_books():
     return render_template('books/addbooks.html', form=form)
 
 @app.route('/books/<google_id>', methods=['GET', 'POST'])
-def edit_book(google_id):
+def edit_new_book(google_id):
     """Add book to database, edit record, add to user's lists of books"""
 
     if not g.user:
@@ -416,6 +410,7 @@ def edit_book(google_id):
     if form.validate_on_submit():
         adding_book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
         title = form.title.data
+        author = form.authors.data
         publisher = form.publisher.data
         pub_date = form.pub_date.data
         description = form.description.data
@@ -428,7 +423,7 @@ def edit_book(google_id):
         ## check if user has already added this book
         check_book = db.session.execute(db.select(User_Book).where(User_Book.user_id == g.user.user_id).where(User_Book.book_id == adding_book.book_id)).scalar()
         if not check_book:
-            new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
+            new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
             db.session.commit()
             add_book_to_tbr(new_user_book.userbook_id)
@@ -436,7 +431,7 @@ def edit_book(google_id):
         else:
             flash('This book is already on your lists', 'danger')
     
-    return render_template('books/editbook.html', form=form)
+    return render_template('books/editnewbook.html', form=form)
 
 @app.route('/books/manual', methods=['GET', 'POST'])
 def add_book_manually():
@@ -462,22 +457,51 @@ def add_book_manually():
         notes = form.notes.data
         script = form.script.data
         ## add the book to the books table in the database
-        new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
-        new_author = Author(name=author)
-        db.session.add(new_book)
-        db.session.add(new_author)
-        db.session.commit()
-        new_book.authors.append(new_author)
-        db.session.add(new_book)
-        db.session.commit()
+        new_book = Book(google_id=google_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         ## add the book to the users_books table in the database
-        new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
+        new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
         db.session.add(new_user_book)
         db.session.commit()
         add_book_to_tbr(new_user_book.userbook_id)
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
     return render_template('books/manualbook.html', form=form)
+
+@app.route('/users_books/<userbook_id>', methods=['GET', 'POST'])
+def edit_book(userbook_id):
+    """Add book to database, edit record, add to user's lists of books"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    print('********************************')
+    print(userbook)
+    if userbook:
+        form=BookEditForm(title=userbook.title, authors=userbook.authors, publisher=userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, thumbnail=userbook.thumbnail)
+    else: 
+        flash('Book not found. Please try again.')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
+
+    if form.validate_on_submit():
+        userbook.title = form.title.data
+        userbook.authors = form.authors.data
+        userbook.publisher = form.publisher.data
+        userbook.pub_date = form.pub_date.data
+        userbook.description = form.description.data
+        userbook.isbn = form.isbn.data
+        userbook.page_count = form.page_count.data
+        userbook.age_category = form.age_category.data
+        userbook.thumbnail = form.thumbnail.data
+        userbook.notes = form.notes.data
+        userbook.script = form.script.data
+        db.session.add(userbook)
+        db.session.commit()
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
+
+    
+    return render_template('books/editbook.html', form=form, book=book)
 
 #########################################################################################
 # Homepage
@@ -498,15 +522,24 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## display TBR appropriately
-        ## figure out how to sort a table
-        ## search field
     ## edit book
+        ## route for editing books
     ## delete book
     ## move books from one list to another functionality
     ## display other two lists appropriately
+    ## figure out how to sort a table
 ## Implement schedule books functionality 
+    ## create calendar
+    ## set calendar days as work or off
+    ## schedule a book individually
+        ## start event
+        ## calculate end event
+        ## recommend post date (but let them change it)
+    ## schedule a year, month, etc. of books randomly
 ## Implement email reminders functionality 
+    ## what books will you need over the next month?
+    ## time to start a book
+    ## time to finish a book
 ## Implement scripts & notes functionality 
 ## Implement challenge functionality 
 ## Write tests for all routes & for javascript
@@ -521,10 +554,13 @@ def homepage():
     ## display of authors on edit form
     ## display of description on edit form
     ## fix tabs to be visible
+    ## make notes and script field big enough to read easily
+    ## display book cover on calendar on start date
+    ## make empty book list display look nice
 ## Documentation
 ## Deployment
 ## Small Screen Styling
-## Refactor
+## Refactor based on feedback from mentor and hatchways
 ## Implement upload user image
 ## Implement book covers on homepage are links that take you to a book form where you can add them to your list
 ## Implement Google Calendar connection

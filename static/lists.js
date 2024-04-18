@@ -37,7 +37,7 @@ function displayUserBooks(array){
     for (let book of array){
         let $bookTr = $('<tr></tr>');
         let $cover = $(`<td><img class="list-cover" src=${book.cover}></td>`);
-        let $title = $(`<td><a href="/books/${book.id}">${book.title}</a></td>`);
+        let $title = $(`<td><a href="/users_books/${book.id}">${book.title}</a></td>`);
         let $author = $(`<td>${book.author}</td>`);
         let $publisher = $(`<td>${book.publisher}</td>`);
         let $pub_date = $(`<td>${book.pub_date}</td>`)

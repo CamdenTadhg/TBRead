@@ -1,20 +1,114 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% include 'books/lists.html' %}
+
 <h1>Edit Book</h1>
 
 <form method="POST" id="edit_book_form">
     {{form.hidden_tag()}}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
-        {% for error in field.errors %}
-            <span class="text-sm text-danger">{{error}}</span>
-        {% endfor %}
-        {{field.label}}
-        {{field(class_="form-control")}}
-    {% endfor %}
+    <div>
+        {{form.title.label(class_="form-label")}}
+        {{form.title(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.title.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.authors.label(class_="form-label")}}
+        {{form.authors(class="form-control", placeholder="Jane Doe, John Doe")}}
+        <span class="text-danger">
+            {% for error in form.authors.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.publisher.label(class_="form-label")}}
+        {{form.publisher(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.publisher.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.pub_date.label(class_="form-label")}}
+        {{form.pub_date(class="form-control", placeholder="Year only")}}
+        <span class="text-danger">
+            {% for error in form.pub_date.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.description.label(class_="form-label")}}
+        {{form.description(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.description.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.isbn.label(class_="form-label")}}
+        {{form.isbn(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.isbn.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.page_count.label(class_="form-label")}}
+        {{form.page_count(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.page_count.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.age_category.label(class_="form-label")}}
+        {{form.age_category(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.age_category.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.thumbnail.label(class_="form-label")}}
+        {{form.thumbnail(class="form-control", placeholder="cover image URL")}}
+        <span class="text-danger">
+            {% for error in form.thumbnail.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.notes.label(class_="form-label")}}
+        {{form.notes(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.notes.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.script.label(class_="form-label")}}
+        {{form.script(class="form-control")}}
+        <span class="text-danger">
+            {% for error in form.script.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
     <a href="/users/{{g.user.user_id}}/lists/tbr" class="btn btn-secondary">Cancel</a>
-    <button class="btn btn-primary book-edit-button">Add to TBR</button>
+    <button class="btn btn-primary book-edit-button">Save changes</button>
 </form>
 
 {% endblock %}
