@@ -326,7 +326,17 @@ def addBookToDatabase(google_id):
         title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
     else: 
         title = data['volumeInfo']['title']
-    author = data['volumeInfo'].get('authors')
+    if data['volumeInfo'].get('authors'):
+        if len(data['volumeInfo']['authors']) == 1:
+            authors = data['volumeInfo']['authors'][0]
+        elif len(data['volumeInfo']['authors']) == 2:
+            authorA = data['volumeInfo']['authors'][0]
+            authorB = data['volumeInfo']['authors'][1]
+            authors = f'{authorA} & {authorB}'
+        else: 
+            authors = ', '.join(data['volumeInfo']['authors'])
+            print('*************************')
+            print(authors)
     publisher = data['volumeInfo'].get('publisher')
     if data['volumeInfo'].get('publishedDate'):
         pub_date = data['volumeInfo']['publishedDate'][0:4]
@@ -349,7 +359,7 @@ def addBookToDatabase(google_id):
         thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
     else: 
         thumbnail = ''
-    new_book = Book(google_id=google_id, title=title, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+    new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
     db.session.add(new_book)
     db.session.commit()
     return new_book
@@ -410,7 +420,7 @@ def edit_new_book(google_id):
     if form.validate_on_submit():
         adding_book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
         title = form.title.data
-        author = form.authors.data
+        authors = form.authors.data
         publisher = form.publisher.data
         pub_date = form.pub_date.data
         description = form.description.data
@@ -423,7 +433,7 @@ def edit_new_book(google_id):
         ## check if user has already added this book
         check_book = db.session.execute(db.select(User_Book).where(User_Book.user_id == g.user.user_id).where(User_Book.book_id == adding_book.book_id)).scalar()
         if not check_book:
-            new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
+            new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
             db.session.commit()
             add_book_to_tbr(new_user_book.userbook_id)
@@ -500,8 +510,7 @@ def edit_book(userbook_id):
         db.session.commit()
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
-    
-    return render_template('books/editbook.html', form=form, book=book)
+    return render_template('books/editbook.html', form=form)
 
 #########################################################################################
 # Homepage
@@ -522,8 +531,6 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## edit book
-        ## route for editing books
     ## delete book
     ## move books from one list to another functionality
     ## display other two lists appropriately
