@@ -42,12 +42,14 @@ function displayUserBooks(array){
         let $publisher = $(`<td>${book.publisher}</td>`);
         let $pub_date = $(`<td>${book.pub_date}</td>`)
         let $pages = $(`<td>${book.pages}</td>`)
+        let $delete = $(`<td><a href="/users_books/${book.id}/delete" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>`)
         $bookTr.append($cover);
         $bookTr.append($title);
         $bookTr.append($author);
         $bookTr.append($publisher);
         $bookTr.append($pub_date);
         $bookTr.append($pages);
+        $bookTr.append($delete)
         $userBookList.append($bookTr);
     }
 }
