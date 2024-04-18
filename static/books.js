@@ -16,12 +16,11 @@ $bookSearchButton.on('click', async function(event) {
 
 //send book search query to GoogleBooks
 async function searchGoogleBooks(field, term){
-
     if (field === 'isbn'){
         var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${term}`
     }
     else if (field === 'title'){
-        let term = term.replace(/ /g, '%20')
+        term = term.replace(/ /g, '%20')
         var url = `https://www.googleapis.com/books/v1/volumes?q=intitle%3A%22${term}%22`
     } else {
         term = term.replace(/ /g, '%20');

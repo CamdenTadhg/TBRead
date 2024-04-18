@@ -177,6 +177,18 @@ class User_Book(db.Model):
     script = db.Column(db.Text)
 
     categories = db.relationship("Category", secondary="books_categories", backref="users_books")
+    book = db.relationship("Book", backref="users_books")
+
+    def serialize_user_book(self):
+        return {
+            "title": self.title,
+            "author": self.book.authors[0].name, 
+            "publisher": self.publisher, 
+            "pub_date": self.pub_date,
+            "cover": self.thumbnail,
+            "id": self.userbook_id,
+            "pages": self.page_count
+        }
 
 class List(db.Model):
     """three lists belonging to each user - TBR, DNF, and completed"""

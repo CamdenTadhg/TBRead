@@ -3,5 +3,29 @@
 {% include 'books/lists.html' %}
 
     <a href="/books" class="btn btn-primary mt-5">Add Books</a>
-    
+    <table class="table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th scole="col">Cover</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Publication</th>
+                <th scope="col">Pub Date</th>
+                <th score="col">Pages</th>
+            </tr>
+        </thead>
+        <tbody class="table-striped user-book-list">
+
+        </tbody>
+    </table>
+
+    <script>
+        let g_user_id = "{{g.user.user_id}}";
+        let type = 'tbr';
+    </script>
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+    <script src="/static/lists.js"></script>
 {% endblock %}

@@ -278,6 +278,24 @@ def display_user_profile(user_id):
         
     return render_template('profile.html', form=form, form2=form2, user=g.user)
 
+@app.route('/users/<user_id>/lists/tbr', methods=['GET'])
+def display_tbr_list(user_id):
+    """Display user's tbr list. Also functions as homepage for logged in user."""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('books/tbrlist.html')
+
+@app.route('/api/<user_id>/lists/tbr', methods=['GET'])
+def return_tbr_list(user_id):
+    """Returns contents of tbr list to axios request"""
+
+    list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
+    serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
+    serialized_user_books
+    return jsonify(serialized_user_books)
 
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
@@ -461,18 +479,6 @@ def add_book_manually():
     
     return render_template('books/manualbook.html', form=form)
 
-
-@app.route('/users/<user_id>/lists/tbr')
-def display_tbr_list(user_id):
-    """Display user's tbr list. Also functions as homepage for logged in user."""
-
-    if not g.user:
-        flash('Please log in', 'danger')
-        return redirect('/')
-    
-    return render_template('books/tbrlist.html')
-
-
 #########################################################################################
 # Homepage
 
@@ -492,11 +498,9 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## add 10 books to each TBR
     ## display TBR appropriately
-        ## show a list of titles, covers, etc.
+        ## figure out how to sort a table
         ## search field
-        ## each title should be a link to open the edit book form
     ## edit book
     ## delete book
     ## move books from one list to another functionality
@@ -520,6 +524,7 @@ def homepage():
 ## Documentation
 ## Deployment
 ## Small Screen Styling
+## Refactor
 ## Implement upload user image
 ## Implement book covers on homepage are links that take you to a book form where you can add them to your list
 ## Implement Google Calendar connection
@@ -528,4 +533,5 @@ def homepage():
 ## Implement friendship & challenging functionality 
 ## Implement bookstore connection
 ## Implement library connection
+## Refactor
 ## Test with actual users and add functionality as needed
