@@ -325,7 +325,7 @@ def display_complete_list(user_id):
         flash('Please log in', 'danger')
         return redirect('/')
     
-    return render_template('books/dnflist.html')
+    return render_template('books/completelist.html')
 
 @app.route('/api/<user_id>/lists/complete', methods=['GET'])
 def return_complete_list(user_id):
@@ -611,9 +611,6 @@ def homepage():
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
-
-## Implement create lists functionality 
-    ## figure out how to sort a table
 ## Implement schedule books functionality 
     ## create calendar
     ## set calendar days as work or off

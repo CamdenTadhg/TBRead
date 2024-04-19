@@ -5,25 +5,13 @@ $table = $('.book-list-table');
 $(document).ready(function(){
     console.log('event handler started')
     userBooksOnStart();
-    //table sorting and searching plugin
-    $table.fancyTable({
-        sortColumn: 1,
-        sortOrder: 'asc',
-        sortable: true,
-        pagination: true, 
-        paginationClass: 'btn btn-primary',
-        perPage: 25,
-        inputStyle: '',
-        inputPlaceholder: "Search...",
-        globalSearch: true,
-        globalSearchExcludeColumns: [0],
-        exactMatch: "auto"
-    })
+
 });
 
 //initial function to show book list on site load
 async function userBooksOnStart(){
     console.log('begin userBooksOnStart')
+    console.log(type);
     mainUserBooksList = await UserBookList.getUserBooks(g_user_id, type);
     console.log(mainUserBooksList);
     displayUserBooks(mainUserBooksList);
@@ -39,7 +27,7 @@ function displayUserBooks(array){
     for (let book of array){
         let $bookTr = $('<tr></tr>');
         let $cover = $(`<td><img class="list-cover" src=${book.cover}></td>`);
-        let $title = $(`<td><a href="/users_books/${book.id}">${book.title}</a></td>`);
+        let $title = $(`<td data-sortvalue="${book.title}"><a href="/users_books/${book.id}">${book.title}</a></td>`);
         let $author = $(`<td>${book.author}</td>`);
         let $publisher = $(`<td>${book.publisher}</td>`);
         let $pub_date = $(`<td>${book.pub_date}</td>`)
@@ -66,7 +54,24 @@ function displayUserBooks(array){
         }
         $userBookList.append($bookTr);
     }
+    //table sorting and searching plugin
+    $table.fancyTable({
+        sortColumn: 1,
+        sortOrder: 'asc',
+        sortable: true,
+        localeCompare: true,
+        pagination: true, 
+        paginationClass: 'btn btn-primary',
+        perPage: 25,
+        inputStyle: '',
+        inputPlaceholder: "Search...",
+        globalSearch: true,
+        globalSearchExcludeColumns: [0],
+        exactMatch: "auto"
+    })
 }
+
+
 
 
 
