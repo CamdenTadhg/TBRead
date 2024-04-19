@@ -568,7 +568,31 @@ def delete_book(userbook_id):
     
     return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
-@app.route
+@app.route('/users_books/<userbook_id>/transfer/<list_type>', methods=["POST"])
+def transfer_to_dnf(userbook_id, list_type):
+    """Transfer a book between lists"""
+    print('transfer request received')
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    print(userbook)
+    list = db.session.execute(db.select(List).where(List.list_type == list_type).where(List.user_id == g.user.user_id)).scalar()
+    print(list)
+    if userbook: 
+        del userbook.lists[0]
+        userbook.lists.append(list)
+        print(userbook.lists)
+        db.session.add(userbook)
+        db.session.commit()
+    else:
+        flash('Book not found. Please try again')
+    
+    return redirect(f'/users/{g.user.user_id}/lists/tbr')
+    
+
 
 #########################################################################################
 # Homepage
@@ -589,9 +613,6 @@ def homepage():
 
 
 ## Implement create lists functionality 
-    ## display other two lists appropriately
-        ## routes to display the other two lists
-    ## move books from one list to another functionality
     ## figure out how to sort a table
 ## Implement schedule books functionality 
     ## create calendar

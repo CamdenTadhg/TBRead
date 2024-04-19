@@ -17,7 +17,7 @@
     </div>
     <div>
         {{form.authors.label(class_="form-label")}}
-        {{form.authors(class="form-control", placeholder="[Jane Doe, John Doe]")}}
+        {{form.authors(class="form-control", placeholder="Jane Doe")}}
         <span class="text-danger">
             {% for error in form.authors.errors %}
                 {{error}}

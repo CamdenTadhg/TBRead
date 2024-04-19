@@ -34,6 +34,8 @@ function displayUserBooks(array){
     console.log('begin displayUserBooks')
     console.log(array);
     $userBookList.empty();
+    currentURL = window.location.href;
+    console.log(currentURL);
     for (let book of array){
         let $bookTr = $('<tr></tr>');
         let $cover = $(`<td><img class="list-cover" src=${book.cover}></td>`);
@@ -43,8 +45,6 @@ function displayUserBooks(array){
         let $pub_date = $(`<td>${book.pub_date}</td>`)
         let $pages = $(`<td>${book.pages}</td>`)
         let $delete = $(`<td><form method="POST" action="/users_books/${book.id}/delete"><button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button></form></td>`)
-        let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/dnf"<button class="btn btn-info">DNF</button></form></td>`)
-        let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/complete"<button class="btn btn-info">Complete</button></form></td>`)
         $bookTr.append($cover);
         $bookTr.append($title);
         $bookTr.append($author);
@@ -52,8 +52,18 @@ function displayUserBooks(array){
         $bookTr.append($pub_date);
         $bookTr.append($pages);
         $bookTr.append($delete)
-        $bookTr.append($DNF)
-        $bookTr.append($complete)
+        if (!currentURL.includes('dnf')){
+            let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/DNF"><button class="btn btn-info">DNF</button></form></td>`)
+            $bookTr.append($DNF)
+        }
+        if (!currentURL.includes('complete')){
+            let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>`)
+            $bookTr.append($complete)
+        }
+        if (!currentURL.includes('tbr')){
+            let $TBR = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>`)
+            $bookTr.append($TBR)
+        }
         $userBookList.append($bookTr);
     }
 }
