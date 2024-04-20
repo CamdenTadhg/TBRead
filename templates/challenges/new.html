@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Create a new challenge</h1>
+<form id="challenge-form">
+    {{form.hidden_tag()}}
+    {% for field in form if field.widget.input_type !='hidden' %}
+    <p>
+        {{field.label}}
+        {{field(class_="form-control")}}
+
+        {% for error in field.errors %}
+            <div class="text-sm text-danger">
+                {{error}}
+            </div>
+        {% endfor %}
+    </p>
+    {% endfor %}
+    <a href="/challenges" class="btn btn-secondary cancel-button" >Cancel</a>
+    <button class="btn btn-primary">Create Challenge</button>
+</form>
+
+{% endblock %}

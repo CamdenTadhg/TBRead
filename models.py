@@ -129,6 +129,14 @@ class Challenge(db.Model):
 
     categories = db.relationship("Category", secondary="challenges_categories", backref="challenges")
 
+    def serialize_challenges(self):
+        return {
+            "id": self.challenge_id,
+            "name": self.name,
+            "num_books": self.num_books,
+            "description": self.description
+        }
+
 class Category(db.Model):
     """Category of challenge requirement"""
 

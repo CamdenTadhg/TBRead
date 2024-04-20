@@ -17,21 +17,21 @@ def matching_passwords(form, field):
 class UserAddForm(FlaskForm):
     """Form for adding users to the system."""
 
-    signup_username = StringField('Username', validators=[DataRequired()])
-    signup_password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
-    password2 = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8)])
-    signup_email = EmailField('E-mail', validators=[DataRequired(), Email()])
+    signup_username = StringField('Username', validators=[DataRequired(message="Please enter a username.")])
+    signup_password = PasswordField('Password', validators=[DataRequired(message="Please enter a password"), Length(min=8, message="Please enter a password of at least 8 characters."), password_requirements, matching_passwords])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired(message="Please confirm your password"), Length(min=8, message="Please enter a password of at least 8 characters.")])
+    signup_email = EmailField('E-mail', validators=[DataRequired(message="Please enter an email"), Email(message="Your email appears invalid. Please try again.")])
     user_image = StringField('(Optional) User Image URL')
 
 class LoginForm(FlaskForm):
     """Login form"""
-    login_username = StringField('Username', validators=[DataRequired()])
-    login_password = PasswordField('Password', validators=[Length(min=8)])
+    login_username = StringField('Username', validators=[DataRequired(message="Please enter your username")])
+    login_password = PasswordField('Password', validators=[DataRequired(message="Please enter your password"), Length(min=8, message="Passwords must be 8 characters long.")])
 
 class UserProfileForm(FlaskForm):
     """Form for editing user information."""
-    username = StringField('Username', validators=[DataRequired()])
-    email = EmailField('E-mail', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired(message="Please enter a username")])
+    email = EmailField('E-mail', validators=[DataRequired(message="Please enter an email"), Email(message="Your email appears invalid. Please try again.")])
     user_image = StringField('User Image')
     reading_time_work_day = DecimalField('How many hours do you read on work days?', places=2, default=0)
     reading_time_day_off = DecimalField('How many hours do you read on off days?', places=2, default=0)
@@ -46,10 +46,10 @@ class UserProfileForm(FlaskForm):
     email_reminders = BooleanField('Do you want email reminders?')
     
 class EmailForm(FlaskForm):
-    email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email"), Email()])
+    email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email."), Email(message="Your email appears invalid. Please try again.")])
 
 class UpdatePasswordForm(FlaskForm):
-    password = PasswordField("Password", validators=[InputRequired(message='Password is required'), password_requirements, matching_passwords])
+    password = PasswordField("Password", validators=[InputRequired(message='Please enter a password'), password_requirements, matching_passwords])
     password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
 
 class BookSearchForm(FlaskForm):
@@ -57,8 +57,8 @@ class BookSearchForm(FlaskForm):
     term = StringField('Search Term')
 
 class BookEditForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    authors = StringField('Authors', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(message="Please enter a title.")])
+    authors = StringField('Authors', validators=[DataRequired(message="Please enter an author.")])
     publisher = StringField('Publisher')
     pub_date = StringField('Publication Date')
     description = StringField('Description', widget=TextArea())
@@ -68,3 +68,8 @@ class BookEditForm(FlaskForm):
     thumbnail = StringField('Cover Image')
     notes = StringField('Notes', widget=TextArea())
     script = StringField('Script', widget=TextArea())
+
+class ChallengeForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired(message="Please enter a challenge name.")])
+    num_books = IntegerField("Number of Books", validators=[InputRequired(message="Please enter a number of books.")])
+    description = StringField('Description')

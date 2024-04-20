@@ -2,8 +2,8 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm
+from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 import requests
@@ -296,7 +296,6 @@ def return_tbr_list(user_id):
 
     list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
-    serialized_user_books
     return jsonify(serialized_user_books)
 
 @app.route('/users/<user_id>/lists/dnf', methods=['GET'])
@@ -315,7 +314,6 @@ def return_dnf_list(user_id):
 
     list = db.session.execute(db.select(List).where(List.list_type == 'DNF').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
-    serialized_user_books
     return jsonify(serialized_user_books)
 
 @app.route('/users/<user_id>/lists/complete', methods=['GET'])
@@ -334,7 +332,6 @@ def return_complete_list(user_id):
 
     list = db.session.execute(db.select(List).where(List.list_type == 'Complete').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
-    serialized_user_books
     return jsonify(serialized_user_books)
 
 @app.route('/users/delete', methods=["POST"])
@@ -607,11 +604,53 @@ def show_calendar(user_id):
     return render_template('calendars/calendar.html')
 
 #########################################################################################
-# Notes and Scripts Routes
+# Challenge Routes
 
-@app.route('/users/<user_id>/notesandscripts')
-def show_books(user_id):
-    """Displays all books on the user's lists"""
+@app.route('/challenges')
+def show_challenges():
+    """Show all available challenges in database"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('challenges/challenges.html')
+
+@app.route('/api/challenges')
+def return_challenges():
+    """Returns challenges to axios request from browser"""
+
+    list = db.session.query(Challenge).order_by(Challenge.name.asc()).all()
+    serialized_challenges = [challenge.serialize_challenge() for challenge in list]
+    return jsonify(serialized_challenges)
+
+@app.route('/challenges/add')
+def add_challenge():
+    """Add a challenge to the database"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    form = ChallengeForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        num_books = form.num_books.data
+        description = form.description.data
+        ## add the challenge to the challenge table in the database
+        new_challenge = Book(name=name, num_books=num_books, description=description)
+        db.session.add(new_challenge)
+        db.session.commit()
+        ## add the challenge to the user's profile
+        user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+        user.challenges.append(new_challenge)
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/challenges')
+
+    return render_template('challenges/new.html', form=form)
+
 
 #########################################################################################
 # Homepage
@@ -631,15 +670,28 @@ def homepage():
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
-## Implement scripts & notes functionality 
-    ## change form inputs for notes & scripts & descriptions to be nice and big
-    ## can the user email in notes?
+
 ## Implement challenge functionality
-    ## create new challenge in detail
-    ## display existing challenges in detail
-    ## assign books to challenges
+    ## create new challenge
+    ## display existing challenges
+        ## add tabs for all challenges and your challenges
+        ## create separate page for your challenges
+        ## create search field with search as you type functionality and put on both pages
+    ## view challenge detail page
+    ## edit user_challenge detail page (linked to listing)
     ## assign books to categories
+    ## assign books to challenges
 ## Deployment
+## Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## create email address for user on profile creation
+        ## create field for send email in user profile
+        ## process incoming email to correct book
+        ## append notes to existing notes information
+    ## create field for send email in user profile
+    ## create help section
+    ## create documentation for sending in emails
 ## Implement schedule books functionality
     ## figure out google oAuth
     ## button to create calendar
@@ -673,12 +725,14 @@ def homepage():
     ## make notes and script field big enough to read easily
     ## display book cover on calendar on start date
     ## make empty book list display look nice
+    ## make tables go across the full page regardless of how long the text content is
+    ## better response to axios errors than stupid little alerts
 ## Documentation
 ## Refactor based on feedback from mentor and hatchways
 ## Small Screen Styling
 ## Implement upload user image
 ## Implement book covers on homepage are links that take you to a book form where you can add them to your list
-## Implement Google Calendar connection
+    ## maybe increase the number of book covers displayed? 
 ## Implement importation functionality
 ## Implement OpenAI connection 
 ## Implement friendship & challenging functionality 
