@@ -143,7 +143,7 @@ class Category(db.Model):
     __tablename__ = "categories"
 
     category_id = db.Column(db.Integer, primary_key=True)
-    category_name = db.Column(db.Text, nullable=False)
+    category_name = db.Column(db.Text, nullable=False, unique=True)
     category_desc = db.Column(db.Text)
 
 class User_Book(db.Model):

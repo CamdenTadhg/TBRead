@@ -69,3 +69,22 @@ class ChallengeList {
         }
     }
 }
+
+class Category{
+
+    constructor({name, description}){
+        this.name = name
+        this.description = description
+    }
+
+    async addCategory(){
+        try{
+            console.log('starting add category');
+            const response = await axios.post('/api/category');
+            console.log(response);
+            return response.data.id;
+        } catch (error){
+            alert('Add category form submission failed. Please try again.')
+        }
+    }
+}

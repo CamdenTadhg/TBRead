@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField
+from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField, HiddenField
 from wtforms.validators import DataRequired, Email, Length, InputRequired, ValidationError
 from wtforms.widgets import TextArea
 import re
@@ -72,4 +72,9 @@ class BookEditForm(FlaskForm):
 class ChallengeForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired(message="Please enter a challenge name.")])
     num_books = IntegerField("Number of Books", validators=[InputRequired(message="Please enter a number of books.")])
+    description = StringField('Description')
+    category_ids = HiddenField()
+
+class CategoryForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired(message="Please enter a name for this category")])
     description = StringField('Description')

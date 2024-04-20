@@ -2,8 +2,8 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm
+from models import db, connect_db, User, Book, List, User_Book, Challenge, Category
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, CategoryForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 import requests
@@ -624,7 +624,34 @@ def return_challenges():
     serialized_challenges = [challenge.serialize_challenge() for challenge in list]
     return jsonify(serialized_challenges)
 
-@app.route('/challenges/add')
+@app.route('/api/category', methods=['POST'])
+def add_category():
+    """Add a new category to the database"""
+
+    name = request.json['name']
+    description = request.json['description']
+    category = db.session.execute(db.select(Category).where(Category.name == name)).scalar()
+    if category:
+        return jsonify({'success': f'{category.id}'})
+    else: 
+        new_category = Category(name=name, description=description)
+        db.session.add(new_category)
+        db.session.commit()
+
+    return jsonify({'success': f'{new_category.id}'})
+
+@app.route('/api/category/description')
+def return_description():
+    """Returns description to axios request containing existing category name"""
+
+    name = request.json['name']
+    category = db.session.execute(db.select(Category).where(Category.name == name)).scalar()
+    if category:
+        return jsonify({'success': f'{category.description}'})
+    else: 
+        return jsonify({'error': 'Category does not exist'})
+
+@app.route('/challenges/add', methods=['GET', 'POST'])
 def add_challenge():
     """Add a challenge to the database"""
 
@@ -633,15 +660,31 @@ def add_challenge():
         return redirect('/')
     
     form = ChallengeForm()
+    form2 = CategoryForm()
+    categories = db.session.execute(db.select(Category.name).order_by(Category.name)).all()
+    print('**************************')
+    print(categories)
 
     if form.validate_on_submit():
         name = form.name.data
         num_books = form.num_books.data
         description = form.description.data
+        category_ids_string = form.category_ids.data
+        ## convert the category ids string into a integer array
+        category_ids_array = category_ids_string.split(',')
+        for id in category_ids_array:
+            id = int(id)
+        print('*********************')
+        print(category_ids_array)
         ## add the challenge to the challenge table in the database
         new_challenge = Book(name=name, num_books=num_books, description=description)
         db.session.add(new_challenge)
         db.session.commit()
+        ## add the categories to the challenge
+        for id in category_ids_array:
+            new_challenge.categories.append(id)
+            db.session.add(new_challenge)
+            db.session.commit()
         ## add the challenge to the user's profile
         user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
         user.challenges.append(new_challenge)
@@ -649,7 +692,7 @@ def add_challenge():
         db.session.commit()
         return redirect('/challenges')
 
-    return render_template('challenges/new.html', form=form)
+    return render_template('challenges/new.html', form=form, form2=form2, categories=categories)
 
 
 #########################################################################################
@@ -672,15 +715,34 @@ def homepage():
 
 
 ## Implement challenge functionality
-    ## create new challenge
+    ## add challenges to database
+        ## add categories to challenge
+            ## if existing category selected, fill in description information
+                ## tell user category already exists
+            ## receive axios data and add category to database if it doesn't already exist
+            ## add category id to category_ids field
+            ## make field inactive once category has been submitted
+            ## on click of remove category, remove category id from category_ids field
+            ## on press of add category button, insert a new subform for a new category
+    ## add 10 challenges to database
+        ## check that autofill works
+        ## check that add_category works
+        ## check that remove_category works
+        ## check that add_challenge works
     ## display existing challenges
         ## add tabs for all challenges and your challenges
         ## create separate page for your challenges
         ## create search field with search as you type functionality and put on both pages
     ## view challenge detail page
     ## edit user_challenge detail page (linked to listing)
+        ## can't edit name, num_books, or description
+        ## can edit start date and end date
+        ## can't edit categories
+        ## button for "canceling" challenge
+        ## display book covers currently fulfilling that challenge
     ## assign books to categories
-    ## assign books to challenges
+        ## this is the tricky part. Books assigned to categories, when they are marked complete, should be connected with the challenge they are completing
+        ## somehow so they can display on the challenge page
 ## Deployment
 ## Implement scripts & notes functionality 
     ## allow user to email in notes
@@ -690,8 +752,6 @@ def homepage():
         ## process incoming email to correct book
         ## append notes to existing notes information
     ## create field for send email in user profile
-    ## create help section
-    ## create documentation for sending in emails
 ## Implement schedule books functionality
     ## figure out google oAuth
     ## button to create calendar
@@ -728,6 +788,10 @@ def homepage():
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
 ## Documentation
+    ## create help section
+        ## create documentation for sending in emails
+        ## create documentation for creating challenges
+    ## create ReadMe
 ## Refactor based on feedback from mentor and hatchways
 ## Small Screen Styling
 ## Implement upload user image
