@@ -34,3 +34,7 @@
 th {
     cursor: pointer;
 }
+
+textarea{
+    overflow-y: scroll;
+}

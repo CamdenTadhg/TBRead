@@ -46,7 +46,7 @@
     </div>
     <div>
         {{form.description.label(class_="form-label")}}
-        {{form.description(class="form-control")}}
+        {{form.description(class="form-control", cols="35", rows="10")}}
         <span class="text-danger">
             {% for error in form.description.errors %}
                 {{error}}
@@ -91,7 +91,7 @@
     </div>
     <div>
         {{form.notes.label(class_="form-label")}}
-        {{form.notes(class="form-control")}}
+        {{form.notes(class="form-control", cols="35", rows="10")}}
         <span class="text-danger">
             {% for error in form.notes.errors %}
                 {{error}}
@@ -100,7 +100,7 @@
     </div>
     <div>
         {{form.script.label(class_="form-label")}}
-        {{form.script(class="form-control")}}
+        {{form.script(class="form-control", cols="35", rows="10")}}
         <span class="text-danger">
             {% for error in form.script.errors %}
                 {{error}}

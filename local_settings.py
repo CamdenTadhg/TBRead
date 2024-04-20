@@ -1,1 +1,1 @@
-MAIL_PASSWORD = 'srql lgzm ujsz alpq'
+MAIL_PASSWORD = 'oowq bucx iubl jcga'

@@ -9,6 +9,7 @@
   "author": "camden",
   "license": "ISC",
   "dependencies": {
-    "jquery.fancytable": "^1.0.34"
+    "jquery.fancytable": "^1.0.34",
+    "minify": "^8.0.4"
   }
 }

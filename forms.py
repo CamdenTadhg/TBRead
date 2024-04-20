@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField
 from wtforms.validators import DataRequired, Email, Length, InputRequired, ValidationError
+from wtforms.widgets import TextArea
 import re
 
 
@@ -19,7 +20,7 @@ class UserAddForm(FlaskForm):
     signup_username = StringField('Username', validators=[DataRequired()])
     signup_password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8)])
-    signup_email = EmailField('E-mail', validators=[DataRequired()])
+    signup_email = EmailField('E-mail', validators=[DataRequired(), Email()])
     user_image = StringField('(Optional) User Image URL')
 
 class LoginForm(FlaskForm):
@@ -30,7 +31,7 @@ class LoginForm(FlaskForm):
 class UserProfileForm(FlaskForm):
     """Form for editing user information."""
     username = StringField('Username', validators=[DataRequired()])
-    email = EmailField('E-mail', validators=[DataRequired()])
+    email = EmailField('E-mail', validators=[DataRequired(), Email()])
     user_image = StringField('User Image')
     reading_time_work_day = DecimalField('How many hours do you read on work days?', places=2, default=0)
     reading_time_day_off = DecimalField('How many hours do you read on off days?', places=2, default=0)
@@ -45,7 +46,7 @@ class UserProfileForm(FlaskForm):
     email_reminders = BooleanField('Do you want email reminders?')
     
 class EmailForm(FlaskForm):
-    email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email")])
+    email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email"), Email()])
 
 class UpdatePasswordForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(message='Password is required'), password_requirements, matching_passwords])
@@ -60,10 +61,10 @@ class BookEditForm(FlaskForm):
     authors = StringField('Authors', validators=[DataRequired()])
     publisher = StringField('Publisher')
     pub_date = StringField('Publication Date')
-    description = StringField('Description')
+    description = StringField('Description', widget=TextArea())
     isbn = IntegerField('ISBN', default=0)
     page_count = IntegerField('Page Count', default=0)
     age_category = SelectField('Age Category', choices=[('NA','N/A'), ('Adult', 'Adult'), ('YA', 'YA'), ('Childrens', 'Childrens'), ('Graphic', 'Graphic')])
     thumbnail = StringField('Cover Image')
-    notes = StringField('Notes')
-    script = StringField('Script')
+    notes = StringField('Notes', widget=TextArea())
+    script = StringField('Script', widget=TextArea())

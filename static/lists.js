@@ -5,7 +5,6 @@ $table = $('.book-list-table');
 $(document).ready(function(){
     console.log('event handler started')
     userBooksOnStart();
-
 });
 
 //initial function to show book list on site load

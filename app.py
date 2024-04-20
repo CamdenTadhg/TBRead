@@ -11,6 +11,7 @@ from io import StringIO
 from html.parser import HTMLParser
 from local_settings import MAIL_PASSWORD
 import calendar
+from datetime import date
 import random
 import pdb
 
@@ -30,7 +31,7 @@ app.config['SESSION_COOKIE_HTTPONLY'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'theenbydeveloper@gmail.com'
+app.config['MAIL_USERNAME'] = 'tbreadlistmanager@gmail.com'
 app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
 mail=Mail(app)
@@ -592,7 +593,25 @@ def transfer_to_dnf(userbook_id, list_type):
     
     return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
+#########################################################################################
+# Calendar Routes
 
+@app.route('/users/<user_id>/calendar')
+def show_calendar(user_id):
+    """Show user's calendar"""
+
+    if not g.user: 
+        flash ('Please log in', 'danger')
+        return redirect('/')    
+
+    return render_template('calendars/calendar.html')
+
+#########################################################################################
+# Notes and Scripts Routes
+
+@app.route('/users/<user_id>/notesandscripts')
+def show_books(user_id):
+    """Displays all books on the user's lists"""
 
 #########################################################################################
 # Homepage
@@ -611,20 +630,34 @@ def homepage():
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
-## Implement schedule books functionality 
-    ## create calendar
-    ## set calendar days as work or off
+
+## Implement scripts & notes functionality 
+    ## change form inputs for notes & scripts & descriptions to be nice and big
+    ## can the user email in notes?
+## Implement challenge functionality
+    ## create new challenge in detail
+    ## display existing challenges in detail
+    ## assign books to challenges
+    ## assign books to categories
+## Deployment
+## Implement schedule books functionality
+    ## figure out google oAuth
+    ## button to create calendar
+    ## create calendar on button press
+    ## set post days based on user profile
+    ## set calendar days as work or off based on a set schedule
+    ## set caledar days as work or off based on click
     ## schedule a book individually
-        ## start event
-        ## calculate end event
+        ## autosuggest search field
+        ## load cover image on select
+        ## start event, calculate end event
+        ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
 ## Implement email reminders functionality 
     ## what books will you need over the next month?
     ## time to start a book
     ## time to finish a book
-## Implement scripts & notes functionality 
-## Implement challenge functionality 
 ## Write tests for all routes & for javascript
 ## Styling
     ## favicon.ico
@@ -641,9 +674,8 @@ def homepage():
     ## display book cover on calendar on start date
     ## make empty book list display look nice
 ## Documentation
-## Deployment
-## Small Screen Styling
 ## Refactor based on feedback from mentor and hatchways
+## Small Screen Styling
 ## Implement upload user image
 ## Implement book covers on homepage are links that take you to a book form where you can add them to your list
 ## Implement Google Calendar connection
