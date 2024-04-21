@@ -127,8 +127,6 @@ class Challenge(db.Model):
     num_books = db.Column(db.Integer)
     description = db.Column(db.Text)
 
-    categories = db.relationship("Category", secondary="challenges_categories", backref="challenges")
-
     def serialize_challenges(self):
         return {
             "id": self.challenge_id,
@@ -136,15 +134,6 @@ class Challenge(db.Model):
             "num_books": self.num_books,
             "description": self.description
         }
-
-class Category(db.Model):
-    """Category of challenge requirement"""
-
-    __tablename__ = "categories"
-
-    category_id = db.Column(db.Integer, primary_key=True)
-    category_name = db.Column(db.Text, nullable=False, unique=True)
-    category_desc = db.Column(db.Text)
 
 class User_Book(db.Model):
     """copy of book data specific to a certain user"""
@@ -166,7 +155,7 @@ class User_Book(db.Model):
     notes = db.Column(db.Text)
     script = db.Column(db.Text)
 
-    categories = db.relationship("Category", secondary="books_categories", backref="users_books")
+    challenges = db.relationship("Challenge", secondary="users_books_challenges", backref="users_books")
     book = db.relationship("Book", backref="users_books")
 
     def serialize_user_book(self):
@@ -225,21 +214,14 @@ class User_Challenge(db.Model):
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
 
-class Challenge_Category(db.Model):
-    """connection between challenges and challenge categories"""
+class User_Book_Challenge(db.Model):
+    """connection between user_books and challenges"""
 
-    __tablename__ = "challenges_categories"
+    __tablename__ = "users_books_challenges"
 
-    challenge_id = db.Column(db.Integer, db.ForeignKey('challenges.challenge_id'), primary_key=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'), primary_key=True)
-
-class Book_Categories(db.Model):
-    """connection between user copy of a book and a challenge category"""
-
-    __tablename__ = "books_categories"
-
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'), primary_key=True)
     userbook_id = db.Column(db.Integer, db.ForeignKey('users_books.userbook_id'), primary_key=True)
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenges.challenge_id'), primary_key=True)
+
 
 
 

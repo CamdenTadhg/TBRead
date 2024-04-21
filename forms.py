@@ -77,4 +77,4 @@ class ChallengeForm(FlaskForm):
 
 class CategoryForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired(message="Please enter a name for this category")])
-    description = StringField('Description')
+    description = StringField('Description', widget=TextArea())

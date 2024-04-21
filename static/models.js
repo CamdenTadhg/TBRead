@@ -1,5 +1,3 @@
-const { default: axios } = require("axios")
-
 class UserBook{
 
     constructor({id, user_id, book_id, title, authors, publisher, pub_date, description, isbn, page_count, age_category, thumbnail, notes, script}){

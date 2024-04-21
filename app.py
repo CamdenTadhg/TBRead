@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book, Challenge, Category
+from models import db, connect_db, User, Book, List, User_Book, Challenge
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, CategoryForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -621,35 +621,8 @@ def return_challenges():
     """Returns challenges to axios request from browser"""
 
     list = db.session.query(Challenge).order_by(Challenge.name.asc()).all()
-    serialized_challenges = [challenge.serialize_challenge() for challenge in list]
+    serialized_challenges = [challenge.serialize_challenges() for challenge in list]
     return jsonify(serialized_challenges)
-
-@app.route('/api/category', methods=['POST'])
-def add_category():
-    """Add a new category to the database"""
-
-    name = request.json['name']
-    description = request.json['description']
-    category = db.session.execute(db.select(Category).where(Category.name == name)).scalar()
-    if category:
-        return jsonify({'success': f'{category.id}'})
-    else: 
-        new_category = Category(name=name, description=description)
-        db.session.add(new_category)
-        db.session.commit()
-
-    return jsonify({'success': f'{new_category.id}'})
-
-@app.route('/api/category/description')
-def return_description():
-    """Returns description to axios request containing existing category name"""
-
-    name = request.json['name']
-    category = db.session.execute(db.select(Category).where(Category.name == name)).scalar()
-    if category:
-        return jsonify({'success': f'{category.description}'})
-    else: 
-        return jsonify({'error': 'Category does not exist'})
 
 @app.route('/challenges/add', methods=['GET', 'POST'])
 def add_challenge():
@@ -660,31 +633,15 @@ def add_challenge():
         return redirect('/')
     
     form = ChallengeForm()
-    form2 = CategoryForm()
-    categories = db.session.execute(db.select(Category.name).order_by(Category.name)).all()
-    print('**************************')
-    print(categories)
 
     if form.validate_on_submit():
         name = form.name.data
         num_books = form.num_books.data
         description = form.description.data
-        category_ids_string = form.category_ids.data
-        ## convert the category ids string into a integer array
-        category_ids_array = category_ids_string.split(',')
-        for id in category_ids_array:
-            id = int(id)
-        print('*********************')
-        print(category_ids_array)
         ## add the challenge to the challenge table in the database
-        new_challenge = Book(name=name, num_books=num_books, description=description)
+        new_challenge = Challenge(name=name, num_books=num_books, description=description)
         db.session.add(new_challenge)
         db.session.commit()
-        ## add the categories to the challenge
-        for id in category_ids_array:
-            new_challenge.categories.append(id)
-            db.session.add(new_challenge)
-            db.session.commit()
         ## add the challenge to the user's profile
         user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
         user.challenges.append(new_challenge)
@@ -692,7 +649,7 @@ def add_challenge():
         db.session.commit()
         return redirect('/challenges')
 
-    return render_template('challenges/new.html', form=form, form2=form2, categories=categories)
+    return render_template('challenges/new.html', form=form)
 
 
 #########################################################################################
@@ -713,17 +670,17 @@ def homepage():
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
-
+## drop and re-add database
+    ## add 10 books to each user's account
+    ## transfer a few to different lists
 ## Implement challenge functionality
     ## add challenges to database
         ## add categories to challenge
-            ## if existing category selected, fill in description information
-                ## tell user category already exists
-            ## receive axios data and add category to database if it doesn't already exist
             ## add category id to category_ids field
-            ## make field inactive once category has been submitted
+            ## add category to <ul>
             ## on click of remove category, remove category id from category_ids field
-            ## on press of add category button, insert a new subform for a new category
+            ## remove category from <ul>
+            ## on press of add category button, clear input fields
     ## add 10 challenges to database
         ## check that autofill works
         ## check that add_category works
@@ -734,6 +691,7 @@ def homepage():
         ## create separate page for your challenges
         ## create search field with search as you type functionality and put on both pages
     ## view challenge detail page
+        ## button to join challenge
     ## edit user_challenge detail page (linked to listing)
         ## can't edit name, num_books, or description
         ## can edit start date and end date

@@ -8,7 +8,7 @@
 
     <p>
         {{form.name.label}}
-        {{form.name(class_="form-control")}}
+        {{form.name(class_="form-control", form="challenge-form")}}
 
         {% for error in form.name.errors %}
             <div class="text-sm text-danger">
@@ -19,7 +19,7 @@
 
     <p>
         {{form.num_books.label}}
-        {{form.num_books(class_="form-control")}}
+        {{form.num_books(class_="form-control", form="challenge-form")}}
 
         {% for error in form.num_books.errors %}
             <div class="text-sm text-danger">
@@ -30,7 +30,7 @@
 
     <p>
         {{form.description.label}}
-        {{form.description(class_="form-control")}}
+        {{form.description(class_="form-control", form="challenge-form")}}
 
         {% for error in form.description.errors %}
             <div class="text-sm text-danger">
@@ -40,29 +40,14 @@
     </p>
 
     {{form.category_ids(id = 'category-ids-field')}}
-
-    <div id="category-div" class="border rounded m-5">
-        <h4>Categories</h4>
-        <form class="category-form">    
-                {{form2.name.label}}
-                {{form2.name(class_="category-name-field")}}
-                <ul class="suggestions">
-
-                </ul>
-
-                {{form2.description.label}}
-                {{form2.description (class_="category-description-field")}}
-
-            <button class="btn btn-primary add-category-button">Add Category</button>
-            <button class="btn btn-danger remove-category-button">Remove Category</button>
-        </form>
-    </div>
     <a href="/challenges" class="btn btn-secondary mt-5 cancel-button" >Cancel</a>
     <button class="btn btn-primary mt-5">Create Challenge</button>
 </form>
+{% endblock %}
 
+{% block scripts %}
 <script>
     let categories = '{{categories}}'
 </script>
-
+<script src="/static/new_challenge.js"></script>
 {% endblock %}
