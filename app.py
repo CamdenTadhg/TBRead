@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
 from models import db, connect_db, User, Book, List, User_Book, Challenge
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, CategoryForm
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 import requests
@@ -682,6 +682,38 @@ def add_challenge():
 
     return render_template('challenges/new.html', form=form)
 
+@app.route('/challenges/join/<challenge_id>', methods=["POST"])
+def join_challenge(challenge_id):
+    """Sign user up to take part in a challenge"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    user.challenges.append(challenge)
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect('/challenges')
+
+@app.route('/challenges/leave/<challenge_id>', methods=["POST"])
+def leave_challenge(challenge_id):
+    """'Unenroll' user in a challenge"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    user.challenges.remove(challenge)
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect(f'/users/{g.user.user_id}/challenges')
+
 
 #########################################################################################
 # Homepage
@@ -702,12 +734,9 @@ def homepage():
 
 
 ## Implement challenge functionalitys
-    ## view challenge detail page
-        ## button to join challenge
     ## edit user_challenge detail page (linked to listing)
         ## can't edit name, num_books, or description
         ## can edit start date and end date
-        ## button for "canceling" challenge
         ## display book covers currently fulfilling that challenge
     ## assign books to challenges
         ## this is the tricky part. Books assigned to challenges, when they are marked complete, should appear on the user_challenge page

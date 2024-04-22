@@ -73,8 +73,12 @@ class ChallengeForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired(message="Please enter a challenge name.")])
     num_books = IntegerField("Number of Books", validators=[InputRequired(message="Please enter a number of books.")])
     description = StringField('Description')
-    category_ids = HiddenField()
 
 class CategoryForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired(message="Please enter a name for this category")])
     description = StringField('Description', widget=TextArea())
+
+class UserChallengeForm(FlaskForm):
+    name = StringField('Name')
+    num_books = IntegerField('Number of Books')
+    description = StringField('Description')

@@ -27,15 +27,30 @@ function displayChallenges(array){
     console.log('begin displayChallenges')
     console.log(array);
     $challengesList.empty();
+    currentURL = window.location.href
     for (let item of array){
         console.log(item);
         let $challengeTr = $('<tr></tr>');
-        let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
+        if (!currentURL.includes('user')){
+            let $name = $(`<td data-sortvalue="${item.name}">${item.name}</td>`);
+            $challengeTr.append($name);
+        }
+        if (currentURL.includes('user')){
+            let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
+            $challengeTr.append($name);
+        }
         let $num_books = $(`<td>${item.num_books}</td>`);
         let $description = $(`<td>${item.description}</td>`);
-        $challengeTr.append($name);
         $challengeTr.append($num_books);
         $challengeTr.append($description);
+        if (!currentURL.includes('user')){
+            let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary">Join Challenge</button></form></td>`)
+            $challengeTr.append($joinButton);
+        }
+        if (currentURL.includes('user')){
+            let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger">Leave Challenge</button></form></td>`)
+            $challengeTr.append($leaveButton)
+        }
         $challengesList.append($challengeTr);
     }
     //table sorting and searching plugin
