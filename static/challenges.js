@@ -11,7 +11,13 @@ $(document).ready(function(){
 //initial function to show challenge list on site load
 async function challengesOnStart(){
     console.log('begin challengesOnStart')
-    mainChallengesList = await ChallengeList.getChallenges();
+    currentURL = window.location.href
+    if (currentURL.includes('user')){
+        mainChallengesList = await ChallengeList.getYourChallenges();
+    }
+    else {
+        mainChallengesList = await ChallengeList.getChallenges();
+    }
     console.log(mainChallengesList);
     displayChallenges(mainChallengesList);
 }
@@ -34,7 +40,7 @@ function displayChallenges(array){
     }
     //table sorting and searching plugin
     $table.fancyTable({
-        sortColumn: 1,
+        sortColumn: 0,
         sortOrder: 'asc',
         sortable: true,
         localeCompare: true,

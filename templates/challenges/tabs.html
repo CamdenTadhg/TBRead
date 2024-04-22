@@ -1,0 +1,10 @@
+{% block tabs %}
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/challenges">All Challenges</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/users/{{g.user.user_id}}/challenges">Your Challenges</a>
+    </li>
+</ul>
+{% endblock %}

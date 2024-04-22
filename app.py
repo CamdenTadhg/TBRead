@@ -449,8 +449,12 @@ def edit_new_book(google_id):
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
         new_book = addBookToDatabase(google_id)
+        print('************************')
+        print(new_book.description)
         ## remove html tags from description
         description = strip_tags(new_book.description)
+        print('***********************')
+        print(description)
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
     if form.validate_on_submit():
@@ -616,11 +620,38 @@ def show_challenges():
     
     return render_template('challenges/challenges.html')
 
+@app.route('/users/<user_id>/challenges')
+def show_user_challenges(user_id):
+    """Show all challenges the user has joined"""
+
+    if not g.user: 
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    return render_template('/challenges/user_challenges.html')
+
 @app.route('/api/challenges')
 def return_challenges():
     """Returns challenges to axios request from browser"""
 
-    list = db.session.query(Challenge).order_by(Challenge.name.asc()).all()
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    list = db.session.query(Challenge).order_by(Challenge.name).all()
+    serialized_challenges = [challenge.serialize_challenges() for challenge in list]
+    return jsonify(serialized_challenges)
+
+@app.route('/api/yourchallenges')
+def return_your_challenges():
+    """Returns challenges that a user has joined"""
+
+    if not g.user: 
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    list = user.challenges
     serialized_challenges = [challenge.serialize_challenges() for challenge in list]
     return jsonify(serialized_challenges)
 
@@ -670,38 +701,17 @@ def homepage():
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
-## drop and re-add database
-    ## add 10 books to each user's account
-    ## transfer a few to different lists
-## Implement challenge functionality
-    ## add challenges to database
-        ## add categories to challenge
-            ## add category id to category_ids field
-            ## add category to <ul>
-            ## on click of remove category, remove category id from category_ids field
-            ## remove category from <ul>
-            ## on press of add category button, clear input fields
-    ## add 10 challenges to database
-        ## check that autofill works
-        ## check that add_category works
-        ## check that remove_category works
-        ## check that add_challenge works
-    ## display existing challenges
-        ## add tabs for all challenges and your challenges
-        ## create separate page for your challenges
-        ## create search field with search as you type functionality and put on both pages
+## Implement challenge functionalitys
     ## view challenge detail page
         ## button to join challenge
     ## edit user_challenge detail page (linked to listing)
         ## can't edit name, num_books, or description
         ## can edit start date and end date
-        ## can't edit categories
         ## button for "canceling" challenge
         ## display book covers currently fulfilling that challenge
-    ## assign books to categories
-        ## this is the tricky part. Books assigned to categories, when they are marked complete, should be connected with the challenge they are completing
-        ## somehow so they can display on the challenge page
-## Deployment
+    ## assign books to challenges
+        ## this is the tricky part. Books assigned to challenges, when they are marked complete, should appear on the user_challenge page
+## figure out ngrok
 ## Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
@@ -750,6 +760,7 @@ def homepage():
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
+## Deployment
 ## Refactor based on feedback from mentor and hatchways
 ## Small Screen Styling
 ## Implement upload user image

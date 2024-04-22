@@ -123,7 +123,7 @@ class Challenge(db.Model):
     __tablename__ = "challenges"
 
     challenge_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=False, unique=True)
     num_books = db.Column(db.Integer)
     description = db.Column(db.Text)
 

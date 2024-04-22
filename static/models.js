@@ -66,23 +66,16 @@ class ChallengeList {
             alert('Something went wrong. Please try again.')
         }
     }
-}
 
-class Category{
-
-    constructor({name, description}){
-        this.name = name
-        this.description = description
-    }
-
-    async addCategory(){
+    //pulls list of challenges the user has joined and returns them as a new instance of ChallengeList
+    static async getYourChallenges(){
         try{
-            console.log('starting add category');
-            const response = await axios.post('/api/category');
+            console.log('starting getYourChallenges');
+            const response = await axios.get('/api/yourchallenges')
             console.log(response);
-            return response.data.id;
+            return response.data
         } catch (error){
-            alert('Add category form submission failed. Please try again.')
+            alert('Something went wrong. Please try again.')
         }
     }
 }
