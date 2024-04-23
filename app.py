@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge
+from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -526,6 +526,7 @@ def edit_book(userbook_id):
         return redirect('/')
     
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    user_challenges = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id)).scalars()
     if userbook:
         form=BookEditForm(title=userbook.title, authors=userbook.authors, publisher=userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, thumbnail=userbook.thumbnail)
     else: 
@@ -548,7 +549,7 @@ def edit_book(userbook_id):
         db.session.commit()
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
-    return render_template('books/editbook.html', form=form, userbook=userbook)
+    return render_template('books/editbook.html', form=form, userbook=userbook, user_challenges=user_challenges)
 
 @app.route('/users_books/<userbook_id>/delete', methods=["POST"])
 def delete_book(userbook_id):
@@ -578,7 +579,7 @@ def transfer_to_dnf(userbook_id, list_type):
     if not g.user:
         flash('Please log in', 'danger')
         return redirect('/')
-    
+    print('list_type = ', list_type)
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
     print(userbook)
     list = db.session.execute(db.select(List).where(List.list_type == list_type).where(List.user_id == g.user.user_id)).scalar()
@@ -591,9 +592,49 @@ def transfer_to_dnf(userbook_id, list_type):
         db.session.commit()
     else:
         flash('Book not found. Please try again')
+    if list_type == 'Complete':
+        userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
+        print(userbook_challenges)
+        for userbook_challenge in userbook_challenges:
+            userbook_challenge.complete = True
+            db.session.add(userbook_challenge)
+            db.session.commit()
+    else: 
+        userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
+        for userbook_challenge in userbook_challenges:
+            userbook_challenge.complete = False
+            db.session.add(userbook_challenge)
+            db.session.commit()
     
     return redirect(f'/users/{g.user.user_id}/lists/tbr')
+
+@app.route('/api/users_books/<userbook_id>/assign', methods=['POST'])
+def assign_book(userbook_id):
+    """Assign a user copy of a book to a challenge"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
     
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    data = request.json
+    challenge_id = data.get('challenge_id')
+    challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    if userbook:
+        userbook.challenges.append(challenge)
+        try: 
+            db.session.add(userbook)
+            db.session.commit()
+        except IntegrityError:
+            return jsonify({'error': 'Book already in challenge'})
+        if userbook.lists[0].list_type == 'complete':
+            userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
+            userbook_challenge.complete = True
+            db.session.add(userbook_challenge)
+            db.session.commit()
+    
+    return jsonify({'success': 'Book added'})
+
 #########################################################################################
 # Calendar Routes
 
@@ -782,75 +823,3 @@ def homepage():
         form3 = EmailForm()
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
-
-
-## 21 Implement challenge functionalitys
-    ## assign books to challenges
-        ## form on user book edit page to assign a book to a challenge
-        ## route to assign a book to a challenge
-            ## check if the book is already complete. If so, set complete to true
-        ## add code to change value to complete when a book is transfered to the complete list
-        ## display book covers currently fulfilling that user_challenge
-## 20 figure out ngrok
-## 19 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## create email address for user on profile creation
-        ## create field for send email in user profile
-        ## process incoming email to correct book
-        ## append notes to existing notes information
-    ## create field for send email in user profile
-## `8 Implement schedule books functionality
-    ## figure out google oAuth
-    ## button to create calendar
-    ## create calendar on button press
-    ## set post days based on user profile
-    ## set calendar days as work or off based on a set schedule
-    ## set caledar days as work or off based on click
-    ## schedule a book individually
-        ## autosuggest search field
-        ## load cover image on select
-        ## start event, calculate end event
-        ## or end event, calculate start event
-        ## recommend post date (but let them change it)
-    ## schedule a year, month, etc. of books randomly
-## 17 Implement email reminders functionality 
-    ## what books will you need over the next month?
-    ## time to start a book
-    ## time to finish a book
-## 16 Write tests for all routes & for javascript
-## 15 Styling
-    ## favicon.ico
-    ## fix it so that on login, you get the appropriate flash message
-    ## reformat user profile 
-    ## list displays
-    ## add books button to the right place
-    ## search form display
-    ## search results display
-    ## display of authors on edit form
-    ## display of description on edit form
-    ## fix tabs to be visible
-    ## make notes and script field big enough to read easily
-    ## display book cover on calendar on start date
-    ## make empty book list display look nice
-    ## make tables go across the full page regardless of how long the text content is
-    ## better response to axios errors than stupid little alerts
-## 14 Documentation
-    ## create help section
-        ## create documentation for sending in emails
-        ## create documentation for creating challenges
-    ## create ReadMe
-## 13 Deployment
-## 12 Refactor based on feedback from mentor and hatchways
-## 11 Small Screen Styling
-## 10 Implement upload user image
-## 9 Implement book covers on homepage are links that take you to a book form where you can add them to your list
-    ## maybe increase the number of book covers displayed? 
-## 8 Implement importation functionality
-## 7 Implement OpenAI connection 
-## 6 Implement friendship & challenging functionality 
-## 5 Implement bookstore connection
-## 4 Implement library connection
-## 3 Refactor
-## 2 Populate Database
-## 1 Test with actual users and add functionality as needed

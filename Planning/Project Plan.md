@@ -1,30 +1,70 @@
 TO DO LIST: 
-    Create models
-        models
-        relationships
-        methods
-    Implement user functionality
-        login
-        logout
-        signup
-        patch user
-        delete user
-    Implement create lists functionality 
-    Implement schedule books functionality 
-    Implement email reminders functionality 
-    Implement scripts & notes functionality 
-    Implement challenge functionality 
-    Implement Google Calendar connection
-    Implement importation functionality
-    Implement OpenAI connection 
-    Implement friendship & challenging functionality 
-    Implement bookstore connection
-    Implement library connection
-    Styling
-    Test with actual users
-    Documentation
-    Deployment
-
+## 21 Implement challenge functionalitys
+    ## assign books to challenges
+        ## display book covers currently fulfilling that user_challenge
+## 20 figure out ngrok
+## 19 Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## create email address for user on profile creation
+        ## create field for send email in user profile
+        ## process incoming email to correct book
+        ## append notes to existing notes information
+    ## create field for send email in user profile
+## `8 Implement schedule books functionality
+    ## figure out google oAuth
+    ## button to create calendar
+    ## create calendar on button press
+    ## set post days based on user profile
+    ## set calendar days as work or off based on a set schedule
+    ## set caledar days as work or off based on click
+    ## schedule a book individually
+        ## autosuggest search field
+        ## load cover image on select
+        ## start event, calculate end event
+        ## or end event, calculate start event
+        ## recommend post date (but let them change it)
+    ## schedule a year, month, etc. of books randomly
+## 17 Implement email reminders functionality 
+    ## what books will you need over the next month?
+    ## time to start a book
+    ## time to finish a book
+## 16 Write tests for all routes & for javascript
+## 15 Styling
+    ## favicon.ico
+    ## fix it so that on login, you get the appropriate flash message
+    ## reformat user profile 
+    ## list displays
+    ## add books button to the right place
+    ## search form display
+    ## search results display
+    ## display of authors on edit form
+    ## display of description on edit form
+    ## fix tabs to be visible
+    ## make notes and script field big enough to read easily
+    ## display book cover on calendar on start date
+    ## make empty book list display look nice
+    ## make tables go across the full page regardless of how long the text content is
+    ## better response to axios errors than stupid little alerts
+## 14 Documentation
+    ## create help section
+        ## create documentation for sending in emails
+        ## create documentation for creating challenges
+    ## create ReadMe
+## 13 Deployment
+## 12 Refactor based on feedback from mentor and hatchways
+## 11 Small Screen Styling
+## 10 Implement upload user image
+## 9 Implement book covers on homepage are links that take you to a book form where you can add them to your list
+    ## maybe increase the number of book covers displayed? 
+## 8 Implement importation functionality
+## 7 Implement OpenAI connection 
+## 6 Implement friendship & challenging functionality 
+## 5 Implement bookstore connection
+## 4 Implement library connection
+## 3 Refactor
+## 2 Populate Database
+## 1 Test with actual users and add functionality as needed
 # APIs
 
 ## Google Books

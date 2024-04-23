@@ -1,7 +1,10 @@
 const $bookSearchButton = $('.book-search-button');
 const $field = $('#field');
 const $term = $('#term');
-const $apiSearchResults = $('.api-search-results')
+const $apiSearchResults = $('.api-search-results');
+const $assignChallengeButton = $('.assign-challenge-button');
+const $challengesField = $('#challenges');
+const $assignToChallengeForm = $('.assign-to-challenge-form');
 
 //book search click event handler
 $bookSearchButton.on('click', async function(event) {
@@ -61,3 +64,29 @@ function displaySearchResults(response){
         $apiSearchResults.append($bookDiv);
     }
 }
+
+$assignChallengeButton.on('click', async function(event){
+    event.preventDefault();
+    console.log('starting assign challenge');
+    $assignToChallengeForm.find('.error-span').remove();
+    console.log($challengesField.val());
+    //get the challenge being assigned to
+    const challenge_id = $challengesField.val();
+    //get the userbook_id
+    currentURL = window.location.href;
+    const userbook_id = currentURL[currentURL.length - 1];
+    //send the data
+    const data = {'challenge_id': challenge_id};
+    const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
+    console.log(response);
+    if (response.data['success']){
+        console.log('success response')
+        $errorSpan = $('<span class="text-sm text-success error-span">Book assigned to challenge</span>');
+        $assignToChallengeForm.append($errorSpan);
+    }
+    if (response.data['error']){
+        console.log('error response')
+        $errorSpan = $('<span class="text-sm text-danger error-span">This book is already assigned to this challenge.</span>');
+        $assignToChallengeForm.append($errorSpan);
+    }
+})
