@@ -58,6 +58,12 @@
         </span>
     </div>
 
+    <div>
+        {% for book in books %}
+        <a href="/users_books/{{book.userbook_id}}"><img class="list-cover" src="{{book.thumbnail}}"></a>
+        {% endfor %}
+    </div>
+
     <a href="/users/{{g.user.user_id}}/challenges" class="btn btn-secondary">Cancel</a>
     <button class="btn btn-primary user-challenge-edit-button">Save changes</button>
     </form>

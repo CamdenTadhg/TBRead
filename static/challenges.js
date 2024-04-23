@@ -52,8 +52,13 @@ function displayChallenges(array){
             $challengeTr.append($joinButton);
         }
         if (currentURL.includes('user')){
-            let $start_date = $(`<td>${item.start_date}</td>`);
-            if (item.end_date = ''){
+            if (item.start_date === null){
+                var $start_date = $('<td></td>')
+            }
+            else {
+                var $start_date = $(`<td>${item.start_date}</td>`);
+            }
+            if (item.end_date === undefined){
                 var $end_date = $('<td></td>')
             }
             else{

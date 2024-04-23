@@ -794,6 +794,8 @@ def edit_user_challenge(user_id, challenge_id):
         return redirect('/')
     
     user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
+    books = db.session.execute(db.select(User_Book).join(User_Book_Challenge, User_Book.userbook_id == User_Book_Challenge.userbook_id).where(User_Book_Challenge.complete == True).where(User_Book_Challenge.challenge_id == challenge_id)).scalars()
+    print(list(books))
     form = UserChallengeForm(name = user_challenge.challenge.name, num_books = user_challenge.challenge.num_books, description = user_challenge.challenge.description, start_date = 
                              user_challenge.start_date, end_date = user_challenge.end_date)
 
@@ -804,7 +806,7 @@ def edit_user_challenge(user_id, challenge_id):
         db.session.commit()
         flash('Changes saved', 'success')
 
-    return render_template('challenges/edit_user_challenge.html', user_challenge=user_challenge, form=form)
+    return render_template('challenges/edit_user_challenge.html', form=form, books=books)
 
 
 #########################################################################################

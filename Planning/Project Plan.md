@@ -1,7 +1,7 @@
 TO DO LIST: 
 ## 21 Implement challenge functionalitys
     ## assign books to challenges
-        ## display book covers currently fulfilling that user_challenge
+        ## figure out why the book covers aren't displaying (question in to Karishma)
 ## 20 figure out ngrok
 ## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
