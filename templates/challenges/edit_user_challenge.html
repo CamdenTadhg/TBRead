@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'challenges/tabs.html' %}
+
+<h1>Edit Challenge</h1>
+
+<form method="POST" id="edit_challenge_form">
+    {{form.hidden_tag()}}
+
+    <div>
+        {{form.name.label(class_="form-label")}}
+        {{form.name(class_="form-control", disabled=true)}}
+        <span class="text-danger">
+            {% for error in form.name.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <div>
+        {{form.num_books.label(class_="form-label")}}
+        {{form.num_books(class_="form-control", disabled=true)}}
+        <span class="text-danger">
+            {% for error in form.num_books.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <div>
+        {{form.description.label(class_="form-label")}}
+        {{form.description(class_="form-control", disabled=true)}}
+        <span class="text-danger">
+            {% for error in form.description.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <div>
+        {{form.start_date.label(class_="form-label")}}
+        {{form.start_date(class_="form-control")}}
+        <span class="text-danger">
+            {% for error in form.start_date.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <div>
+        {{form.end_date.label(class_="form-label")}}
+        {{form.end_date(class_="form-control")}}
+        <span class="text-danger">
+            {% for error in form.end_date.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+
+    <a href="/users/{{g.user.user_id}}/challenges" class="btn btn-secondary">Cancel</a>
+    <button class="btn btn-primary user-challenge-edit-button">Save changes</button>
+    </form>
+{% endblock %}
+

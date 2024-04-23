@@ -211,8 +211,16 @@ class User_Challenge(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenges.challenge_id'), primary_key=True)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.Text)
+    end_date = db.Column(db.Text)
+
+    challenge = db.relationship('Challenge', backref="user_challenges", viewonly=True)
+
+    def serialize_user_challenges(self):
+        return {
+            "start_date": self.start_date,
+            "end_date": self.end_date
+        }
 
 class User_Book_Challenge(db.Model):
     """connection between user_books and challenges"""

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField, HiddenField
+from wtforms import StringField, PasswordField, DecimalField, IntegerField, BooleanField, SelectField, EmailField, DateField
 from wtforms.validators import DataRequired, Email, Length, InputRequired, ValidationError
 from wtforms.widgets import TextArea
 import re
@@ -82,3 +82,5 @@ class UserChallengeForm(FlaskForm):
     name = StringField('Name')
     num_books = IntegerField('Number of Books')
     description = StringField('Description')
+    start_date = StringField('Start date')
+    end_date = StringField('End date')

@@ -36,7 +36,7 @@ function displayChallenges(array){
             $challengeTr.append($name);
         }
         if (currentURL.includes('user')){
-            let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
+            let $name = $(`<td data-sortvalue="${item.name}"><a href="/users/${user_id}/challenges/${item.id}">${item.name}</a></td>`);
             $challengeTr.append($name);
         }
         let $num_books = $(`<td>${item.num_books}</td>`);
@@ -44,12 +44,21 @@ function displayChallenges(array){
         $challengeTr.append($num_books);
         $challengeTr.append($description);
         if (!currentURL.includes('user')){
-            let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary">Join Challenge</button></form></td>`)
+            let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary">Join Challenge</button></form></td>`);
             $challengeTr.append($joinButton);
         }
         if (currentURL.includes('user')){
-            let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger">Leave Challenge</button></form></td>`)
-            $challengeTr.append($leaveButton)
+            let $start_date = $(`<td>${item.start_date}</td>`);
+            if (item.end_date = ''){
+                var $end_date = $('<td></td>')
+            }
+            else{
+                var $end_date = $(`<td>${item.end_date}</td>`);
+            }
+            let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger">Leave Challenge</button></form></td>`);
+            $challengeTr.append($start_date);
+            $challengeTr.append($end_date);
+            $challengeTr.append($leaveButton);
         }
         $challengesList.append($challengeTr);
     }

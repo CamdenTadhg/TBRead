@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book, Challenge
+from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -653,6 +653,11 @@ def return_your_challenges():
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     list = user.challenges
     serialized_challenges = [challenge.serialize_challenges() for challenge in list]
+    for challenge in serialized_challenges:
+        challenge_id = int(challenge['id'])
+        user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
+        challenge['start_date'] = user_challenge.start_date
+        challenge['end date'] = user_challenge.end_date
     return jsonify(serialized_challenges)
 
 @app.route('/challenges/add', methods=['GET', 'POST'])
@@ -700,7 +705,7 @@ def join_challenge(challenge_id):
 
 @app.route('/challenges/leave/<challenge_id>', methods=["POST"])
 def leave_challenge(challenge_id):
-    """'Unenroll' user in a challenge"""
+    """Unenroll user in a challenge"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -713,6 +718,27 @@ def leave_challenge(challenge_id):
     db.session.commit()
 
     return redirect(f'/users/{g.user.user_id}/challenges')
+
+@app.route('/users/<user_id>/challenges/<challenge_id>', methods=["GET", "POST"])
+def edit_user_challenge(user_id, challenge_id):
+    """Display an individual challenge with a user has enrolled in"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
+    form = UserChallengeForm(name = user_challenge.challenge.name, num_books = user_challenge.challenge.num_books, description = user_challenge.challenge.description, start_date = 
+                             user_challenge.start_date, end_date = user_challenge.end_date)
+
+    if form.validate_on_submit():
+        user_challenge.start_date = form.start_date.data
+        user_challenge.end_date = form.end_date.data
+        db.session.add(user_challenge)
+        db.session.commit()
+        flash('Changes saved', 'success')
+
+    return render_template('challenges/edit_user_challenge.html', user_challenge=user_challenge, form=form)
 
 
 #########################################################################################
@@ -733,15 +759,13 @@ def homepage():
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 
-## Implement challenge functionalitys
-    ## edit user_challenge detail page (linked to listing)
-        ## can't edit name, num_books, or description
-        ## can edit start date and end date
-        ## display book covers currently fulfilling that challenge
+## 21 Implement challenge functionalitys
+    ## see if I can figure out a way to let the creator of the challenge edit it. 
     ## assign books to challenges
         ## this is the tricky part. Books assigned to challenges, when they are marked complete, should appear on the user_challenge page
-## figure out ngrok
-## Implement scripts & notes functionality 
+        ## display book covers currently fulfilling that user_challenge
+## 20 figure out ngrok
+## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
         ## create email address for user on profile creation
@@ -749,7 +773,7 @@ def homepage():
         ## process incoming email to correct book
         ## append notes to existing notes information
     ## create field for send email in user profile
-## Implement schedule books functionality
+## `8 Implement schedule books functionality
     ## figure out google oAuth
     ## button to create calendar
     ## create calendar on button press
@@ -763,12 +787,12 @@ def homepage():
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## Implement email reminders functionality 
+## 17 Implement email reminders functionality 
     ## what books will you need over the next month?
     ## time to start a book
     ## time to finish a book
-## Write tests for all routes & for javascript
-## Styling
+## 16 Write tests for all routes & for javascript
+## 15 Styling
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message
     ## reformat user profile 
@@ -784,21 +808,22 @@ def homepage():
     ## make empty book list display look nice
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
-## Documentation
+## 14 Documentation
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
-## Deployment
-## Refactor based on feedback from mentor and hatchways
-## Small Screen Styling
-## Implement upload user image
-## Implement book covers on homepage are links that take you to a book form where you can add them to your list
+## 13 Deployment
+## 12 Refactor based on feedback from mentor and hatchways
+## 11 Small Screen Styling
+## 10 Implement upload user image
+## 9 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## maybe increase the number of book covers displayed? 
-## Implement importation functionality
-## Implement OpenAI connection 
-## Implement friendship & challenging functionality 
-## Implement bookstore connection
-## Implement library connection
-## Refactor
-## Test with actual users and add functionality as needed
+## 8 Implement importation functionality
+## 7 Implement OpenAI connection 
+## 6 Implement friendship & challenging functionality 
+## 5 Implement bookstore connection
+## 4 Implement library connection
+## 3 Refactor
+## 2 Populate Database
+## 1 Test with actual users and add functionality as needed
