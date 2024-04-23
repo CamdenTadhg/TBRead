@@ -635,6 +635,28 @@ def assign_book(userbook_id):
     
     return jsonify({'success': 'Book added'})
 
+@app.route('/api/users_books/<userbook_id>/remove', methods=['POST'])
+def remove_book(userbook_id):
+    """Remove a user copy of a book from a challenge"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    data = request.json
+    challenge_id = data.get('challenge_id')
+    challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    if userbook:
+        if challenge in userbook.challenges:
+            userbook.challenges.remove(challenge)
+            db.session.add(userbook)
+            db.session.commit()
+        else:
+            return jsonify({'error': 'Book is not assigned to this challenge'}) 
+
+    return jsonify({'success': 'Book removed'}) 
+
 #########################################################################################
 # Calendar Routes
 

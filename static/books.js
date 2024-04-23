@@ -5,6 +5,7 @@ const $apiSearchResults = $('.api-search-results');
 const $assignChallengeButton = $('.assign-challenge-button');
 const $challengesField = $('#challenges');
 const $assignToChallengeForm = $('.assign-to-challenge-form');
+const $removeChallengeButton = $('.remove-challenge-button');
 
 //book search click event handler
 $bookSearchButton.on('click', async function(event) {
@@ -65,6 +66,7 @@ function displaySearchResults(response){
     }
 }
 
+//assign a book as part of a challenge
 $assignChallengeButton.on('click', async function(event){
     event.preventDefault();
     console.log('starting assign challenge');
@@ -80,13 +82,37 @@ $assignChallengeButton.on('click', async function(event){
     const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
     console.log(response);
     if (response.data['success']){
-        console.log('success response')
+        console.log('success response');
         $errorSpan = $('<span class="text-sm text-success error-span">Book assigned to challenge</span>');
         $assignToChallengeForm.append($errorSpan);
     }
     if (response.data['error']){
-        console.log('error response')
+        console.log('error response');
         $errorSpan = $('<span class="text-sm text-danger error-span">This book is already assigned to this challenge.</span>');
+        $assignToChallengeForm.append($errorSpan);
+    }
+})
+
+//remove a book as part of a challenge
+$removeChallengeButton.on('click', async function(event){
+    event.preventDefault();
+    console.log('starting remove challenge');
+    $assignToChallengeForm.find('.error-span').remove();
+    console.log($challengesField.val());
+    const challenge_id = $challengesField.val();
+    currentURL = window.location.href;
+    const userbook_id = currentURL[currentURL.length-1];
+    const data = {'challenge_id': challenge_id};
+    const response = await axios.post(`/api/users_books/${userbook_id}/remove`, data);
+    console.log(response);
+    if (response.data['success']){
+        console.log('success response');
+        $errorSpan = $('<span class="text-sm text-success error-span">Book removed from challenge</span>');
+        $assignToChallengeForm.append($errorSpan);
+    }
+    if (response.data['error']){
+        console.log('error response');
+        $errorSpan = $('<span class="text-sm text-danger error-span">This book is not assigned to this challenge</span>')
         $assignToChallengeForm.append($errorSpan);
     }
 })

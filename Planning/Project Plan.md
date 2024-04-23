@@ -2,6 +2,7 @@ TO DO LIST:
 ## 21 Implement challenge functionalitys
     ## assign books to challenges
         ## figure out why the book covers aren't displaying (question in to Karishma)
+    ## remove books from challenges
 ## 20 figure out ngrok
 ## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
@@ -10,8 +11,7 @@ TO DO LIST:
         ## create field for send email in user profile
         ## process incoming email to correct book
         ## append notes to existing notes information
-    ## create field for send email in user profile
-## `8 Implement schedule books functionality
+## 18 Implement schedule books functionality
     ## figure out google oAuth
     ## button to create calendar
     ## create calendar on button press
@@ -65,6 +65,9 @@ TO DO LIST:
 ## 3 Refactor
 ## 2 Populate Database
 ## 1 Test with actual users and add functionality as needed
+
+
+
 # APIs
 
 ## Google Books
