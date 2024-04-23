@@ -100,6 +100,7 @@ def signup():
     
     do_login(user)
     create_lists(user)
+    create_email(user)
 
     return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     
@@ -656,6 +657,22 @@ def remove_book(userbook_id):
             return jsonify({'error': 'Book is not assigned to this challenge'}) 
 
     return jsonify({'success': 'Book removed'}) 
+
+@app.route('/email', methods=["POST"])
+def receive_email():
+
+    email = request.form['to']
+    subject = request.form['subject']
+    body = request.form['text']
+
+    user = db.session.execute(db.select(User).where(User.incoming_email == email)).scalar()
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
+
+    stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
+    db.session.execute(stmt)
+    db.session.commit()
+
+    return ''
 
 #########################################################################################
 # Calendar Routes

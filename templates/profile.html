@@ -55,7 +55,7 @@
     <form method="POST" id="user_profile">
         {{form.hidden_tag()}}
     
-        {% for field in form if field.widget.input_type !='hidden' and field.name !='email_reminders' %}
+        {% for field in form if field.widget.input_type !='hidden' and field.name !='email_reminders' and field.name !="incoming_email" %}
             {% for error in field.errors %}
                 <span class="text-danger">{{error}}</span>
             {% endfor %} 
@@ -68,6 +68,10 @@
         {% for error in form.email_reminders.errors %}
             <span class="text-danger">{{error}}</span>
         {% endfor %}
+        <br>
+
+        {{form.incoming_email.label}}
+        {{form.incoming_email(class_="form-control", disabled=true)}}
 
       <div class="profile-edit-btn-area">
         <button class="btn btn-success">Save your changes</button>

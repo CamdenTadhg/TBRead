@@ -2,19 +2,13 @@ TO DO LIST:
 ## 21 Implement challenge functionalitys
     ## assign books to challenges
         ## figure out why the book covers aren't displaying (question in to Karishma)
-    ## remove books from challenges
 ## 20 figure out ngrok
-## 19 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## create email address for user on profile creation
-        ## create field for send email in user profile
-        ## process incoming email to correct book
-        ## append notes to existing notes information
-## 18 Implement schedule books functionality
+## 19 Implement schedule books functionality
     ## figure out google oAuth
     ## button to create calendar
     ## create calendar on button press
+    ## embed calendar on calendar page
+    ## save calendar address to user profile
     ## set post days based on user profile
     ## set calendar days as work or off based on a set schedule
     ## set caledar days as work or off based on click
@@ -25,10 +19,18 @@ TO DO LIST:
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## 17 Implement email reminders functionality 
+## 18 Implement email reminders functionality 
     ## what books will you need over the next month?
     ## time to start a book
     ## time to finish a book
+    ## time to post a book
+## 17 Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## create email address for user on profile creation
+        ## create field for send email in user profile (DONE)
+        ## process incoming email to correct book (DONE)
+        ## append notes to existing notes information (DONE)
 ## 16 Write tests for all routes & for javascript
 ## 15 Styling
     ## favicon.ico

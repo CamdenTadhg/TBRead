@@ -49,6 +49,7 @@ class User(db.Model):
     calendar = db.Column(db.Text)
     email_reminders = db.Column(db.Boolean)
     password_reset_token = db.Column(db.String)
+    incoming_email = db.Column(db.String)
 
     user_books = db.relationship("User_Book", backref="users", cascade="all, delete-orphan")
     lists = db.relationship("List", backref="users", cascade="all, delete-orphan")

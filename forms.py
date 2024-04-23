@@ -44,6 +44,7 @@ class UserProfileForm(FlaskForm):
     prep_days = IntegerField('How many days before posting would you like to finish books?', default=0)
     content_account = StringField('URL of posting account')
     email_reminders = BooleanField('Do you want email reminders?')
+    incoming_email = StringField('Your notes email')
     
 class EmailForm(FlaskForm):
     email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email."), Email(message="Your email appears invalid. Please try again.")])
