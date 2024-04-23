@@ -123,6 +123,7 @@ class Challenge(db.Model):
     __tablename__ = "challenges"
 
     challenge_id = db.Column(db.Integer, primary_key=True)
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     name = db.Column(db.Text, nullable=False, unique=True)
     num_books = db.Column(db.Integer)
     description = db.Column(db.Text)
@@ -130,6 +131,7 @@ class Challenge(db.Model):
     def serialize_challenges(self):
         return {
             "id": self.challenge_id,
+            "creator_id": self.creator_id,
             "name": self.name,
             "num_books": self.num_books,
             "description": self.description
@@ -229,8 +231,7 @@ class User_Book_Challenge(db.Model):
 
     userbook_id = db.Column(db.Integer, db.ForeignKey('users_books.userbook_id'), primary_key=True)
     challenge_id = db.Column(db.Integer, db.ForeignKey('challenges.challenge_id'), primary_key=True)
-
-
+    complete = db.Column(db.Boolean)
 
 
 def connect_db(app):

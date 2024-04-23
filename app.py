@@ -675,7 +675,7 @@ def add_challenge():
         num_books = form.num_books.data
         description = form.description.data
         ## add the challenge to the challenge table in the database
-        new_challenge = Challenge(name=name, num_books=num_books, description=description)
+        new_challenge = Challenge(creator_id = g.user.user_id, name=name, num_books=num_books, description=description)
         db.session.add(new_challenge)
         db.session.commit()
         ## add the challenge to the user's profile
@@ -686,6 +686,31 @@ def add_challenge():
         return redirect('/challenges')
 
     return render_template('challenges/new.html', form=form)
+
+@app.route('/challenges/<challenge_id>', methods=['GET', 'POST'])
+def edit_challenge(challenge_id):
+    """Edit a challenge that the user created"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
+    
+    challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    if challenge.creator_id != g.user.user_id:
+        flash('You do not have permissions to edit this challenge', 'danger')
+        return redirect('/challenges')
+    
+    form = ChallengeForm(obj=challenge)
+
+    if form.validate_on_submit():
+        challenge.name = form.name.data
+        challenge.num_books = form.num_books.data
+        challenge.description = form.description.data
+        db.session.add(challenge)
+        db.session.commit()
+        flash('Changes saved', 'success')
+    
+    return render_template('challenges/edit_challenge.html', form=form)
 
 @app.route('/challenges/join/<challenge_id>', methods=["POST"])
 def join_challenge(challenge_id):
@@ -760,9 +785,11 @@ def homepage():
 
 
 ## 21 Implement challenge functionalitys
-    ## see if I can figure out a way to let the creator of the challenge edit it. 
     ## assign books to challenges
-        ## this is the tricky part. Books assigned to challenges, when they are marked complete, should appear on the user_challenge page
+        ## form on user book edit page to assign a book to a challenge
+        ## route to assign a book to a challenge
+            ## check if the book is already complete. If so, set complete to true
+        ## add code to change value to complete when a book is transfered to the complete list
         ## display book covers currently fulfilling that user_challenge
 ## 20 figure out ngrok
 ## 19 Implement scripts & notes functionality 

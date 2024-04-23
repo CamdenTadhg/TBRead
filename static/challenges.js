@@ -31,12 +31,16 @@ function displayChallenges(array){
     for (let item of array){
         console.log(item);
         let $challengeTr = $('<tr></tr>');
-        if (!currentURL.includes('user')){
-            let $name = $(`<td data-sortvalue="${item.name}">${item.name}</td>`);
+        if (!currentURL.includes('user') && user_id == item.creator_id){
+            let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
             $challengeTr.append($name);
         }
-        if (currentURL.includes('user')){
+        else if (currentURL.includes('user')){
             let $name = $(`<td data-sortvalue="${item.name}"><a href="/users/${user_id}/challenges/${item.id}">${item.name}</a></td>`);
+            $challengeTr.append($name);
+        }
+        else {
+            let $name = $(`<td data-sortvalue="${item.name}">${item.name}</td>`);
             $challengeTr.append($name);
         }
         let $num_books = $(`<td>${item.num_books}</td>`);
