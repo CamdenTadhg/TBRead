@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div id="calendar" style="padding: 1rem">
+{% if not g.user.calendar %}
+    <a class="btn btn-primary" href="/users/{{g.user.user_id}}/oauth">Create Your Calendar</a>
+{% endif %}
 
-</div>
+{% if g.user.calendar %}
+<iframe src="https://calendar.google.com/calendar/embed?src={{calendar_id}}" style="border:0" width="900" height="800" frameborder="0" scrolling="no"></iframe>
+{% endif %}
 {% endblock %}
 
 

@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
+from flask import Flask, render_template, request, flash, redirect, session, g, jsonify, url_for
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
 from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge
@@ -9,11 +9,17 @@ from flask_mail import Mail, Message
 import requests
 from io import StringIO
 from html.parser import HTMLParser
-from local_settings import MAIL_PASSWORD
-import calendar
-from datetime import date
+from local_settings import MAIL_PASSWORD, GOOGLE_API_KEY
 import random
 import pdb
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+from google.cloud import storage
+import json 
+import google_auth_oauthlib.flow
+from google.oauth2.credentials import Credentials
+import string
 
 CURR_USER_KEY = "curr_user"
 
@@ -42,6 +48,8 @@ app.app_context().push()
 
 connect_db(app)
 db.create_all()
+
+
 
 #########################################################################################
 # User signup/login/logout
@@ -100,7 +108,6 @@ def signup():
     
     do_login(user)
     create_lists(user)
-    create_email(user)
 
     return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     
@@ -661,11 +668,11 @@ def remove_book(userbook_id):
 @app.route('/email', methods=["POST"])
 def receive_email():
 
-    email = request.form['to']
+    email = request.form['from']
     subject = request.form['subject']
     body = request.form['text']
 
-    user = db.session.execute(db.select(User).where(User.incoming_email == email)).scalar()
+    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
 
     stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
@@ -677,15 +684,88 @@ def receive_email():
 #########################################################################################
 # Calendar Routes
 
+def authenticate_implicit_with_adc(project_id = 'tb-read'):
+    storage_client = storage.Client(project=project_id)
+    buckets = storage_client.list_buckets()
+
 @app.route('/users/<user_id>/calendar')
 def show_calendar(user_id):
     """Show user's calendar"""
 
     if not g.user: 
         flash ('Please log in', 'danger')
-        return redirect('/')    
+        return redirect('/')   
 
-    return render_template('calendars/calendar.html')
+    user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
+    calendar_id = user.calendar_id 
+
+    return render_template('calendars/calendar.html', calendar_id=calendar_id)
+
+@app.route('/users/<user_id>/oauth')
+def connect_to_google(user_id):
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    flow.redirect_uri = 'https://ngrok.com/r/ti/createcalendar'
+    state = generate_random_state()
+    session['oauth_state'] = state
+    authorization_url, _ = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent", state=state)
+
+    # global service
+    # service = build('calendar', 'v3')
+    # session['oauth_state'] = state
+
+    return redirect(authorization_url)
+
+@app.route('/createcalendar')
+def create_calendar():
+    """Create a new google calendar for the user"""
+
+    if not g.user: 
+        flash ('Please log in', 'danger')
+        return redirect('/') 
+    
+    if request.args.get('state') != session.get('oauth_state'): 
+        flash('State verification failed', 'danger')
+        return redirect('/')
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    flow.redirect_uri = 'https://ngrok.com/r/ti/createcalendar'
+    flow.fetch_token(authorization_response = request.url)
+    session['google_auth_token'] = flow.credentials.to_json()
+    return redirect(url_for('create_calendar_callback'))
+
+@app.route('/createcalendar/callback')
+def create_calendar_callback():
+
+    token_info = json.loads(session.get('google_auth_token'))
+    if 'token' not in token_info or 'refresh_token' not in token_info:
+        flash('Token information incomplete', 'danger')
+        return redirect('/')
+    # flow = session.get('google_auth_flow')
+    # if not flow: 
+    #     return redirect(url_for('connect_to_google', user_id = g.user.user_id))
+    # credentials = flow.fetch_token(authorization_response=request.url)
+    # token_info = json.loads(session.get('google_auth_token'))
+    credentials = Credentials.from_authorized_user_info(token_info)
+    service = build('calendar', 'v3', credentials=credentials)
+    calendar = {
+        'summary': 'TB Read Calendar'
+    }
+    created_calendar = service.calendars().insert(body=calendar).execute()
+    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    user.calendar_id = created_calendar['id']
+    db.session.add(user)
+    db.session.commit()
+    print('****************************')
+    print(user.calendar_id)
+    service.close()
+
+    return redirect(f'/users/{g.user.user_id}/calendar')
+
+def generate_random_state():
+    state_length = 10
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=state_length))
+
+
 
 #########################################################################################
 # Challenge Routes

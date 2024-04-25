@@ -5,13 +5,14 @@ TO DO LIST:
 ## 20 figure out ngrok
 ## 19 Implement schedule books functionality
     ## figure out google oAuth
-    ## button to create calendar
+        ## figure out authentication scopes
+        ## how to make the button disappear once permission has been given
     ## create calendar on button press
     ## embed calendar on calendar page
-    ## save calendar address to user profile
+    ## save calendar idenifier to user profile to assist in future embedding
     ## set post days based on user profile
     ## set calendar days as work or off based on a set schedule
-    ## set caledar days as work or off based on click
+    ## set calendar days as work or off based on click
     ## schedule a book individually
         ## autosuggest search field
         ## load cover image on select
@@ -27,11 +28,10 @@ TO DO LIST:
 ## 17 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## create email address for user on profile creation
-        ## create field for send email in user profile (DONE)
         ## process incoming email to correct book (DONE)
         ## append notes to existing notes information (DONE)
 ## 16 Write tests for all routes & for javascript
+    ## figure out why tests aren't working
 ## 15 Styling
     ## favicon.ico
     ## fix it so that on login, you get the appropriate flash message
