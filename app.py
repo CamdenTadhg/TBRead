@@ -635,7 +635,8 @@ def assign_book(userbook_id):
             db.session.commit()
         except IntegrityError:
             return jsonify({'error': 'Book already in challenge'})
-        if userbook.lists[0].list_type == 'complete':
+        if userbook.lists[0].list_type == 'Complete':
+            print('userbook complete')
             userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
             userbook_challenge.complete = True
             db.session.add(userbook_challenge)
@@ -914,7 +915,8 @@ def edit_user_challenge(user_id, challenge_id):
     
     user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
     books = db.session.execute(db.select(User_Book).join(User_Book_Challenge, User_Book.userbook_id == User_Book_Challenge.userbook_id).where(User_Book_Challenge.complete == True).where(User_Book_Challenge.challenge_id == challenge_id)).scalars()
-    print(list(books))
+    print('list of books')
+    print(books)
     form = UserChallengeForm(name = user_challenge.challenge.name, num_books = user_challenge.challenge.num_books, description = user_challenge.challenge.description, start_date = 
                              user_challenge.start_date, end_date = user_challenge.end_date)
 

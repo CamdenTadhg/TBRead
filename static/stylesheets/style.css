@@ -38,3 +38,7 @@ th {
 textarea{
     overflow-y: scroll;
 }
+
+.challenge-cover {
+    width: 100px;
+}

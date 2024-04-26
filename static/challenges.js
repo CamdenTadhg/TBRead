@@ -22,7 +22,7 @@ async function challengesOnStart(){
     displayChallenges(mainChallengesList);
 }
 
-//display an instance of UserBookList on the page
+//display an instance of ChallengeList on the page
 function displayChallenges(array){
     console.log('begin displayChallenges')
     console.log(array);

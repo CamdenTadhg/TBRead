@@ -159,6 +159,9 @@ class User_Book(db.Model):
     challenges = db.relationship("Challenge", secondary="users_books_challenges", backref="users_books")
     book = db.relationship("Book", backref="users_books")
 
+    def __repr__(self):
+        return f"<User_Book {self.userbook_id}: {self.title}, {self.pub_date}>"
+
     def serialize_user_book(self):
         return {
             "id": self.userbook_id,

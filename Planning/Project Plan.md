@@ -1,9 +1,6 @@
 TO DO LIST: 
-## 21 Implement challenge functionalitys
-    ## assign books to challenges
-        ## figure out why the book covers aren't displaying (question in to Karishma)
-## 20 figure out ngrok
 ## 19 Implement schedule books functionality
+    ## add a bunch of books to my tbr for ease of testing this feature
     ## figure out google oAuth
         ## figure out authentication scopes
         ## how to make the button disappear once permission has been given
