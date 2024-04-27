@@ -662,8 +662,11 @@ def remove_book(userbook_id):
     if userbook:
         if challenge in userbook.challenges:
             userbook.challenges.remove(challenge)
-            db.session.add(userbook)
-            db.session.commit()
+            try: 
+                db.session.add(userbook)
+                db.session.commit()
+            except: 
+                db.session.rollback()
         else:
             return jsonify({'error': 'Book is not assigned to this challenge'}) 
 
