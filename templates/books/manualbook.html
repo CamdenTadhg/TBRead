@@ -16,7 +16,7 @@
     </div>
     <div>
         {{form.authors.label(class_="form-label")}}
-        {{form.authors(class_="form-control", placeholder="First Last, separate authors with a comma")}}
+        {{form.authors(class_="form-control")}}
         <span class="text-danger">
             {% for error in form.authors.errors %}
                 {{error}}
@@ -88,7 +88,7 @@
     </div>
     <div>
         {{form.notes.label(class_="form-label")}}
-        {{form.notes(class_="form-control")}}
+        {{form.notes(class_="form-control", cols="35", rows="10")}}
         <span class="text-danger">
             {% for error in form.notes.errors %}
                 {{error}}
@@ -97,7 +97,7 @@
     </div>
     <div>
         {{form.script.label(class_="form-label")}}
-        {{form.script(class_="form-control")}}
+        {{form.script(class_="form-control", cols="35", rows="10")}}
         <span class="text-danger">
             {% for error in form.script.errors %}
                 {{error}}

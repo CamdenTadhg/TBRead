@@ -1,5 +1,14 @@
 TO DO LIST: 
-## 19 Implement schedule books functionality
+## 19 Deployment
+    ## TBR buttons not appearing
+    ## manual book add not working
+    ## create calendar button not working
+## 18 Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## process incoming email to correct book (DONE)
+        ## append notes to existing notes information (DONE)
+## 17 Implement schedule books functionality
     ## figure out google oAuth
     ## create calendar on button press
     ## embed calendar on calendar page
@@ -14,40 +23,34 @@ TO DO LIST:
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## 18 Implement email reminders functionality 
+## 16 Implement email reminders functionality 
     ## what books will you need over the next month?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
-## 17 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## process incoming email to correct book (DONE)
-        ## append notes to existing notes information (DONE)
-## 16 Write tests for all routes & for javascript
+## 15 Write tests for all routes & for javascript
     ## figure out why tests aren't working
-## 15 Styling
+## 14 Styling
     ## favicon.ico
+    ## logo
     ## fix it so that on login, you get the appropriate flash message
+    ## go over site with Augustin for design considerations
     ## reformat user profile 
     ## list displays
     ## add books button to the right place
     ## search form display
     ## search results display
     ## display of authors on edit form
-    ## display of description on edit form
     ## fix tabs to be visible
-    ## make notes and script field big enough to read easily
     ## display book cover on calendar on start date
     ## make empty book list display look nice
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
-## 14 Documentation
+## 13 Documentation
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
-## 13 Deployment
 ## 12 Refactor based on feedback from mentor and hatchways
 ## 11 Small Screen Styling
 ## 10 Implement upload user image

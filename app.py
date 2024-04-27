@@ -22,6 +22,7 @@ from google.oauth2.credentials import Credentials
 import string
 
 CURR_USER_KEY = "curr_user"
+CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
 
 app = Flask(__name__)
 if __name__ == "__main__":
@@ -702,7 +703,7 @@ def show_calendar(user_id):
 @app.route('/users/<user_id>/oauth')
 def connect_to_google(user_id):
 
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
     flow.redirect_uri = 'http://localhost:5000/createcalendar'
     authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
     session['state'] = state
@@ -720,7 +721,7 @@ def create_calendar():
     code = request.args.get('code')
 
     state = session['state']
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
     flow.redirect_uri = url_for('create_calendar', _external=True)
     authorization_response = request.url
     flow.fetch_token(authorization_response=authorization_response)
