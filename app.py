@@ -25,7 +25,7 @@ CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, ssl_context=('cert.pem', 'key.pem'))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
 # app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
@@ -685,9 +685,6 @@ def receive_email():
 #########################################################################################
 # Calendar Routes
 
-def authenticate_implicit_with_adc(project_id = 'tb-read'):
-    storage_client = storage.Client(project=project_id)
-    buckets = storage_client.list_buckets()
 
 @app.route('/users/<user_id>/calendar')
 def show_calendar(user_id):
@@ -706,14 +703,9 @@ def show_calendar(user_id):
 def connect_to_google(user_id):
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    flow.redirect_uri = 'https://ngrok.com/r/ti/createcalendar'
-    state = generate_random_state()
-    session['oauth_state'] = state
-    authorization_url, _ = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent", state=state)
-
-    # global service
-    # service = build('calendar', 'v3')
-    # session['oauth_state'] = state
+    flow.redirect_uri = 'http://localhost:5000/createcalendar'
+    authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
+    session['state'] = state
 
     return redirect(authorization_url)
 
@@ -725,28 +717,23 @@ def create_calendar():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
-    if request.args.get('state') != session.get('oauth_state'): 
-        flash('State verification failed', 'danger')
-        return redirect('/')
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    flow.redirect_uri = 'https://ngrok.com/r/ti/createcalendar'
-    flow.fetch_token(authorization_response = request.url)
-    session['google_auth_token'] = flow.credentials.to_json()
-    return redirect(url_for('create_calendar_callback'))
+    code = request.args.get('code')
 
-@app.route('/createcalendar/callback')
-def create_calendar_callback():
+    state = session['state']
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json', scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
+    flow.redirect_uri = url_for('create_calendar', _external=True)
+    authorization_response = request.url
+    flow.fetch_token(authorization_response=authorization_response)
+    credentials = flow.credentials
+    session['credentials'] = {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id, 
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
 
-    token_info = json.loads(session.get('google_auth_token'))
-    if 'token' not in token_info or 'refresh_token' not in token_info:
-        flash('Token information incomplete', 'danger')
-        return redirect('/')
-    # flow = session.get('google_auth_flow')
-    # if not flow: 
-    #     return redirect(url_for('connect_to_google', user_id = g.user.user_id))
-    # credentials = flow.fetch_token(authorization_response=request.url)
-    # token_info = json.loads(session.get('google_auth_token'))
-    credentials = Credentials.from_authorized_user_info(token_info)
     service = build('calendar', 'v3', credentials=credentials)
     calendar = {
         'summary': 'TB Read Calendar'
@@ -761,11 +748,6 @@ def create_calendar_callback():
     service.close()
 
     return redirect(f'/users/{g.user.user_id}/calendar')
-
-def generate_random_state():
-    state_length = 10
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=state_length))
-
 
 
 #########################################################################################
