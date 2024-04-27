@@ -40,16 +40,16 @@ function displayUserBooks(array){
         $bookTr.append($pages);
         $bookTr.append($delete)
         if (!currentURL.includes('dnf')){
-            let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/DNF"><button class="btn btn-info">DNF</button></form></td>`)
-            $bookTr.append($DNF)
+            let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/DNF"><button class="btn btn-info">DNF</button></form></td>`);
+            $bookTr.append($DNF);
         }
         if (!currentURL.includes('complete')){
-            let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>`)
-            $bookTr.append($complete)
+            let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>`);
+            $bookTr.append($complete);
         }
-        if (!currentURL.includes('tbr')){
-            let $TBR = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>`)
-            $bookTr.append($TBR)
+        if (!currentURL.includes('/tbr')){
+            let $TBR = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>`);
+            $bookTr.append($TBR);
         }
         $userBookList.append($bookTr);
     }
