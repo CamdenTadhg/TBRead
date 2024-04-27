@@ -76,7 +76,7 @@ $assignChallengeButton.on('click', async function(event){
     const challenge_id = $challengesField.val();
     //get the userbook_id
     currentURL = window.location.href;
-    const userbook_id = currentURL.substring(this.href.lastIndexOf('/') + 1);
+    const userbook_id = currentURL.substring(currentURL.lastIndexOf('/') + 1);
     console.log('userbook_id:', userbook_id);
     //send the data
     const data = {'challenge_id': challenge_id};
