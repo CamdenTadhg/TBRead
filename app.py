@@ -33,7 +33,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgre
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 app.config['SESSION_COOKIE_HTTPONLY'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -881,7 +880,7 @@ def join_challenge(challenge_id):
         db.session.commit()
     except: 
         db.session.rollback()
-        flash('You are already signed up for this challenge.')
+        flash('You are already signed up for this challenge.', 'danger')
 
     return redirect('/challenges')
 
