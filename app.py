@@ -636,6 +636,7 @@ def assign_book(userbook_id):
             db.session.add(userbook)
             db.session.commit()
         except IntegrityError:
+            db.session.rollback()
             return jsonify({'error': 'Book already in challenge'})
         if userbook.lists[0].list_type == 'Complete':
             print('userbook complete')
