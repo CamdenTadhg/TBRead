@@ -1,6 +1,5 @@
 TO DO LIST: 
 ## 18 Deployment
-    ## remove from challenge not working
     ## figure out profile edit
     ## manual book add not working
 ## 17 Implement scripts & notes functionality 
