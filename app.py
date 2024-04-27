@@ -501,6 +501,8 @@ def add_book_manually():
         return redirect('/')
     
     form=BookEditForm()
+    print('***************')
+    print('loading manual book add')
 
     if form.validate_on_submit():
         print('***************')
