@@ -538,7 +538,7 @@ def edit_book(userbook_id):
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
     user_challenges = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id)).scalars()
     if userbook:
-        form=BookEditForm(obj=userbook)
+        form=BookEditForm(title = userbook.title, authors = userbook.authors, publisher = userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, age_category=userbook.age_category, thumbnail=userbook.thumbnail, notes=userbook.notes, script=userbook.script)
         print('*******************')
         print(userbook.age_category)
     else: 
