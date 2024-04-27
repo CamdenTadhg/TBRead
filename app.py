@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 import requests
 from io import StringIO
 from html.parser import HTMLParser
-from local_settings import MAIL_PASSWORD, GOOGLE_API_KEY
+from local_settings import MAIL_PASSWORD, GOOGLE_API_KEY, SECRET_KEY
 import random
 import pdb
 import google.oauth2.credentials
@@ -34,6 +34,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SESSION_COOKIE_HTTPONLY'] = False
+app.config['SECRET_KEY'] = SECRET_KEY
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
