@@ -504,7 +504,7 @@ def add_book_manually():
     form=BookEditForm()
     print('***************')
     print('loading manual book add')
-    print(form.csrf_token)
+    print('form.csrf_token:', form.csrf_token)
 
     if form.validate_on_submit():
         print('***************')
