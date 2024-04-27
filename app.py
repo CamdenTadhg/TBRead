@@ -387,7 +387,7 @@ def addBookToDatabase(google_id):
         pub_date = data['volumeInfo']['publishedDate'][0:4]
     else:
         pub_date = '0000'
-    description = data['volumeInfo'].get('description')
+    description = strip_tags(data['volumeInfo'].get('description'))
     if data['volumeInfo'].get('industryIdentifiers'):
         for item in data['volumeInfo'].get('industryIdentifiers'):
             if item['type'] == "ISBN_13":
@@ -455,7 +455,8 @@ def edit_new_book(google_id):
     
     book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
     if book:
-        form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
+        description = strip_tags(book.description)
+        form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
         new_book = addBookToDatabase(google_id)
         ## remove html tags from description
