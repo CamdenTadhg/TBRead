@@ -539,6 +539,8 @@ def edit_book(userbook_id):
     user_challenges = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id)).scalars()
     if userbook:
         form=BookEditForm(obj=userbook)
+        print('*******************')
+        print(userbook.age_category)
     else: 
         flash('Book not found. Please try again.')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')

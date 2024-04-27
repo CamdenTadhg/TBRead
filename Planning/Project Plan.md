@@ -1,8 +1,8 @@
 TO DO LIST: 
 ## 18 Deployment
     ## age level not displaying correctly
-    ## manual book add not working
     ## remove from challenge not working
+    ## manual book add not working
 ## 17 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
