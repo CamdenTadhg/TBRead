@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify, url_for
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
-from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge
+from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge, AgeCategory
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
@@ -538,7 +538,7 @@ def edit_book(userbook_id):
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
     user_challenges = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id)).scalars()
     if userbook:
-        form=BookEditForm(title = userbook.title, authors = userbook.authors, publisher = userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, age_category=userbook.age_category, thumbnail=userbook.thumbnail, notes=userbook.notes, script=userbook.script)
+        form=BookEditForm(title=userbook.title, authors=userbook.authors, publisher=userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, age_category=str(userbook.age_category.value), thumbnail=userbook.thumbnail, notes=userbook.notes, script=userbook.script)
         print('*******************')
         print(userbook.age_category)
     else: 
@@ -553,7 +553,7 @@ def edit_book(userbook_id):
         userbook.description = form.description.data
         userbook.isbn = form.isbn.data
         userbook.page_count = form.page_count.data
-        userbook.age_category = form.age_category.data
+        userbook.age_category = AgeCategory(int(form.age_category.data))
         userbook.thumbnail = form.thumbnail.data
         userbook.notes = form.notes.data
         userbook.script = form.script.data
