@@ -458,12 +458,8 @@ def edit_new_book(google_id):
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=book.description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
         new_book = addBookToDatabase(google_id)
-        print('************************')
-        print(new_book.description)
         ## remove html tags from description
         description = strip_tags(new_book.description)
-        print('***********************')
-        print(description)
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
     if form.validate_on_submit():
@@ -541,7 +537,7 @@ def edit_book(userbook_id):
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
     user_challenges = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id)).scalars()
     if userbook:
-        form=BookEditForm(title=userbook.title, authors=userbook.authors, publisher=userbook.publisher, pub_date=userbook.pub_date, description=userbook.description, isbn=userbook.isbn, page_count=userbook.page_count, thumbnail=userbook.thumbnail)
+        form=BookEditForm(obj=userbook)
     else: 
         flash('Book not found. Please try again.')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
@@ -585,7 +581,7 @@ def delete_book(userbook_id):
     return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
 @app.route('/users_books/<userbook_id>/transfer/<list_type>', methods=["POST"])
-def transfer_to_dnf(userbook_id, list_type):
+def transfer_between_lists(userbook_id, list_type):
     """Transfer a book between lists"""
     print('transfer request received')
 
