@@ -76,7 +76,8 @@ $assignChallengeButton.on('click', async function(event){
     const challenge_id = $challengesField.val();
     //get the userbook_id
     currentURL = window.location.href;
-    const userbook_id = currentURL[currentURL.length - 1];
+    const userbook_id = this.href.substring(this.href.lastIndexOf('/') + 1);
+    console.log(userbook_id);
     //send the data
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
@@ -101,7 +102,8 @@ $removeChallengeButton.on('click', async function(event){
     console.log($challengesField.val());
     const challenge_id = $challengesField.val();
     currentURL = window.location.href;
-    const userbook_id = currentURL[currentURL.length-1];
+    const userbook_id = this.href.substring(this.href.lastIndexOf('/')+1);
+    console.log(userbook_id);
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/remove`, data);
     console.log(response);

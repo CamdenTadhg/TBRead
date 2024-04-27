@@ -1,6 +1,5 @@
 TO DO LIST: 
 ## 18 Deployment
-    ## age level not displaying correctly
     ## remove from challenge not working
     ## manual book add not working
 ## 17 Implement scripts & notes functionality 
