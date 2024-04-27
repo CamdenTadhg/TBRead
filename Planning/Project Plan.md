@@ -1,7 +1,7 @@
 TO DO LIST: 
 ## 19 Deployment
-    ## TBR buttons not appearing
     ## manual book add not working
+    ## remove from challenge not displaying message
     ## create calendar button not working
 ## 18 Implement scripts & notes functionality 
     ## allow user to email in notes

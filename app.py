@@ -503,6 +503,8 @@ def add_book_manually():
     form=BookEditForm()
 
     if form.validate_on_submit():
+        print('***************')
+        print('form validated')
         google_id = random.randint(10000000, 99999999)
         title = form.title.data
         author = form.authors.data

@@ -47,7 +47,7 @@ function displayUserBooks(array){
             let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>`);
             $bookTr.append($complete);
         }
-        if (!currentURL.includes('/tbr')){
+        if (!currentURL.includes('lists/tbr')){
             let $TBR = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>`);
             $bookTr.append($TBR);
         }
