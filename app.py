@@ -236,16 +236,17 @@ def update_password():
 #########################################################################################
 # User Routes
 
-def create_lists(user):
-    """Create three lists when new user is created"""
+with app.app_context():
+    def create_lists(user):
+        """Create three lists when new user is created"""
 
-    stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
-    stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
-    stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
-    db.session.execute(stmt)
-    db.session.execute(stmt2)
-    db.session.execute(stmt3)
-    db.session.commit()
+        stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
+        stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
+        stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
+        db.session.execute(stmt)
+        db.session.execute(stmt2)
+        db.session.execute(stmt3)
+        db.session.commit()
     
 @app.route('/users/<user_id>', methods=['GET', 'POST'])
 def display_user_profile(user_id):
@@ -364,52 +365,53 @@ def delete_user():
 #########################################################################################
 # Book Routes
 
-def addBookToDatabase(google_id):
-    api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
-    response = requests.get(api_url)
-    data = response.json()
-    google_id = data['id']
-    if data['volumeInfo'].get('subtitle'):
-        title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
-    else: 
-        title = data['volumeInfo']['title']
-    if data['volumeInfo'].get('authors'):
-        if len(data['volumeInfo']['authors']) == 1:
-            authors = data['volumeInfo']['authors'][0]
-        elif len(data['volumeInfo']['authors']) == 2:
-            authorA = data['volumeInfo']['authors'][0]
-            authorB = data['volumeInfo']['authors'][1]
-            authors = f'{authorA} & {authorB}'
+with app.app_context():
+    def addBookToDatabase(google_id):
+        api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
+        response = requests.get(api_url)
+        data = response.json()
+        google_id = data['id']
+        if data['volumeInfo'].get('subtitle'):
+            title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
         else: 
-            authors = ', '.join(data['volumeInfo']['authors'])
-            print('*************************')
-            print(authors)
-    publisher = data['volumeInfo'].get('publisher')
-    if data['volumeInfo'].get('publishedDate'):
-        pub_date = data['volumeInfo']['publishedDate'][0:4]
-    else:
-        pub_date = '0000'
-    description = strip_tags(data['volumeInfo'].get('description'))
-    if data['volumeInfo'].get('industryIdentifiers'):
-        for item in data['volumeInfo'].get('industryIdentifiers'):
-            if item['type'] == "ISBN_13":
-                isbn = item['identifier']
-        if isbn == '':
-            isbn = 0
-    else:
-        isbn=0
-    if data['volumeInfo'].get('pageCount'):
-        page_count = data['volumeInfo'].get('pageCount')
-    else:
-        page_count = 0
-    if data['volumeInfo'].get('imageLinks'):
-        thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
-    else: 
-        thumbnail = ''
-    new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
-    db.session.add(new_book)
-    db.session.commit()
-    return new_book
+            title = data['volumeInfo']['title']
+        if data['volumeInfo'].get('authors'):
+            if len(data['volumeInfo']['authors']) == 1:
+                authors = data['volumeInfo']['authors'][0]
+            elif len(data['volumeInfo']['authors']) == 2:
+                authorA = data['volumeInfo']['authors'][0]
+                authorB = data['volumeInfo']['authors'][1]
+                authors = f'{authorA} & {authorB}'
+        else: 
+                authors = ', '.join(data['volumeInfo']['authors'])
+                print('*************************')
+                print(authors)
+        publisher = data['volumeInfo'].get('publisher')
+        if data['volumeInfo'].get('publishedDate'):
+            pub_date = data['volumeInfo']['publishedDate'][0:4]
+        else:
+            pub_date = '0000'
+        description = strip_tags(data['volumeInfo'].get('description'))
+        if data['volumeInfo'].get('industryIdentifiers'):
+            for item in data['volumeInfo'].get('industryIdentifiers'):
+                if item['type'] == "ISBN_13":
+                    isbn = item['identifier']
+            if isbn == '':
+                isbn = 0
+        else:
+            isbn=0
+        if data['volumeInfo'].get('pageCount'):
+            page_count = data['volumeInfo'].get('pageCount')
+        else:
+            page_count = 0
+        if data['volumeInfo'].get('imageLinks'):
+            thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
+        else: 
+            thumbnail = ''
+        new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+        db.session.add(new_book)
+        db.session.commit()
+        return new_book
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -428,12 +430,13 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
-def add_book_to_tbr(userbook_id):
-    list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
-    userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
-    list.user_books.append(userbook)
-    db.session.add(list)
-    db.session.commit()
+with app.app_context():
+    def add_book_to_tbr(userbook_id):
+        list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
+        userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+        list.user_books.append(userbook)
+        db.session.add(list)
+        db.session.commit()
 
 @app.route('/books', methods=['GET'])
 def add_books():
