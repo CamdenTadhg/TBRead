@@ -43,7 +43,7 @@
     </div>
     <div>
         {{form.description.label(class_="form-label")}}
-        {{form.description(class_="form-control")}}
+        {{form.description(class_="form-control", cols="35", rows="15")}}
         <span class="text-danger">
             {% for error in form.description.errors %}
                 {{error}}
