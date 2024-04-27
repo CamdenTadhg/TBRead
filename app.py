@@ -259,8 +259,12 @@ def display_user_profile(user_id):
         
     form=UserProfileForm(obj=g.user)
     form2= UpdatePasswordForm()
+    print('*****************')
+    print('user edit form displayed')
 
     if form.validate_on_submit():
+        print('**********************')
+        print('form validated')
         user = db.session.query(User).get(user_id)
         user.username = form.username.data
         user.email = form.email.data
