@@ -40,7 +40,6 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'tbreadlistmanager@gmail.com'
 app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
-app.config['WTF_CSRF_CHECK_DEFAULT'] = False
 
 mail=Mail(app)
 
