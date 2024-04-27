@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 import requests
 from io import StringIO
 from html.parser import HTMLParser
-from local_settings import MAIL_PASSWORD, GOOGLE_API_KEY, SECRET_KEY
+from local_settings import MAIL_PASSWORD, SECRET_KEY
 import random
 import pdb
 import google.oauth2.credentials
@@ -504,6 +504,7 @@ def add_book_manually():
     form=BookEditForm()
     print('***************')
     print('loading manual book add')
+    print(form.csrf_token)
 
     if form.validate_on_submit():
         print('***************')
