@@ -1,13 +1,18 @@
 TO DO LIST: 
-## 18 Deployment
-    ## figure out profile edit
-    ## manual book add not working
-## 17 Implement scripts & notes functionality 
+## 20 Deployment
+    ## figure out forms not validating
+        ## manual book add
+        ## user profile
+        ## add book
+        ## create challenge
+        ## edit challenge
+        ## edit user challenge
+## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
         ## process incoming email to correct book (DONE)
         ## append notes to existing notes information (DONE)
-## 16 Implement schedule books functionality
+## 18 Implement schedule books functionality
     ## figure out google oAuth
     ## create calendar on button press
     ## embed calendar on calendar page
@@ -22,14 +27,14 @@ TO DO LIST:
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## 15 Implement email reminders functionality 
+## 17 Implement email reminders functionality 
     ## what books will you need over the next month?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
-## 14 Write tests for all routes & for javascript
+## 16 Write tests for all routes & for javascript
     ## figure out why tests aren't working
-## 13 Styling
+## 15 Styling
     ## favicon.ico
     ## logo
     ## fix it so that on login, you get the appropriate flash message
@@ -45,22 +50,27 @@ TO DO LIST:
     ## make empty book list display look nice
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
-## 12 Documentation
+## 14 Documentation
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
-## 11 Refactor based on feedback from mentor and hatchways
-## 10 Small Screen Styling
-## 9 Implement upload user image and book cover image
-## 8 Implement book covers on homepage are links that take you to a book form where you can add them to your list
+## 13 Refactor based on feedback from mentor and hatchways
+## 12 Small Screen Styling
+## 11 Implement upload user image and book cover image
+## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## maybe increase the number of book covers displayed? 
-## 7 Implement importation functionality
-## 6 Implement OpenAI connection 
-## 5 Implement friendship & challenging functionality 
-## 4 Implement bookstore connection
-## 3 Implement library connection
-## 2 Refactor
+## 9 Implement importation functionality
+## 8 Implement OpenAI connection 
+## 7 Implement friendship & challenging functionality 
+## 6 Implement challenge categories
+    ## include a way to search what books other people have assigned to what categories and add them to your lists
+    ## a checklist of categories that users can check off
+    ## hover over a book cover shows what category it is fulfilling
+## 5 Implement bookstore connection
+## 4 Implement library connection
+## 3 Refactor
+## 2 Fully population database with 100 challenges and 500 books
 ## 1 Test with actual users and add functionality as needed
 
 

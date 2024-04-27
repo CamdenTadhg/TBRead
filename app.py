@@ -876,8 +876,12 @@ def join_challenge(challenge_id):
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     user.challenges.append(challenge)
-    db.session.add(user)
-    db.session.commit()
+    try: 
+        db.session.add(user)
+        db.session.commit()
+    except: 
+        db.session.rollback()
+        flash('You are already signed up for this challenge.')
 
     return redirect('/challenges')
 
