@@ -236,10 +236,9 @@ def update_password():
 #########################################################################################
 # User Routes
 
-with app.app_context():
-    def create_lists(user):
-        """Create three lists when new user is created"""
-
+def create_lists(user):
+    """Create three lists when new user is created"""
+    with app.app_context():
         stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
         stmt2 = (insert(List).values(list_type='DNF', user_id=user.user_id))
         stmt3 = (insert(List).values(list_type='Complete', user_id=user.user_id))
@@ -365,8 +364,8 @@ def delete_user():
 #########################################################################################
 # Book Routes
 
-with app.app_context():
-    def addBookToDatabase(google_id):
+def addBookToDatabase(google_id):
+    with app.app_context():
         api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
         response = requests.get(api_url)
         data = response.json()
@@ -430,8 +429,8 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
-with app.app_context():
-    def add_book_to_tbr(userbook_id):
+def add_book_to_tbr(userbook_id):
+    with app.app_context():
         list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
         userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
         list.user_books.append(userbook)
