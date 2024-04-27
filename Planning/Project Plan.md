@@ -2,6 +2,7 @@ TO DO LIST:
 ## 18 Deployment
     ## remove from challenge not working
     ## manual book add not working
+    ## figure out profile edit
 ## 17 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
