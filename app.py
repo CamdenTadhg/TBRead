@@ -411,21 +411,23 @@ def addBookToDatabase(google_id):
         return new_book
 
 class MLStripper(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.reset()
-        self.strict=False
-        self.convert_charrefs=True
-        self.text = StringIO()
-    def handle_data(self, d):
-        self.text.write(d)
-    def get_data(self):
-        return self.text.getvalue()
+    with app.app_context():
+        def __init__(self):
+            super().__init__()
+            self.reset()
+            self.strict=False
+            self.convert_charrefs=True
+            self.text = StringIO()
+        def handle_data(self, d):
+            self.text.write(d)
+        def get_data(self):
+            return self.text.getvalue()
     
 def strip_tags(html):
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
+    with app.app_context():
+        s = MLStripper()
+        s.feed(html)
+        return s.get_data()
 
 def add_book_to_tbr(userbook_id):
     with app.app_context():
