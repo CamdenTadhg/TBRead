@@ -1,8 +1,4 @@
 TO DO LIST: 
-## 20 Deployment
-    ## add new books
-    ## reset password
-    ## send username reminder
 ## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
         ## hostinger set-up
@@ -11,15 +7,17 @@ TO DO LIST:
         ## append notes to existing notes information (DONE)
 ## 18 Implement schedule books functionality
     ## set post days based on user profile
-        ## set posting schedule button
-        ## pop-up? with form for last post date, frequency, day of the week. 
-        ## add recurring event to the calendar for post days
+        ## javascript to send the data via axios
+        ## route to add recurring event to the calendar for post days
+            ## find current posting day event
+            ## delete rest of current posting day event
+            ## add new recurring posting day event
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
         ## pop-up with form to set work days
         ## add recurring events to the calendar for work days and off days
-    ## set calendar days as work or off based on click
-        ## add second tab to pop-up for setting work days up to one month in advance
+    ## set calendar days as work or off based on a less regular schedule
+        ## add second tab to pop-up for setting individual days to work or off
         ## add events to the calendar for work days and off days
     ## schedule a book individually
         ## autosuggest search field
@@ -55,6 +53,8 @@ TO DO LIST:
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
+
+
 ## 14 Write tests for python & javascript
     ## figure out why tests aren't working
     ## route tests

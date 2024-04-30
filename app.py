@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
 from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge, AgeCategory
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm, PostDaysForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 from local_settings import MAIL_PASSWORD, SECRET_KEY
@@ -709,7 +709,9 @@ def show_calendar(user_id):
     user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
     calendar_id = user.calendar_id 
 
-    return render_template('calendars/calendar.html', calendar_id=calendar_id)
+    form=PostDaysForm(posting_frequency=user.posting_frequency, posting_day = user.posting_day)
+
+    return render_template('calendars/calendar.html', calendar_id=calendar_id, form=form)
 
 @app.route('/users/<user_id>/oauth')
 def connect_to_google(user_id):
