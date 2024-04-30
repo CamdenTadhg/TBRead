@@ -1,13 +1,5 @@
 TO DO LIST: 
-## 20 Deployment
-    ## manual book add
-    ## add book
-## 19 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## process incoming email to correct book (DONE)
-        ## append notes to existing notes information (DONE)
-## 18 Implement schedule books functionality
+## 19 Implement schedule books functionality
     ## figure out google oAuth
     ## create calendar on button press
     ## embed calendar on calendar page
@@ -22,11 +14,16 @@ TO DO LIST:
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## 17 Implement email reminders functionality 
+## 18 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
+## 17 Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## process incoming email to correct book (DONE)
+        ## append notes to existing notes information (DONE)
 ## 16 Write tests for all routes & for javascript
     ## figure out why tests aren't working
 ## 15 Styling

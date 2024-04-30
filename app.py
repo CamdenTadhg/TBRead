@@ -713,7 +713,7 @@ def show_calendar(user_id):
 def connect_to_google(user_id):
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    flow.redirect_uri = 'http://localhost:5000/createcalendar'
+    flow.redirect_uri = 'https://tbread-xd1y.onrender.com/createcalendar'
     authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
     session['state'] = state
 
