@@ -28,7 +28,7 @@ TO DO LIST:
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
 ## 17 Implement email reminders functionality 
-    ## what books will you need over the next month?
+    ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
