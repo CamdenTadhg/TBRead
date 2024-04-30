@@ -9,7 +9,6 @@ from flask_mail import Mail, Message
 import requests
 from io import StringIO
 from html.parser import HTMLParser
-from local_settings import MAIL_PASSWORD, SECRET_KEY
 import random
 import pdb
 import google.oauth2.credentials
@@ -508,7 +507,7 @@ def add_book_manually():
         print('form validated')
         google_id = random.randint(10000000, 99999999)
         title = form.title.data
-        author = form.authors.data
+        authors = form.authors.data
         publisher = form.publisher.data
         pub_date = form.pub_date.data
         description = form.description.data
@@ -519,9 +518,9 @@ def add_book_manually():
         notes = form.notes.data
         script = form.script.data
         ## add the book to the books table in the database
-        new_book = Book(google_id=google_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+        new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         ## add the book to the users_books table in the database
-        new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, author=author, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
+        new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
         db.session.add(new_user_book)
         db.session.commit()
         add_book_to_tbr(new_user_book.userbook_id)
