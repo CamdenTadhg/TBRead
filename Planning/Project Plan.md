@@ -1,8 +1,7 @@
 TO DO LIST: 
 ## 20 Deployment
-    ## figure out forms not validating
-        ## manual book add
-        ## add book
+    ## manual book add
+    ## add book
 ## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python

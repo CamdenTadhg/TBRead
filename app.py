@@ -427,6 +427,10 @@ def strip_tags(html):
 
 def add_book_to_tbr(userbook_id):
     with app.app_context():
+        if CURR_USER_KEY in session:
+            g.user = db.session.query(User).get(session[CURR_USER_KEY])
+        else: 
+            g.user = None
         print('************')
         print(g.user.user_id)
         list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
