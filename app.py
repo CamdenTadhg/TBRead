@@ -427,6 +427,8 @@ def strip_tags(html):
 
 def add_book_to_tbr(userbook_id):
     with app.app_context():
+        print('************')
+        print(g.user.user_id)
         list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
         userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
         list.user_books.append(userbook)
