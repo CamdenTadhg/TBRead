@@ -405,7 +405,7 @@ def addBookToDatabase(google_id):
         new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         db.session.add(new_book)
         db.session.commit()
-        return new_book
+        return new_book.book_id
 
 class MLStripper(HTMLParser):
     with app.app_context():
@@ -465,8 +465,10 @@ def edit_new_book(google_id):
         description = strip_tags(book.description)
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
-        new_book = addBookToDatabase(google_id)
+        new_book_id = addBookToDatabase(google_id)
+        new_book = db.session.execute(db.select(Book).where(Book.book_id == new_book_id)).scalar()
         ## remove html tags from description
+        description = strip_tags(new_book.description)
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
     if form.validate_on_submit():
