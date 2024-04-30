@@ -498,13 +498,8 @@ def add_book_manually():
         return redirect('/')
     
     form=BookEditForm()
-    print('***************')
-    print('loading manual book add')
-    print('form.csrf_token:', form.csrf_token)
 
     if form.validate_on_submit():
-        print('***************')
-        print('form validated')
         google_id = random.randint(10000000, 99999999)
         title = form.title.data
         authors = form.authors.data

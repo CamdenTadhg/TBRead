@@ -13,11 +13,11 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 class AgeCategory(enum.Enum):
-    Adult = 1
-    YA = 2
-    Childrens = 3
-    Graphic = 4
-    NA = 5
+    Adult = 'Adult'
+    YA = 'YA'
+    Childrens = 'Childrens'
+    Graphic = 'Graphic'
+    NA = 'N/A'
 
 class EventCategory(enum.Enum):
     Order = 1
