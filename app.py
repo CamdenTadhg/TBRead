@@ -6,6 +6,7 @@ from models import db, connect_db, User, Book, List, User_Book, Challenge, User_
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
+from local_settings import MAIL_PASSWORD, SECRET_KEY
 import requests
 from io import StringIO
 from html.parser import HTMLParser
@@ -31,12 +32,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SESSION_COOKIE_HTTPONLY'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = SECRET_KEY
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'tbreadlistmanager@gmail.com'
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
 mail=Mail(app)
 

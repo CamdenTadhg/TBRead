@@ -1,12 +1,24 @@
 TO DO LIST: 
-## 19 Implement schedule books functionality
-    ## figure out google oAuth
-    ## create calendar on button press
-    ## embed calendar on calendar page
-    ## save calendar idenifier to user profile to assist in future embedding
+## 20 Deployment
+    ## reset password
+    ## send username reminder
+## 19 Implement scripts & notes functionality 
+    ## allow user to email in notes
+        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
+        ## process incoming email to correct book (DONE)
+        ## append notes to existing notes information (DONE)
+## 18 Implement schedule books functionality
     ## set post days based on user profile
+        ## set posting schedule button
+        ## pop-up? with form for last post date, frequency, day of the week. 
+        ## add recurring event to the calendar for post days
     ## set calendar days as work or off based on a set schedule
+        ## set work schedule button
+        ## pop-up with form to set work days
+        ## add recurring events to the calendar for work days and off days
     ## set calendar days as work or off based on click
+        ## add second tab to pop-up for setting work days up to one month in advance
+        ## add events to the calendar for work days and off days
     ## schedule a book individually
         ## autosuggest search field
         ## load cover image on select
@@ -14,19 +26,13 @@ TO DO LIST:
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
-## 18 Implement email reminders functionality 
+    ## oops I deleted my calendar button
+## 17 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
-## 17 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
-        ## process incoming email to correct book (DONE)
-        ## append notes to existing notes information (DONE)
-## 16 Write tests for all routes & for javascript
-    ## figure out why tests aren't working
-## 15 Styling
+## 16 Styling
     ## favicon.ico
     ## logo
     ## fix it so that on login, you get the appropriate flash message
@@ -42,11 +48,17 @@ TO DO LIST:
     ## make empty book list display look nice
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
-## 14 Documentation
+## 15 Documentation
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## create ReadMe
+## 14 Write tests for python & javascript
+    ## figure out why tests aren't working
+    ## route tests
+    ## python function tests
+    ## model tests
+    ## javascript tests
 ## 13 Refactor based on feedback from mentor and hatchways
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
