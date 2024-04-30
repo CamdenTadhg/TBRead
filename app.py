@@ -514,6 +514,8 @@ def add_book_manually():
         script = form.script.data
         ## add the book to the books table in the database
         new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
+        db.session.add(new_book)
+        db.session.commit()
         ## add the book to the users_books table in the database
         new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
         db.session.add(new_user_book)
