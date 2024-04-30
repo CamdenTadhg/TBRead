@@ -467,7 +467,6 @@ def edit_new_book(google_id):
     else:
         new_book = addBookToDatabase(google_id)
         ## remove html tags from description
-        description = strip_tags(new_book.description)
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
     if form.validate_on_submit():
