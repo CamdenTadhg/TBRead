@@ -20,10 +20,12 @@ class AgeCategory(enum.Enum):
     NA = 'N/A'
 
 class EventCategory(enum.Enum):
-    Order = 1
-    Start = 2
-    Finish = 3
-    Post = 4
+    Order = 'Order'
+    Start = 'Start'
+    Finish = 'Finish'
+    Post = 'Post'
+    Posting = 'Posting'
+    Work = 'Work'
 
 class User(db.Model): 
     """ User in the TBRead system"""
@@ -205,8 +207,9 @@ class Event(db.Model):
     event_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     userbook_id = db.Column(db.Integer, db.ForeignKey('users_books.userbook_id'))
-    date = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date)
     eventcategory = db.Column(db.Enum(EventCategory), nullable=False)
+    google_event_id = db.Column(db.Text)
 
 class User_Challenge(db.Model):
     """connection between users and challenges"""

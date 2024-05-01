@@ -8,6 +8,7 @@ TO DO LIST:
 ## 18 Implement schedule books functionality
     ## set post days based on user profile
         ## javascript to send the data via axios
+            ## deal with returned message
         ## route to add recurring event to the calendar for post days
             ## find current posting day event
             ## delete rest of current posting day event
