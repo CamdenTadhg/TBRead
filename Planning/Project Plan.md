@@ -64,11 +64,12 @@ TO DO LIST:
     ## python function tests
     ## model tests
     ## javascript tests
-## 13 Refactor based on feedback from mentor and hatchways
+## 13 Refactor based on feedback from mentor and hatchways and Augustin
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
 ## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
-    ## maybe increase the number of book covers displayed? 
+    ## increase the number of book covers displayed? 
+    ## make it so books without covers will not display
 ## 9 Implement importation functionality
 ## 8 Implement OpenAI connection 
 ## 7 Implement friendship & challenging functionality 

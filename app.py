@@ -709,7 +709,7 @@ def show_calendar(user_id):
     user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
     calendar_id = user.calendar_id 
 
-    form=PostDaysForm(posting_frequency=user.posting_frequency, posting_day = user.posting_day)
+    form=PostDaysForm(posting_frequency=user.posting_frequency)
 
     return render_template('calendars/calendar.html', calendar_id=calendar_id, form=form)
 
