@@ -270,7 +270,6 @@ def display_user_profile(user_id):
         user.reading_speed_children = form.reading_speed_children.data
         user.reading_speed_graphic = form.reading_speed_graphic.data
         user.posting_frequency = form.posting_frequency.data
-        user.posting_day = form.posting_day.data
         user.prep_days = form.prep_days.data
         user.content_account = form.content_account.data
         user.email_reminders = form.email_reminders.data

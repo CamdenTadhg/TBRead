@@ -6,6 +6,8 @@ TO DO LIST:
         ## process incoming email to correct book (DONE)
         ## append notes to existing notes information (DONE)
 ## 18 Implement schedule books functionality
+    ## set up four profiles for testing purposes
+        ## remove posting day from database and forms
     ## set post days based on user profile
         ## javascript to send the data via axios
             ## deal with returned message

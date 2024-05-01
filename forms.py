@@ -40,7 +40,6 @@ class UserProfileForm(FlaskForm):
     reading_speed_children = IntegerField('How many pages of a kids book do you read per hour?', default=0)
     reading_speed_graphic = IntegerField('How many pages of a graphic novel do you read per hour?', default=0)
     posting_frequency = IntegerField('How often do you post, in days?', default=0)
-    posting_day = SelectField('What day do you post?', choices=[('', ''), ('mon', 'Monday'), ('tues', 'Tuesday'), ('wed', 'Wednesday'), ('thurs', 'Thursday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday')])
     prep_days = IntegerField('How many days before posting would you like to finish books?', default=0)
     content_account = StringField('URL of posting account')
     email_reminders = BooleanField('Do you want email reminders?')

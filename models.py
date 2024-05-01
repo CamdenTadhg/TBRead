@@ -45,7 +45,6 @@ class User(db.Model):
     reading_speed_graphic = db.Column(db.Integer, default=0)
     calendar_id = db.Column(db.Text, unique=True)
     posting_frequency = db.Column(db.Integer, default=0)
-    posting_day = db.Column(db.Text)
     prep_days = db.Column(db.Integer, default=0)
     content_account = db.Column(db.Text)
     email_reminders = db.Column(db.Boolean)
