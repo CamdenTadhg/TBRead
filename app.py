@@ -20,6 +20,7 @@ import json
 import google_auth_oauthlib.flow
 from google.oauth2.credentials import Credentials
 import string
+from datetime import date
 
 CURR_USER_KEY = "curr_user"
 CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
@@ -790,9 +791,12 @@ def schedule_posting_days():
     service = build('calendar', 'v3', credentials=credentials)
     ## Check if a posting date event currently exists
     existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
-    ## Delete existing posting date event
+    ## Delete remaining recurring posting events
     if existing_posting_event.google_event_id: 
-        service.events().delete(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id)
+        post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
+        today = date.today()
+        post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
+        service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
     ## Add new posting date event
     event = {
         'summary': 'Posting Day',
@@ -804,8 +808,14 @@ def schedule_posting_days():
     print('**************************')
     print(posting_day)
     service.close()
+    ## Update user profile
+    if g.user.posting_frequency != posting_frequency:
+        user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+        user.posting_frequency = posting_frequency
+        db.session.add(user)
+        db.session.commit()
 
-    return jsonify({'success': 'Posting Event Created'}) 
+    return jsonify({'success': 'Posting Event Changed'}) 
 
 
 

@@ -31,6 +31,7 @@
 {% endif %}
 
 {% if g.user.calendar_id %}
+    <div class="alert error-div"></div>
     <iframe src="https://calendar.google.com/calendar/embed?src={{g.user.calendar_id}}" style="border:0" width="900" height="800" frameborder="0" scrolling="no"></iframe>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postDaysModal">Set Posting Schedule</button>
     <button class="btn btn-info">Set Work Schedule</button>

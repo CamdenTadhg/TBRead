@@ -89,4 +89,3 @@ class UserChallengeForm(FlaskForm):
 class PostDaysForm(FlaskForm):
     last_post_date = DateField('When was your last post day?')
     posting_frequency = IntegerField('How often do you post, in days?', default=0)
-    posting_day = SelectField('What day do you post?', choices=[('', ''), ('mon', 'Monday'), ('tues', 'Tuesday'), ('wed', 'Wednesday'), ('thurs', 'Thursday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday')])
