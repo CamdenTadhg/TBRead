@@ -686,7 +686,7 @@ def receive_email():
     print('email received')
 
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
-    email = envelope['from'][0]
+    email = envelope['from']
     print(email)
     subject = request.form['subject']
     body = str(request.form['text'])
