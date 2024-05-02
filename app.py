@@ -681,16 +681,27 @@ def remove_book(userbook_id):
 @app.route('/email', methods=["POST"])
 def receive_email():
 
+    print('************************')
+    print('email received')
+
     email = request.form['from']
     subject = request.form['subject']
     body = request.form['text']
 
-    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
-    userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
+    print('data received')
 
-    stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
-    db.session.execute(stmt)
-    db.session.commit()
+    user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+    print('user found')
+    userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
+    print('book found')
+
+    try: 
+        stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
+        db.session.execute(stmt)
+        db.session.commit()
+        ('database updated')
+    except: 
+        db.session.rollback()
 
     return ''
 

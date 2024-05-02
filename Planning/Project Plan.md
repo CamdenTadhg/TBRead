@@ -1,7 +1,6 @@
 TO DO LIST: 
 ## 19 Implement scripts & notes functionality 
     ## allow user to email in notes
-        ## hostinger set-up
         ##https://sendgrid.com/en-us/blog/how-to-receive-emails-with-the-flask-framework-for-python
         ## process incoming email to correct book (DONE)
         ## append notes to existing notes information (DONE)
