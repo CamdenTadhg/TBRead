@@ -21,6 +21,7 @@ import google_auth_oauthlib.flow
 from google.oauth2.credentials import Credentials
 import string
 from datetime import date
+import re
 
 CURR_USER_KEY = "curr_user"
 CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
@@ -684,12 +685,10 @@ def receive_email():
     print('************************')
     print('email received')
 
-    email = request.form['from']
+    email = re.search(r'>([^>]+)>', request.form['from'])
     print(email)
     subject = request.form['subject']
-    print(subject)
     body = str(request.form['text'])
-    print(body)
 
     print('data received')
 
