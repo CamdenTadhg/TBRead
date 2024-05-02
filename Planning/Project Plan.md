@@ -72,7 +72,7 @@ TO DO LIST:
     ## hover over a book cover shows what category it is fulfilling
 ## 5 Implement bookstore connection
 ## 4 Implement library connection
-## 3 Refactor
+## 3 Refactor and take out all the print & console.logs
 ## 2 Fully population database with 100 challenges and 500 books
 ## 1 Test with actual users and add functionality as needed
 

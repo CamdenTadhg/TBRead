@@ -781,10 +781,11 @@ def schedule_posting_days():
     
     last_post_date = request.json['lastPostDate']
     posting_frequency = request.json['postingFrequency']
+    print('data received')
 
-    state = session['state']
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
-    flow.redirect_uri = url_for('create_calendar', _external=True)
+    # state = session['state']
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    # flow.redirect_uri = url_for('create_calendar', _external=True)
     authorization_response = request.url
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
@@ -798,6 +799,7 @@ def schedule_posting_days():
     }
 
     service = build('calendar', 'v3', credentials=credentials)
+    print('service started')
     ## Check if a posting date event currently exists
     existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
     ## Delete remaining recurring posting events
