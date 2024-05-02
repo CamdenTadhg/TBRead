@@ -10,7 +10,7 @@ $postDaysButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     let response = await sendPostingDataViaAxios();
     if (response['success']){
-        let errorDiv = $('<div class="alert alert-success error-div">Posting Schedule Updated</div>')
+        let $errorDiv = $('<div class="alert alert-success error-div">Posting Schedule Updated</div>')
         $modalBody.append($errorDiv)
     }
 })

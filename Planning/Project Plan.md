@@ -1,9 +1,5 @@
 TO DO LIST: 
-## 19 Implement scripts & notes functionality 
-    ## allow user to email in notes
-        ## process incoming email to correct book (DONE)
-        ## append notes to existing notes information (DONE)
-## 18 Implement schedule books functionality
+## 19 Implement schedule books functionality
     ## set post days based on user profile
         ## javascript to send the data via axios
             ## deal with returned message
@@ -26,11 +22,12 @@ TO DO LIST:
         ## recommend post date (but let them change it)
     ## schedule a year, month, etc. of books randomly
     ## oops I deleted my calendar button
-## 17 Implement email reminders functionality 
+## 18 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
+## 17 Add try/catch/rollback everywhere
 ## 16 Styling
     ## favicon.ico
     ## logo

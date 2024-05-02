@@ -771,7 +771,7 @@ def create_calendar():
 
     return redirect(f'/users/{g.user.user_id}/calendar')
 
-@app.route('/api/posting')
+@app.route('/api/posting', methods=['POST'])
 def schedule_posting_days():
     """Schedule a user's posting schedule on the google calendar"""
 
