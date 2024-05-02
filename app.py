@@ -685,20 +685,14 @@ def receive_email():
     print('************************')
     print('email received')
 
-    # email = re.search(r'<([^>]+)>', request.form['from'])
-    # print(email)
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
-    email = envelope['to'][0]
+    email = envelope['from'][0]
     print(email)
     subject = request.form['subject']
     body = str(request.form['text'])
 
-    print('data received')
-
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
-    print('user found')
     userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
-    print('book found')
 
     try: 
         stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
