@@ -685,8 +685,11 @@ def receive_email():
     print('email received')
 
     email = request.form['from']
+    print(email)
     subject = request.form['subject']
-    body = request.form['text']
+    print(subject)
+    body = str(request.form['text'])
+    print(body)
 
     print('data received')
 
