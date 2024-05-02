@@ -558,7 +558,7 @@ def edit_book(userbook_id):
         userbook.description = form.description.data
         userbook.isbn = form.isbn.data
         userbook.page_count = form.page_count.data
-        userbook.age_category = AgeCategory(int(form.age_category.data))
+        userbook.age_category = AgeCategory(form.age_category.data)
         userbook.thumbnail = form.thumbnail.data
         userbook.notes = form.notes.data
         userbook.script = form.script.data
