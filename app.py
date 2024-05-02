@@ -685,7 +685,8 @@ def receive_email():
     print('************************')
     print('email received')
 
-    email = re.search(r'>([^>]+)>', request.form['from'])
+    # email = re.search(r'>([^>]+)>', request.form['from'])
+    email = request.form['from']
     print(email)
     subject = request.form['subject']
     body = str(request.form['text'])
