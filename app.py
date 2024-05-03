@@ -741,6 +741,7 @@ def create_calendar():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
+    code = request.args.get('code')
     state = session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
     flow.redirect_uri = url_for('create_calendar', _external=True)
@@ -763,6 +764,7 @@ def create_calendar():
     created_calendar = service.calendars().insert(body=calendar).execute()
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     user.calendar_id = created_calendar['id']
+    user.google_code = code
     db.session.add(user)
     db.session.commit()
     print('****************************')
@@ -785,7 +787,6 @@ def schedule_posting_days():
 
     # state = session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    # flow.redirect_uri = url_for('create_calendar', _external=True)
     authorization_response = request.url
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials

@@ -1,6 +1,8 @@
 TO DO LIST: 
 ## 19 Implement schedule books functionality
     ## set post days based on user profile
+        ## save the code returned when user first oks connection to google in the database
+        ## call it up and include it in the fetch token call
         ## javascript to send the data via axios
             ## deal with returned message
         ## route to add recurring event to the calendar for post days
