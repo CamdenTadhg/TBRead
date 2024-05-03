@@ -15,14 +15,14 @@ TO DO LIST:
         ## add recurring events to the calendar for work days and off days
     ## set calendar days as work or off based on a less regular schedule
         ## add second tab to pop-up for setting individual days to work or off
-        ## add events to the calendar for work days and off days
+        ## add events to the calendar for work days
     ## schedule a book individually
         ## autosuggest search field
         ## load cover image on select
         ## start event, calculate end event
         ## or end event, calculate start event
         ## recommend post date (but let them change it)
-    ## schedule a year, month, etc. of books randomly
+    ## schedule 1 - 12 months of books randomly
     ## oops I deleted my calendar button
 ## 18 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
