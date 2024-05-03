@@ -783,12 +783,12 @@ def schedule_posting_days():
     
     last_post_date = request.json['lastPostDate']
     posting_frequency = request.json['postingFrequency']
-    print('data received')
+    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
 
     # state = session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
     authorization_response = request.url
-    flow.fetch_token(authorization_response=authorization_response)
+    flow.fetch_token(authorization_response=authorization_response, code=user.google_code)
     credentials = flow.credentials
     session['credentials'] = {
         'token': credentials.token,
