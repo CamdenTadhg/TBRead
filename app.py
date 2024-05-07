@@ -846,7 +846,7 @@ def schedule_posting_days():
 
         return redirect(f'/users/{g.user.user_id}/calendar')
     
-    return render_template('/calendars/posting', form=form)
+    return render_template('/calendars/posting.html', form=form)
 
 
 #########################################################################################
