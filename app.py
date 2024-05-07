@@ -814,8 +814,8 @@ def schedule_posting_days():
             )
             return redirect(authorization_url)
     
-        last_post_date = request.json['lastPostDate']
-        posting_frequency = request.json['postingFrequency']
+        last_post_date = form.last_post_date.data
+        posting_frequency = form.posting_frequency.data
 
         service = build('calendar', 'v3', credentials=credentials)
         ## Check if a posting date event currently exists
@@ -846,7 +846,7 @@ def schedule_posting_days():
 
         return redirect(f'/users/{g.user.user_id}/calendar')
     
-    return render_template('/posting', form=form)
+    return render_template('/calendars/posting', form=form)
 
 
 #########################################################################################

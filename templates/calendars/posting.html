@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Set Posting Days</h1>
+
+<form method="POST" id="posting_days_form">
+    {{form.hidden_tag()}}
+    <div>
+        {{form.last_post_date.label(class_="form-label")}}
+        {{form.last_post_date(class_="form-control")}}
+        <span class="text-danger">
+            {% for error in form.last_post_date.errors %}
+                {{error}}
+            {% endfor %}
+        </span>
+    </div>
+    <div>
+        {{form.posting_frequency.label(class_="form-label")}}
+        {{form.posting_frequency(class_="form-control")}}
+        <span class="text-danger">
+            {% for error in form.posting_frequency.errors %}
+                {{error}}
+            {% endfor %}            
+        </span>
+    </div>
+    <button class="btn btn-primary">Set Posting Days</button>
+</form>
+{% endblock %}
