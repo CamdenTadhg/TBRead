@@ -22,6 +22,7 @@ from google.oauth2.credentials import Credentials
 import string
 from datetime import date
 import re
+from oauthlib.oauth2 import TokenExpiredError
 
 CURR_USER_KEY = "curr_user"
 CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
@@ -707,6 +708,22 @@ def receive_email():
 #########################################################################################
 # Calendar Routes
 
+def get_credentials(user_id, redirect_uri):
+    with app.app_context():
+        user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
+
+        if user and user.google_code: 
+            flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+                CLIENT_SECRETS_FILE,
+                scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+            flow.redirect_uri= redirect_uri
+
+            try: 
+                flow.fetch_token(code=user.google_code)
+                return flow.credentials
+            except TokenExpiredError: 
+                return None
+        return None
 
 @app.route('/users/<user_id>/calendar')
 def show_calendar(user_id):
@@ -719,9 +736,7 @@ def show_calendar(user_id):
     user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
     calendar_id = user.calendar_id 
 
-    form=PostDaysForm(posting_frequency=user.posting_frequency)
-
-    return render_template('calendars/calendar.html', calendar_id=calendar_id, form=form)
+    return render_template('calendars/calendar.html', calendar_id=calendar_id)
 
 @app.route('/users/<user_id>/oauth')
 def connect_to_google(user_id):
@@ -741,8 +756,13 @@ def create_calendar():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
+    state = session.get('state')
+    if not state:
+        flash('OAuth state mismatch', 'danger')
+        return redirect('/')
+    
+    
     code = request.args.get('code')
-    state = session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
     flow.redirect_uri = url_for('create_calendar', _external=True)
     authorization_response = request.url
@@ -773,7 +793,7 @@ def create_calendar():
 
     return redirect(f'/users/{g.user.user_id}/calendar')
 
-@app.route('/api/posting', methods=['POST'])
+@app.route('/posting', methods=['GET', 'POST'])
 def schedule_posting_days():
     """Schedule a user's posting schedule on the google calendar"""
 
@@ -781,55 +801,52 @@ def schedule_posting_days():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
-    last_post_date = request.json['lastPostDate']
-    posting_frequency = request.json['postingFrequency']
-    user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    form = PostDaysForm()
 
-    # state = session['state']
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    authorization_response = request.url
-    flow.fetch_token(authorization_response=authorization_response, code=user.google_code)
-    credentials = flow.credentials
-    session['credentials'] = {
-        'token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id, 
-        'client_secret': credentials.client_secret,
-        'scopes': credentials.scopes
-    }
+    if form.validate_on_submit():
+        redirect_uri = url_for('schedule_posting_days', external=True)
+        credentials = get_credentials(g.user.user_id, redirect_uri)
+        if credentials is None:
+            flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+            flow.redirect_uri = redirect_uri
+            authorization_url, _ = flow.authorization_url(
+                access_type="offline", include_granted_scopes="true", prompt="consent"
+            )
+            return redirect(authorization_url)
+    
+        last_post_date = request.json['lastPostDate']
+        posting_frequency = request.json['postingFrequency']
 
-    service = build('calendar', 'v3', credentials=credentials)
-    print('service started')
-    ## Check if a posting date event currently exists
-    existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
-    ## Delete remaining recurring posting events
-    if existing_posting_event.google_event_id: 
-        post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
-        today = date.today()
-        post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
-        service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
-    ## Add new posting date event
-    event = {
-        'summary': 'Posting Day',
-        'start.date': last_post_date,
-        'end.date': last_post_date,
-        'recurrence': [f'RRULE: FREQ=DAILY; COUNT={posting_frequency}']
-    }
-    posting_day = service.events().insert(calendarId = g.user.calendar_id, body=event).execute()
-    print('**************************')
-    print(posting_day)
-    service.close()
-    ## Update user profile
-    if g.user.posting_frequency != posting_frequency:
-        user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
-        user.posting_frequency = posting_frequency
-        db.session.add(user)
-        db.session.commit()
+        service = build('calendar', 'v3', credentials=credentials)
+        ## Check if a posting date event currently exists
+        existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
+        ## Delete remaining recurring posting events
+        if existing_posting_event.google_event_id: 
+            post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
+            today = date.today()
+            post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
+            service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
+        ## Add new posting date event
+        event = {
+            'summary': 'Posting Day',
+            'start.date': last_post_date,
+            'end.date': last_post_date,
+            'recurrence': [f'RRULE: FREQ=DAILY; COUNT={posting_frequency}']
+        }
+        posting_day = service.events().insert(calendarId = g.user.calendar_id, body=event).execute()
+        print('**************************')
+        print(posting_day)
+        service.close()
+        ## Update user profile
+        if g.user.posting_frequency != posting_frequency:
+            user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+            user.posting_frequency = posting_frequency
+            db.session.add(user)
+            db.session.commit()
 
-    return jsonify({'success': 'Posting Event Changed'}) 
-
-
+        return redirect(f'/users/{g.user.user_id}/calendar')
+    
+    return render_template('/posting', form=form)
 
 
 #########################################################################################
