@@ -711,6 +711,7 @@ def receive_email():
 
 def get_credentials(user_id, redirect_uri):
     with app.app_context():
+        print('LOGGED HERE: function get credentials starts')
         user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
 
         if user and user.google_code: 
@@ -804,6 +805,7 @@ def create_calendar():
 @app.route('/posting', methods=['GET', 'POST'])
 def schedule_posting_days():
     """Schedule a user's posting schedule on the google calendar"""
+    print('LOGGED HERE: Function Schedule Posting Days starts')
 
     if not g.user: 
         flash ('Please log in', 'danger')
@@ -812,9 +814,11 @@ def schedule_posting_days():
     form = PostDaysForm()
 
     if form.validate_on_submit():
+        print('LOGGED HERE: if validate on submit starts')
         redirect_uri = url_for('schedule_posting_days', external=True)
         credentials = get_credentials(g.user.user_id, redirect_uri)
         if credentials is None:
+            print('LOGGED HERE: if credentials is none starts')
             flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
             flow.redirect_uri = redirect_uri
             authorization_url, _ = flow.authorization_url(
