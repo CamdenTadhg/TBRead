@@ -713,24 +713,33 @@ def get_credentials(user_id, redirect_uri):
     with app.app_context():
         print('LOGGED HERE: function get credentials starts')
         user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
+        print('LOGGED HERE: user', user)
 
         if user and user.google_code: 
+            print('LOGGED HERE: if statement starts')
+            print('LOGGED HERE: user', user)
+            print('LOGGED HERE: user.google_code', user.google_code)
             flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
                 CLIENT_SECRETS_FILE,
                 scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+            print('LOGGED HERE: flow', flow)
             flow.redirect_uri= redirect_uri
+            print('LOGGED HERE: redirect_uri', redirect_uri)
+            print('LOGGED HERE: flow.redirect_uri', flow.redirect_uri)
 
             try: 
+                print('LOGGED HERE: try starts')
                 flow.fetch_token(code=user.google_code)
                 print('LOGGED HERE')
-                print(flow.credentials)
-                print(flow.credentials.expired)
+                print('flow.credentials', flow.credentials)
+                print('flow.credentials.expired', flow.credentials.expired)
                 if flow.credentials.expired:
                     flow.credentials.refresh(Request())
                 print('LOGGED HERE')
-                print(flow.credentials)
+                print('flow.credentials', flow.credentials)
                 return flow.credentials
             except TokenExpiredError: 
+                print('LOGGED HERE: execept starts', TokenExpiredError)
                 return None
         return None
 
