@@ -720,6 +720,8 @@ def get_credentials(user_id, redirect_uri):
 
             try: 
                 flow.fetch_token(code=user.google_code)
+                if flow.credentials.expired:
+                    flow.credentials.refresh(Request())
                 return flow.credentials
             except TokenExpiredError: 
                 return None
@@ -739,7 +741,7 @@ def show_calendar(user_id):
     return render_template('calendars/calendar.html', calendar_id=calendar_id)
 
 @app.route('/users/<user_id>/oauth')
-def connect_to_google(user_id):
+def connect_to_google_create_calendar(user_id):
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
     flow.redirect_uri = 'https://tb-read.com/createcalendar'
