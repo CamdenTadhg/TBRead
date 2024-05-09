@@ -827,6 +827,8 @@ def schedule_posting_days():
     form = PostDaysForm()
 
     if form.validate_on_submit():
+        print('*****************')
+        print('validate on submit starts')
     
         last_post_date = form.last_post_date.data
         posting_frequency = form.posting_frequency.data
@@ -835,6 +837,8 @@ def schedule_posting_days():
         existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
         ## Delete remaining recurring posting events
         if existing_posting_event.google_event_id: 
+            print('****************')
+            print('if existing posting event')
             post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
             today = date.today()
             post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
@@ -852,6 +856,8 @@ def schedule_posting_days():
         service.close()
         ## Update user profile
         if g.user.posting_frequency != posting_frequency:
+            print('************************')
+            print('if g user posting_frequency')
             user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
             user.posting_frequency = posting_frequency
             db.session.add(user)
