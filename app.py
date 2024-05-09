@@ -738,7 +738,8 @@ def get_credentials(user_id, redirect_uri):
                 print('LOGGED HERE')
                 print('flow.credentials', flow.credentials)
                 return flow.credentials
-            except TokenExpiredError: 
+            except TokenExpiredError or Exception: 
+                print('LOGGED HERE: exception', Exception)
                 print('LOGGED HERE: execept starts', TokenExpiredError)
                 return None
         return None
