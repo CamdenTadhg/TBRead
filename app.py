@@ -721,10 +721,12 @@ def get_credentials(user_id, redirect_uri):
 
             try: 
                 flow.fetch_token(code=user.google_code)
+                print('LOGGED HERE')
                 print(flow.credentials)
                 print(flow.credentials.expired)
                 if flow.credentials.expired:
                     flow.credentials.refresh(Request())
+                print('LOGGED HERE')
                 print(flow.credentials)
                 return flow.credentials
             except TokenExpiredError: 
