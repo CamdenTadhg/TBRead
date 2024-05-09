@@ -729,6 +729,7 @@ def get_credentials(user_id, redirect_uri):
 
             try: 
                 print('LOGGED HERE: try starts')
+                print('LOGGED HERE: flow.fetch_token', flow.fetch_token(code=user.google_code))
                 flow.fetch_token(code=user.google_code)
                 print('LOGGED HERE')
                 print('flow.credentials', flow.credentials)
