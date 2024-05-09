@@ -23,6 +23,7 @@ import string
 from datetime import date
 import re
 from oauthlib.oauth2 import TokenExpiredError
+from google.auth.transport.requests import Request
 
 CURR_USER_KEY = "curr_user"
 CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
