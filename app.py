@@ -709,42 +709,6 @@ def receive_email():
 #########################################################################################
 # Calendar Routes
 
-def get_credentials(user_id, redirect_uri):
-    with app.app_context():
-        print('LOGGED HERE: function get credentials starts')
-        user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar()
-        print('LOGGED HERE: user', user)
-
-        if user and user.google_code: 
-            print('LOGGED HERE: if statement starts')
-            print('LOGGED HERE: user', user)
-            print('LOGGED HERE: user.google_code', user.google_code)
-            flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-                CLIENT_SECRETS_FILE,
-                scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-            print('LOGGED HERE: flow', flow)
-            flow.redirect_uri= redirect_uri
-            print('LOGGED HERE: redirect_uri', redirect_uri)
-            print('LOGGED HERE: flow.redirect_uri', flow.redirect_uri)
-
-            try: 
-                print('LOGGED HERE: try starts')
-                print('LOGGED HERE: flow.fetch_token', flow.fetch_token(code=user.google_code))
-                flow.fetch_token(code=user.google_code)
-                print('LOGGED HERE')
-                print('flow.credentials', flow.credentials)
-                print('flow.credentials.expired', flow.credentials.expired)
-                if flow.credentials.expired:
-                    flow.credentials.refresh(Request())
-                print('LOGGED HERE')
-                print('flow.credentials', flow.credentials)
-                return flow.credentials
-            except TokenExpiredError or Exception: 
-                print('LOGGED HERE: exception', Exception)
-                print('LOGGED HERE: execept starts', TokenExpiredError)
-                return None
-        return None
-
 @app.route('/users/<user_id>/calendar')
 def show_calendar(user_id):
     """Show user's calendar"""
@@ -758,7 +722,7 @@ def show_calendar(user_id):
 
     return render_template('calendars/calendar.html', calendar_id=calendar_id)
 
-@app.route('/users/<user_id>/oauth')
+@app.route('/users/<user_id>/oauth/create')
 def connect_to_google_create_calendar(user_id):
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
@@ -813,6 +777,16 @@ def create_calendar():
 
     return redirect(f'/users/{g.user.user_id}/calendar')
 
+@app.route('/users/<user_id>/oauth/posting')
+def connect_to_google_posting(user_id):
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    flow.redirect_uri = 'https://tb-read.com/posting'
+    authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
+    session['state'] = state
+
+    return redirect(authorization_url)
+
 @app.route('/posting', methods=['GET', 'POST'])
 def schedule_posting_days():
     """Schedule a user's posting schedule on the google calendar"""
@@ -822,25 +796,29 @@ def schedule_posting_days():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
+    flow.redirect_uri = url_for('create_calendar', _external=True)
+    authorization_response = request.url
+    flow.fetch_token(authorization_response=authorization_response)
+    credentials = flow.credentials
+    session['credentials'] = {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id, 
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
+
+    service = build('calendar', 'v3', credentials=credentials)
+
     form = PostDaysForm()
 
     if form.validate_on_submit():
-        print('LOGGED HERE: if validate on submit starts')
-        redirect_uri = url_for('schedule_posting_days', external=True)
-        credentials = get_credentials(g.user.user_id, redirect_uri)
-        if credentials is None:
-            print('LOGGED HERE: if credentials is none starts')
-            flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-            flow.redirect_uri = redirect_uri
-            authorization_url, _ = flow.authorization_url(
-                access_type="offline", include_granted_scopes="true", prompt="consent"
-            )
-            return redirect(authorization_url)
     
         last_post_date = form.last_post_date.data
         posting_frequency = form.posting_frequency.data
 
-        service = build('calendar', 'v3', credentials=credentials)
         ## Check if a posting date event currently exists
         existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
         ## Delete remaining recurring posting events
