@@ -814,6 +814,13 @@ def schedule_posting_days():
         'client_secret': credentials.client_secret,
         'scopes': credentials.scopes
     }
+    print('*********************')
+    print('credentials.token', credentials.token)
+    print('refresh_token', credentials.refresh_token)
+    print('token_uri', credentials.token_uri )
+    print('client_id', credentials.client_id)
+    print('client_secret', credentials.client_secret)
+    print('scopes', credentials.scopes)
 
     service = build('calendar', 'v3', credentials=credentials)
 
