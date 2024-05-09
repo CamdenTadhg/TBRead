@@ -802,7 +802,7 @@ def schedule_posting_days():
         return redirect('/')
     
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
-    flow.redirect_uri = url_for('create_calendar', _external=True)
+    flow.redirect_uri = url_for('schedule_posting_days', _external=True)
     authorization_response = request.url
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
