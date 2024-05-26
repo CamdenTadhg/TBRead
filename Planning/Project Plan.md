@@ -1,6 +1,47 @@
 TO DO LIST: 
-## 19 Implement schedule books functionality
+## 21 Take one last stab at the calendar functionality
+    ## add necessary columns to database
+    ## save data to database
+    ## if it exists in the session, pull it from there
+    ## if it doesn't exist in the session, pull it from the database. 
+## 20 Remove calendar functionality
+## 19 Add try/catch/rollback everywhere
+## 18 Write tests for python & javascript
+    ## figure out why tests aren't working
+    ## route tests
+    ## python function tests
+    ## model tests
+    ## javascript tests
+## 17 Styling
+    ## favicon.ico
+    ## logo
+    ## fix it so that on login, you get the appropriate flash message
+    ## go over site with Augustin for design considerations
+    ## reformat user profile 
+    ## list displays
+    ## add books button to the right place
+    ## search form display
+    ## search results display
+    ## display of authors on edit form
+    ## fix tabs to be visible
+    ## make empty book list display look nice
+    ## make tables go across the full page regardless of how long the text content is
+    ## better response to axios errors than stupid little alerts
+## 16 Documentation
+    ## create ReadMe
+
+
+    ## create help section
+        ## create documentation for sending in emails
+        ## create documentation for creating challenges
+## 15 Implement schedule books functionality
     ## set post days based on user profile
+    ## see what credentials are needed in the build statement exactly
+    ## stuck on the fetch token part. Is there syntax to give it the authorization code instead of the request.url? 
+        ## if user.google_code
+            ## if user.google_code valid, user that
+            ## if user.google_code expired = get a new google_code
+        ## if not user.google_code, do authorization flow
         ## switch page to get/post with form validation
             ## if form doesn't validate, display form
             ## if form does validate, do all the code then redirect to the calendar page
@@ -20,41 +61,12 @@ TO DO LIST:
         ## recommend post date (but let them change it)
     ## schedule 1 - 12 months of books randomly
     ## oops I deleted my calendar button
-## 18 Implement email reminders functionality 
+    ## display book cover on calendar on start date
+## 14 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
-## 17 Add try/catch/rollback everywhere
-## 16 Styling
-    ## favicon.ico
-    ## logo
-    ## fix it so that on login, you get the appropriate flash message
-    ## go over site with Augustin for design considerations
-    ## reformat user profile 
-    ## list displays
-    ## add books button to the right place
-    ## search form display
-    ## search results display
-    ## display of authors on edit form
-    ## fix tabs to be visible
-    ## display book cover on calendar on start date
-    ## make empty book list display look nice
-    ## make tables go across the full page regardless of how long the text content is
-    ## better response to axios errors than stupid little alerts
-## 15 Documentation
-    ## create help section
-        ## create documentation for sending in emails
-        ## create documentation for creating challenges
-    ## create ReadMe
-
-
-## 14 Write tests for python & javascript
-    ## figure out why tests aren't working
-    ## route tests
-    ## python function tests
-    ## model tests
-    ## javascript tests
 ## 13 Refactor based on feedback from mentor and hatchways and Augustin
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image

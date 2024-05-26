@@ -741,10 +741,6 @@ def create_calendar():
         return redirect('/') 
     
     state = session.get('state')
-    if not state:
-        flash('OAuth state mismatch', 'danger')
-        return redirect('/')
-    
     
     code = request.args.get('code')
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
@@ -768,24 +764,17 @@ def create_calendar():
     created_calendar = service.calendars().insert(body=calendar).execute()
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     user.calendar_id = created_calendar['id']
-    user.google_code = code
+    user.token = credentials.token
+    user.refresh_token = credentials.refresh_token
+    user.token_uri = credentials.token_uri
+    user.client_id = credentials.client_id
+    user.client_secret = credentials.client_secret
+    user.scopes = credentials.scopes
     db.session.add(user)
     db.session.commit()
-    print('****************************')
-    print(user.calendar_id)
     service.close()
 
     return redirect(f'/users/{g.user.user_id}/calendar')
-
-@app.route('/users/<user_id>/oauth/posting')
-def connect_to_google_posting(user_id):
-
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
-    flow.redirect_uri = 'https://tb-read.com/posting'
-    authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
-    session['state'] = state
-
-    return redirect(authorization_url)
 
 @app.route('/posting', methods=['GET', 'POST'])
 def schedule_posting_days():
@@ -796,31 +785,18 @@ def schedule_posting_days():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
-    state = session.get('state')
-    if not state:
-        flash('OAuth state mismatch', 'danger')
-        return redirect('/')
-    
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
-    flow.redirect_uri = url_for('schedule_posting_days', _external=True)
-    authorization_response = request.url
-    flow.fetch_token(authorization_response=authorization_response)
-    credentials = flow.credentials
-    session['credentials'] = {
-        'token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id, 
-        'client_secret': credentials.client_secret,
-        'scopes': credentials.scopes
-    }
-    print('*********************')
-    print('credentials.token', credentials.token)
-    print('refresh_token', credentials.refresh_token)
-    print('token_uri', credentials.token_uri )
-    print('client_id', credentials.client_id)
-    print('client_secret', credentials.client_secret)
-    print('scopes', credentials.scopes)
+    if session.get("credentials"):
+        credentials = session["credentials"]
+    else: 
+        credentials = {
+            'token': g.user.token,
+            'refresh_token': g.user.refresh_token, 
+            'token_uri': g.user.token_uri,
+            'client_id': g.user.client_id,
+            'client_secret': g.user.client_secret,
+            'scopes': g.user.scopes
+            }
+
 
     service = build('calendar', 'v3', credentials=credentials)
 
@@ -851,13 +827,9 @@ def schedule_posting_days():
             'recurrence': [f'RRULE: FREQ=DAILY; COUNT={posting_frequency}']
         }
         posting_day = service.events().insert(calendarId = g.user.calendar_id, body=event).execute()
-        print('**************************')
-        print(posting_day)
         service.close()
         ## Update user profile
         if g.user.posting_frequency != posting_frequency:
-            print('************************')
-            print('if g user posting_frequency')
             user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
             user.posting_frequency = posting_frequency
             db.session.add(user)
@@ -1050,3 +1022,7 @@ def homepage():
         form3 = EmailForm()
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
+    
+
+with open('camden.txt', 'w') as f:
+    f.writelines("{'camden':{'token': 'asl;kjdgoawigo', } }")
