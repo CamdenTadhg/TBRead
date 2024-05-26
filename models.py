@@ -49,7 +49,12 @@ class User(db.Model):
     content_account = db.Column(db.Text)
     email_reminders = db.Column(db.Boolean)
     password_reset_token = db.Column(db.String)
-    google_code = db.Column(db.String)
+    token = db.Column(db.String)
+    refresh_token = db.Column(db.String)
+    token_uri = db.Column(db.String)
+    client_id = db.Column(db.String)
+    client_secret = db.Column(db.String)
+    scopes = db.Column(db.String)
 
     user_books = db.relationship("User_Book", backref="users", cascade="all, delete-orphan")
     lists = db.relationship("List", backref="users", cascade="all, delete-orphan")
