@@ -1,5 +1,4 @@
 TO DO LIST: 
-## 21 Take one last stab at the calendar functionality 
 ## 20 Remove calendar functionality
 ## 19 Add try/catch/rollback everywhere
 ## 18 Write tests for python & javascript
