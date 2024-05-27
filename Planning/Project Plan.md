@@ -1,9 +1,5 @@
 TO DO LIST: 
-## 21 Take one last stab at the calendar functionality
-    ## add necessary columns to database
-    ## save data to database
-    ## if it exists in the session, pull it from there
-    ## if it doesn't exist in the session, pull it from the database. 
+## 21 Take one last stab at the calendar functionality 
 ## 20 Remove calendar functionality
 ## 19 Add try/catch/rollback everywhere
 ## 18 Write tests for python & javascript
