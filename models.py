@@ -23,7 +23,6 @@ class EventCategory(enum.Enum):
     Order = 'Order'
     Start = 'Start'
     Finish = 'Finish'
-    Post = 'Post'
     Posting = 'Posting'
     Work = 'Work'
 

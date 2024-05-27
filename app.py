@@ -854,16 +854,16 @@ def schedule_posting_days():
         posting_frequency = form.posting_frequency.data
 
         ## Check if a posting date event currently exists
-        existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
+        # existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
         ## Delete remaining recurring posting events
-        if existing_posting_event.google_event_id: 
-            print('****************')
-            print('if existing posting event')
-            post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
-            today = date.today()
-            post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
-            service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
-        ## Add new posting date event
+        # if existing_posting_event.google_event_id: 
+        #     print('****************')
+        #     print('if existing posting event')
+        #     post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
+        #     today = date.today()
+        #     post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
+        #     service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
+        # ## Add new posting date event
         event = {
             'summary': 'Posting Day',
             'start.date': last_post_date,
