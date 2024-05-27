@@ -748,16 +748,6 @@ def create_calendar():
     authorization_response = request.url
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
-    print('************************')
-    print(list(credentials))
-    session['credentials'] = {
-        'token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id, 
-        'client_secret': credentials.client_secret,
-        'scopes': credentials.scopes
-    }
 
     service = build('calendar', 'v3', credentials=credentials)
     calendar = {
@@ -778,6 +768,16 @@ def create_calendar():
 
     return redirect(f'/users/{g.user.user_id}/calendar')
 
+@app.route('/users/<user_id>/oauth/posting')
+def connect_to_google_schedule_posting(user_id):
+
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
+    flow.redirect_uri = 'https://tb-read.com/posting'
+    authorization_url, state = flow.authorization_url(access_type="offline", include_granted_scopes="true", prompt="consent")
+    session['state'] = state
+
+    return redirect(authorization_url)
+
 @app.route('/posting', methods=['GET', 'POST'])
 def schedule_posting_days():
     """Schedule a user's posting schedule on the google calendar"""
@@ -787,26 +787,14 @@ def schedule_posting_days():
         flash ('Please log in', 'danger')
         return redirect('/') 
     
-    if session.get("credentials"):
-        credentials = session["credentials"]
-    else: 
-        credentials = {
-            'token': g.user.token,
-            'refresh_token': g.user.refresh_token, 
-            'token_uri': g.user.token_uri,
-            'client_id': g.user.client_id,
-            'client_secret': g.user.client_secret,
-            'scopes': g.user.scopes
-            }
-        session['credentials'] = {
-            'token': credentials.token,
-            'refresh_token': credentials.refresh_token,
-            'token_uri': credentials.token_uri,
-            'client_id': credentials.client_id, 
-            'client_secret': credentials.client_secret,
-            'scopes': credentials.scopes
-    }
-
+    state = session.get('state')
+    
+    code = request.args.get('code')
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'], state=state)
+    flow.redirect_uri = url_for('schedule_posting_days', _external=True)
+    authorization_response = request.url
+    flow.fetch_token(authorization_response=authorization_response)
+    credentials = flow.credentials
 
     service = build('calendar', 'v3', credentials=credentials)
 
