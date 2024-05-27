@@ -796,6 +796,14 @@ def schedule_posting_days():
             'client_secret': g.user.client_secret,
             'scopes': g.user.scopes
             }
+        session['credentials'] = {
+            'token': credentials.token,
+            'refresh_token': credentials.refresh_token,
+            'token_uri': credentials.token_uri,
+            'client_id': credentials.client_id, 
+            'client_secret': credentials.client_secret,
+            'scopes': credentials.scopes
+    }
 
 
     service = build('calendar', 'v3', credentials=credentials)
