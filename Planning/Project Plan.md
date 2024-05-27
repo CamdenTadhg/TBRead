@@ -1,5 +1,4 @@
 TO DO LIST: 
-## 20 Remove calendar functionality
 ## 19 Add try/catch/rollback everywhere
 ## 18 Write tests for python & javascript
     ## figure out why tests aren't working

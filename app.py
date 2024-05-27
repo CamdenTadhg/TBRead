@@ -175,7 +175,10 @@ def send_password_reset():
         prt = user.get_password_reset_token()
         stmt = update(User).where(User.email == email).values(password_reset_token=prt)
         db.session.execute(stmt)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
         msg = Message(subject='Password Reset Link', sender='theenbydeveloper@gmail.com', recipients=[email])
         msg.html = render_template('emails/passwordresetemail.html', prt=prt, email=email)
         mail.send(msg)
@@ -203,12 +206,14 @@ def password_reset():
             db.session.commit()
         except:
             flash('Something went wrong. Please try again')
+            db.session.rollback()
         stmt2 = update(User).where(User.email == email).values(password_reset_token=None)
         db.session.execute(stmt2)
         try:
             db.session.commit()
         except:
             flash('Something went wrong. Please try again')
+            db.session.rollback()
         return redirect('/')
     elif user and user.password_reset_token == prt:
         return render_template('passwordreset.html', form=form)
@@ -228,6 +233,7 @@ def update_password():
     try:
         db.session.commit()
     except:
+        db.session.rollback()
         return jsonify({'error': 'Something went wrong'})
     return jsonify({'success': 'Password updated'})
 
@@ -235,7 +241,7 @@ def update_password():
 #########################################################################################
 # User Routes
 
-def create_lists(user):
+def create_lists(user):   
     """Create three lists when new user is created"""
     with app.app_context():
         stmt = (insert(List).values(list_type='TBR', user_id=user.user_id))
@@ -244,7 +250,10 @@ def create_lists(user):
         db.session.execute(stmt)
         db.session.execute(stmt2)
         db.session.execute(stmt3)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
     
 @app.route('/users/<user_id>', methods=['GET', 'POST'])
 def display_user_profile(user_id):
@@ -286,6 +295,9 @@ def display_user_profile(user_id):
                 flash('Email already in use', 'danger')
             if 'users_username_key' in str(e):
                 flash('Username already in use', 'danger')
+        except: 
+            db.session.rollback()
+            flash('Something went wrong. Please try again')
         
     return render_template('profile.html', form=form, form2=form2, user=g.user)
 
@@ -353,7 +365,11 @@ def delete_user():
         do_logout()
 
         db.session.delete(g.user)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
+            flash('Delete failed. Please try again', 'danger')
 
         flash('Account deleted', 'danger')
 
@@ -407,7 +423,10 @@ def addBookToDatabase(google_id):
             thumbnail = ''
         new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         db.session.add(new_book)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
         return new_book.book_id
 
 class MLStripper(HTMLParser):
@@ -441,7 +460,10 @@ def add_book_to_tbr(userbook_id):
         userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
         list.user_books.append(userbook)
         db.session.add(list)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
 
 @app.route('/books', methods=['GET'])
 def add_books():
@@ -492,7 +514,11 @@ def edit_new_book(google_id):
         if not check_book:
             new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Something went wrong. Please try again', 'danger')
             add_book_to_tbr(new_user_book.userbook_id)
             return redirect(f'/users/{g.user.user_id}/lists/tbr')
         else:
@@ -526,11 +552,17 @@ def add_book_manually():
         ## add the book to the books table in the database
         new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         db.session.add(new_book)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
         ## add the book to the users_books table in the database
         new_user_book = User_Book(user_id=g.user.user_id, book_id=new_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script)
         db.session.add(new_user_book)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
         add_book_to_tbr(new_user_book.userbook_id)
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
@@ -565,7 +597,11 @@ def edit_book(userbook_id):
         userbook.notes = form.notes.data
         userbook.script = form.script.data
         db.session.add(userbook)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
+            flash('Something went wrong. Please try again', 'danger')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
     return render_template('books/editbook.html', form=form, userbook=userbook, user_challenges=user_challenges)
@@ -582,7 +618,11 @@ def delete_book(userbook_id):
     if userbook:
         if g.user.user_id == userbook.user_id:
             db.session.delete(userbook)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Delete failed. Please try again', 'danger')
         else: 
             flash('You do not have permission to do that', 'danger')
     else:
@@ -608,7 +648,11 @@ def transfer_between_lists(userbook_id, list_type):
         userbook.lists.append(list)
         print(userbook.lists)
         db.session.add(userbook)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
+            flash('Something went wrong. Please try again.', 'danger')
     else:
         flash('Book not found. Please try again')
     if list_type == 'Complete':
@@ -617,13 +661,21 @@ def transfer_between_lists(userbook_id, list_type):
         for userbook_challenge in userbook_challenges:
             userbook_challenge.complete = True
             db.session.add(userbook_challenge)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Something went wrong. Please try again.', 'danger')
     else: 
         userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
         for userbook_challenge in userbook_challenges:
             userbook_challenge.complete = False
             db.session.add(userbook_challenge)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Something went wrong. Please try again.', 'danger')
     
     return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
@@ -647,12 +699,19 @@ def assign_book(userbook_id):
         except IntegrityError:
             db.session.rollback()
             return jsonify({'error': 'Book already in challenge'})
+        except: 
+            db.session.rollback()
+            flash('Something went wrong. Please try again.', 'danger')
         if userbook.lists[0].list_type == 'Complete':
             print('userbook complete')
             userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
             userbook_challenge.complete = True
             db.session.add(userbook_challenge)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except:
+                db.session.rollback()
+                flash('Something went wrong. Please try again', 'danger')
     
     return jsonify({'success': 'Book added'})
 
@@ -763,7 +822,11 @@ def create_calendar():
     user.client_secret = credentials.client_secret
     user.scopes = credentials.scopes
     db.session.add(user)
-    db.session.commit()
+    try: 
+        db.session.commit()
+    except: 
+        db.session.rollback()
+        flash('Something went wrong. Please try again', 'danger')
     service.close()
 
     return redirect(f'/users/{g.user.user_id}/calendar')
@@ -831,7 +894,10 @@ def schedule_posting_days():
             user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
             user.posting_frequency = posting_frequency
             db.session.add(user)
-            db.session.commit()
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
 
         return redirect(f'/users/{g.user.user_id}/calendar')
     
@@ -908,12 +974,20 @@ def add_challenge():
         ## add the challenge to the challenge table in the database
         new_challenge = Challenge(creator_id = g.user.user_id, name=name, num_books=num_books, description=description)
         db.session.add(new_challenge)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Challenge not added. Please try again', 'danger')
         ## add the challenge to the user's profile
         user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
         user.challenges.append(new_challenge)
         db.session.add(user)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Challenge not added. Please try again.', 'danger')
         return redirect('/challenges')
 
     return render_template('challenges/new.html', form=form)
@@ -938,7 +1012,11 @@ def edit_challenge(challenge_id):
         challenge.num_books = form.num_books.data
         challenge.description = form.description.data
         db.session.add(challenge)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
+            flash('Changes not saved. Please try again.', 'danger')
         flash('Changes saved', 'success')
     
     return render_template('challenges/edit_challenge.html', form=form)
@@ -957,9 +1035,9 @@ def join_challenge(challenge_id):
     try: 
         db.session.add(user)
         db.session.commit()
-    except: 
-        db.session.rollback()
-        flash('You are already signed up for this challenge.', 'danger')
+    # except: 
+    #     db.session.rollback()
+    #     flash('You are already signed up for this challenge.', 'danger')
 
     return redirect('/challenges')
 
@@ -975,7 +1053,10 @@ def leave_challenge(challenge_id):
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     user.challenges.remove(challenge)
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except: 
+        db.session.rollback()
 
     return redirect(f'/users/{g.user.user_id}/challenges')
 
