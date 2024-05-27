@@ -749,7 +749,7 @@ def create_calendar():
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
     print('************************')
-    print(credentials)
+    print(list(credentials))
     session['credentials'] = {
         'token': credentials.token,
         'refresh_token': credentials.refresh_token,
