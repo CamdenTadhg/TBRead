@@ -1,6 +1,6 @@
 TO DO LIST: 
-## 19 Add try/catch/rollback everywhere
 ## 18 Write tests for python & javascript
+    ## figure out how to run tests on render
     ## figure out why tests aren't working
     ## route tests
     ## python function tests
@@ -29,17 +29,7 @@ TO DO LIST:
         ## create documentation for sending in emails
         ## create documentation for creating challenges
 ## 15 Implement schedule books functionality
-    ## set post days based on user profile
-    ## see what credentials are needed in the build statement exactly
-    ## stuck on the fetch token part. Is there syntax to give it the authorization code instead of the request.url? 
-        ## if user.google_code
-            ## if user.google_code valid, user that
-            ## if user.google_code expired = get a new google_code
-        ## if not user.google_code, do authorization flow
-        ## switch page to get/post with form validation
-            ## if form doesn't validate, display form
-            ## if form does validate, do all the code then redirect to the calendar page
-        ## does it work? 
+    ## set post days 
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
         ## pop-up with form to set work days
