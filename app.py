@@ -1033,8 +1033,8 @@ def join_challenge(challenge_id):
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     user.challenges.append(challenge)
     # try: 
-        db.session.add(user)
-        db.session.commit()
+    db.session.add(user)
+    db.session.commit()
     # except: 
     #     db.session.rollback()
     #     flash('You are already signed up for this challenge.', 'danger')
