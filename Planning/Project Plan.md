@@ -1,5 +1,4 @@
 TO DO LIST: 
-## 19 Did I just figure out the google calendar authorization? 
 ## 18 Write tests for python & javascript
     ## figure out how to run tests on render
     ## figure out why tests aren't working
