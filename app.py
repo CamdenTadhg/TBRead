@@ -1032,7 +1032,7 @@ def join_challenge(challenge_id):
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     user.challenges.append(challenge)
-    try: 
+    # try: 
         db.session.add(user)
         db.session.commit()
     # except: 
@@ -1062,7 +1062,7 @@ def leave_challenge(challenge_id):
 
 @app.route('/users/<user_id>/challenges/<challenge_id>', methods=["GET", "POST"])
 def edit_user_challenge(user_id, challenge_id):
-    """Display an individual challenge with a user has enrolled in"""
+    """Display an individual challenge that a user has enrolled in"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -1079,7 +1079,11 @@ def edit_user_challenge(user_id, challenge_id):
         user_challenge.start_date = form.start_date.data
         user_challenge.end_date = form.end_date.data
         db.session.add(user_challenge)
-        db.session.commit()
+        try: 
+            db.session.commit()
+        except: 
+            db.session.rollback()
+            flash('Changes not saved. Please try again', 'danger')
         flash('Changes saved', 'success')
 
     return render_template('challenges/edit_user_challenge.html', form=form, books=books)
@@ -1101,7 +1105,3 @@ def homepage():
         form3 = EmailForm()
         display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
-    
-
-with open('camden.txt', 'w') as f:
-    f.writelines("{'camden':{'token': 'asl;kjdgoawigo', } }")
