@@ -3,7 +3,7 @@
 import os
 from unittest import TestCase
 from sqlalchemy.exc import IntegrityError
-from models import db, User, Book
+from models import db, User, Book, Challenge, User_Book, List, User_Challenge
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -194,3 +194,207 @@ class BookModelTestCase(TestCase):
         db.session.commit()
 
         self.assertEqual(f'<Book lahsgoiawog: test book, 2024>', str(b))
+
+class ChallengeModelTestCase(TestCase):
+    """Test methods for challenge model"""
+
+    def setUp(self):
+        "create test client, add data"
+
+        Challenge.query.delete()
+        User.query.delete()
+
+        u1 = User(
+            email="janedoe@test.com", 
+            username="janedoe", 
+            password="HASHED_PASSWORD"
+        )
+
+        db.session.add(u1)
+        db.session.commit()
+
+        self.client = app.test_client()
+    
+    def tearDown(self):
+        """Clean up any fouled transactions"""
+
+        db.session.rollback()
+    
+    def test_serialize_challenge(self):
+        """Does serialize challenge return the right format?"""
+
+        user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
+
+        c1 = Challenge(
+            creator_id=user_id, 
+            name="Test Challenge", 
+            num_books=12, 
+            description="testing"
+        )
+
+        db.session.add(c1)
+        db.session.commit()
+
+        self.assertEqual(c1.serialize_challenges(), {"id": c1.challenge_id, "creator_id": user_id, "name": "Test Challenge", "num_books": 12, "description": "testing"} )
+
+class User_BookModelTestCase(TestCase):
+    """Test methods for user_book model"""
+
+    def setUp(self):
+        "create test client, add data"
+
+        User_Book.query.delete()
+        Book.query.delete()
+        User.query.delete()
+
+
+        u1 = User(
+            email="janedoe@test.com", 
+            username="janedoe", 
+            password="HASHED_PASSWORD"
+        )
+
+        db.session.add(u1)
+        db.session.commit()
+
+        b = Book(google_id = "lahsgoiawog", 
+                 title = "test book", 
+                 publisher="PenguinRandomHouse", 
+                 pub_date = 2024)
+        
+        db.session.add(b)
+        db.session.commit()
+
+        self.client = app.test_client()
+
+    def tearDown(self):
+        """Clean up any fouled transactions"""
+
+        db.session.rollback()
+    
+    def test_repr(self):
+        """Does repr return the correct format?"""
+
+        user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
+        book_id = db.session.execute(db.select(Book.book_id).where(Book.google_id == "lahsgoiawog")).scalar()
+
+        ub = User_Book(title = "test book", 
+                 user_id = user_id,
+                 book_id = book_id,
+                 publisher="PenguinRandomHouse", 
+                 pub_date = 2024)
+        
+        db.session.add(ub)
+        db.session.commit()
+
+        self.assertEqual(f'<User Book {ub.userbook_id}: test book, 2024>', str(ub))
+    
+    def test_serialize_user_book(self):
+        """Does serialize user_book return the right format?"""
+
+        user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
+        book_id = db.session.execute(db.select(Book.book_id).where(Book.google_id == "lahsgoiawog")).scalar()
+
+        ub = User_Book(title = "test book", 
+                 user_id = user_id,
+                 book_id = book_id,
+                 authors = "Mr. Testy Test",
+                 publisher="PenguinRandomHouse", 
+                 pub_date = 2024,
+                 cover = "https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE",
+                 pages = 100)
+        
+        db.session.add(ub)
+        db.session.commit()
+
+        self.assertEqual(ub.serialize_user_book(), {"id": ub.userbook_id, "title": "test book", "author": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": 2024, "cover":"https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE", "pages": 100} )
+
+class ListModelTestCase(TestCase):
+    """Test methods for list model"""
+
+    def setUp(self):
+        "create test client, add data"
+    
+        User.query.delete()
+
+
+        u1 = User(
+            email="janedoe@test.com", 
+            username="janedoe", 
+            password="HASHED_PASSWORD"
+        )
+
+        db.session.add(u1)
+        db.session.commit()
+
+        self.client = app.test_client()
+
+    def tearDown(self):
+        """Clean up any fouled transactions"""
+
+        db.session.rollback()
+
+    def test_repr(self):
+        """Does repr return the correct format?"""
+
+        user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
+
+        l1 = List(list_type = "TBR", 
+                  user_id = user_id)
+        
+        db.session.add(l1)
+        db.session.commit()
+
+        self.assertEqual(f'<List {l1.list_id} TBR>', str(l1))
+
+class UserChallengeTestCase(TestCase):
+    """Test methods for user_challenge model"""
+
+    def setUp(self):
+        "create test client, add data"
+    
+        Challenge.query.delete()
+        User.query.delete()
+
+        u1 = User(
+            email="janedoe@test.com", 
+            username="janedoe", 
+            password="HASHED_PASSWORD"
+        )
+
+        db.session.add(u1)
+        db.session.commit()
+
+
+        c1 = Challenge(
+            creator_id=u1.user_id, 
+            name="Test Challenge", 
+            num_books=12, 
+            description="testing"
+        )
+
+        db.session.add(c1)
+        db.session.commit()
+
+        self.client = app.test_client()
+
+    def tearDown(self):
+        """Clean up any fouled transactions"""
+
+        db.session.rollback()
+
+    def test_serialize_user_challenge(self):
+        """Does serialize user_challenge return the correct format?"""
+
+        user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
+        challenge_id = db.session.execute(db.select(Challenge.challenge_id).where(Challenge.name == "Test Challenge")).scalar()
+
+        uc = User_Challenge(user_id = user_id,
+                            challenge_id = challenge_id, 
+                            start_date = "2024-01-01",
+                            end_date = "2025-01-01")
+        
+        db.session.add(uc)
+        db.session.commit()
+
+        self.assertEqual(uc.serialize_user_challenge(), {"start_date": "2024-01-01", "end_date": "2025-01-01"})

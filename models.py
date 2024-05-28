@@ -176,7 +176,6 @@ class User_Book(db.Model):
             "publisher": self.publisher, 
             "pub_date": self.pub_date,
             "cover": self.thumbnail,
-            "id": self.userbook_id,
             "pages": self.page_count
         }
 

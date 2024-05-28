@@ -1,13 +1,34 @@
 TO DO LIST: 
 ## 18 Write tests for python & javascript
     ## model tests
+        ## alter test database to match production database
+        ## run tests locally
+        ## figure out how to run tests on render
     ## python function tests
+        ## write tests
+        ## run tests locally
+        ## figure out how to run tests on render
     ## route tests
         ## user routes
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
         ## book routes
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
         ## challenge routes
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
         ## calendar routes
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
     ## javascript tests
+        ## write tests
+        ## run tests locally
+        ## figure out how to run tests on render
 ## 17 Styling
     ## favicon.ico
     ## logo
