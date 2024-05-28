@@ -1,10 +1,10 @@
-"""User Views tests (plus homepage)"""
+"""User Views tests"""
 
 import os
 from unittest import TestCase
 from app import do_login, do_logout, add_user_to_g
 from flask import g, session
-from models import db, connect_db, User, Book
+from models import db, connect_db, User, Book, User_Book
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -21,6 +21,7 @@ class UserViewTestCase(TestCase):
     def setUp(self):
         """create test client, add sample data"""
 
+        User_Book.query.delete()
         User.query.delete()
 
         self.client = app.test_client()
@@ -67,49 +68,72 @@ class UserViewTestCase(TestCase):
                 do_logout()
 
                 self.assertFalse(session.get(CURR_USER_KEY))
-
-class HomepageTestCase(TestCase):
-    """Test view for homepage"""
-
-    def setUp(self):
-        """create test client, add sample data"""
-
-        User.query.delete()
-        Book.query.delete()
-
-        self.client = app.test_client()
-
-        self.test_user = User.signup(username="testuser", 
-                                     email="testuser@test.com", 
-                                     password="testuser", 
-                                     user_image=None)
-        db.session.commit()
-
-        self.test_book = Book(google_id="lasowndo", title="The Testy Test Book", publisher="PenguinRandomHouse")
-        db.session.add(self.test_book)
-        db.session.commit()
-
-    def tearDown(self):
-        """Clean up any fouled transactions"""
-        db.session.rollback()
     
-    def test_homepage_loggedout(self):
-        """Does anonymous homepage display correctly?"""
+    def test_signup_already_logged_in(self):
+        """Does site respond appropriately if user is already logged in?"""
+
+        with self.client as c: 
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post('/signup')
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, f'/users/{self.testuser.user_id}/lists/tbr')
+
+    def test_signup_already_logged_in_redirect(self):
+        """Does site redirect appropriately if user is already logged in?"""
+
         with self.client as c:
-            resp = c.get('/')
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post('/signup', follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Sign up', html)
-            self.assertIn('The Testy Test Book', html)
-        
-    def test_homepage_loggedin(self):
-        """Does the logged in homepage redirect correctly?"""
+            self.assertIn('You are already logged in', html)
+    
+    def test_signup_correct(self):
+        """Does signup route sign a user up for the site?"""
+
         with self.client as c:
-            with c. session_transaction() as session:
-                session[CURR_USER_KEY] = self.test_user.user_id
-            user_id = self.test_user.user_id
-            resp = c.get('/')
+            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None})
+            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
 
             self.assertEqual(resp.status_code, 302)
             self.assertEqual(resp.location, f'/users/{user_id}/lists/tbr')
+
+    def test_signup_correct_redirect(self):
+        """Does signup route sign a user up for the site?"""
+
+        with self.client as c:
+            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None}, follow_redirects=True)
+            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
+            user_image = db.session.execute(db.select(User.user_image).where(User.username == 'testuser3')).scalar()
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add Books', html)
+            self.assertEqual(user_id, session[CURR_USER_KEY])
+            self.assertEqual(user_image, 'static/images/image.png')
+    
+    def test_signup_duplicate_email(self):
+        """Does a duplicate email return the correct json error response?"""
+
+        with self.client as c:
+            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser2@test.com', 'user_image': None})
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertEqual(resp.json, {'error': 'Email already taken'})
+    
+    def test_signup_duplicate_username(self):
+        """Does a duplicate username return the correct json error response?"""
+
+        with self.client as c:
+            resp = c.post('/signup', json={'username': 'testuser', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None})
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertEqual(resp.json, {'error': 'Username already taken'})
+    
+

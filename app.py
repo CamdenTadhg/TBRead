@@ -121,7 +121,6 @@ def login():
         
     if user: 
         do_login(user)
-        flash(f'Hello, {user.username}', 'success')
         return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     elif not db.session.execute(db.select(User).where(User.username == request.json['username'])).scalar():
         return jsonify({'error': 'Invalid username'})

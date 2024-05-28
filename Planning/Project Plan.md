@@ -2,24 +2,24 @@ TO DO LIST:
 ## 18 Write tests for python & javascript
     ## model tests
         ## figure out how to run tests on render
-    ## python function tests
-        ## write tests
-        ## run tests locally
-        ## figure out how to run tests on render
     ## route tests
-        ## user routes
+        ## homepage routes
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## book routes
+        ## user routes & python function tests
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## challenge routes
+        ## book routes & python function tests
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## calendar routes
+        ## challenge routes & python function tests
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
+        ## calendar routes & python function tests
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
