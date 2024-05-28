@@ -10,7 +10,7 @@ os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 from app import app
 app.app_context().push()
 
-db.create_all()
+# db.create_all()
 
 class UserModelTestCase(TestCase):
     """Test methods on user model"""
@@ -18,6 +18,10 @@ class UserModelTestCase(TestCase):
     def setUp(self):
         """Clear out old data, create test client, add sample data"""
 
+        User_Challenge.query.delete()
+        Challenge.query.delete()
+        List.query.delete()
+        User_Book.query.delete()
         User.query.delete()
 
         u1 = User(
@@ -173,6 +177,7 @@ class BookModelTestCase(TestCase):
     def setUp(self):
         """Create test client, clear out data"""
 
+        User_Book.query.delete()
         Book.query.delete()
 
         self.client = app.test_client()
@@ -187,6 +192,7 @@ class BookModelTestCase(TestCase):
 
         b = Book(google_id = "lahsgoiawog", 
                  title = "test book", 
+                 authors = "Mr. Testy Test",
                  publisher="PenguinRandomHouse", 
                  pub_date = 2024)
         
@@ -201,7 +207,10 @@ class ChallengeModelTestCase(TestCase):
     def setUp(self):
         "create test client, add data"
 
+        User_Challenge.query.delete()
         Challenge.query.delete()
+        List.query.delete()
+        User_Book.query.delete()
         User.query.delete()
 
         u1 = User(
@@ -243,6 +252,9 @@ class User_BookModelTestCase(TestCase):
     def setUp(self):
         "create test client, add data"
 
+        User_Challenge.query.delete()
+        Challenge.query.delete()
+        List.query.delete()
         User_Book.query.delete()
         Book.query.delete()
         User.query.delete()
@@ -259,6 +271,7 @@ class User_BookModelTestCase(TestCase):
 
         b = Book(google_id = "lahsgoiawog", 
                  title = "test book", 
+                 authors = "Mr. Testy Test",
                  publisher="PenguinRandomHouse", 
                  pub_date = 2024)
         
@@ -287,7 +300,7 @@ class User_BookModelTestCase(TestCase):
         db.session.add(ub)
         db.session.commit()
 
-        self.assertEqual(f'<User Book {ub.userbook_id}: test book, 2024>', str(ub))
+        self.assertEqual(f'<User_Book {ub.userbook_id}: test book, 2024>', str(ub))
     
     def test_serialize_user_book(self):
         """Does serialize user_book return the right format?"""
@@ -301,13 +314,13 @@ class User_BookModelTestCase(TestCase):
                  authors = "Mr. Testy Test",
                  publisher="PenguinRandomHouse", 
                  pub_date = 2024,
-                 cover = "https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE",
-                 pages = 100)
+                 thumbnail = "https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE",
+                 page_count = 100)
         
         db.session.add(ub)
         db.session.commit()
 
-        self.assertEqual(ub.serialize_user_book(), {"id": ub.userbook_id, "title": "test book", "author": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": 2024, "cover":"https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE", "pages": 100} )
+        self.assertEqual(ub.serialize_user_book(), {"id": ub.userbook_id, "title": "test book", "author": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": '2024', "cover":"https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE", "pages": 100} )
 
 class ListModelTestCase(TestCase):
     """Test methods for list model"""
@@ -315,6 +328,10 @@ class ListModelTestCase(TestCase):
     def setUp(self):
         "create test client, add data"
     
+        User_Challenge.query.delete()
+        Challenge.query.delete()
+        List.query.delete()
+        User_Book.query.delete()
         User.query.delete()
 
 
@@ -353,7 +370,10 @@ class UserChallengeTestCase(TestCase):
     def setUp(self):
         "create test client, add data"
     
+        List.query.delete()
+        User_Challenge.query.delete()
         Challenge.query.delete()
+        User_Book.query.delete()
         User.query.delete()
 
         u1 = User(
@@ -383,7 +403,7 @@ class UserChallengeTestCase(TestCase):
 
         db.session.rollback()
 
-    def test_serialize_user_challenge(self):
+    def test_serialize_user_challenges(self):
         """Does serialize user_challenge return the correct format?"""
 
         user_id = db.session.execute(db.select(User.user_id).where(User.username == "janedoe")).scalar()
@@ -397,4 +417,4 @@ class UserChallengeTestCase(TestCase):
         db.session.add(uc)
         db.session.commit()
 
-        self.assertEqual(uc.serialize_user_challenge(), {"start_date": "2024-01-01", "end_date": "2025-01-01"})
+        self.assertEqual(uc.serialize_user_challenges(), {"start_date": "2024-01-01", "end_date": "2025-01-01"})
