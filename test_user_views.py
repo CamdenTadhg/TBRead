@@ -9,6 +9,7 @@ from models import db, connect_db, User, Book
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
 from app import app, CURR_USER_KEY
+app.app_context().push()
 
 db.create_all()
 

@@ -8,6 +8,7 @@ from models import db, User, Book
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
 from app import app
+app.app_context().push()
 
 db.create_all()
 
