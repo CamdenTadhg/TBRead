@@ -51,14 +51,14 @@ connect_db(app)
 
 
 #########################################################################################
-# User signup/login/logout
+# Authentication
 
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add current user to Flask global"""
 
     if CURR_USER_KEY in session:
-        g.user = db.session.query(User).get(session[CURR_USER_KEY])
+        g.user = db.session.execute(db.select(User).where(User.user_id == session[CURR_USER_KEY])).scalar()
 
     else: 
         g.user = None
@@ -114,7 +114,7 @@ def login():
 
     if g.user: 
         flash('You are already logged in.', 'danger')
-        return redirect('/')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')    
       
     user = User.authenticate(request.json['username'],
                                  request.json['password'])
@@ -145,7 +145,7 @@ def send_username_reminder():
 
     if g.user: 
         flash('You are already logged in', 'danger')
-        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
     email = request.json['email']
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
@@ -163,11 +163,9 @@ def send_password_reset():
 
     if g.user:
         flash('You are already logged in', 'danger')
-        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
     email = request.json['email']
-    print('*********************')
-    print(email)
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
     if user:
         prt = user.get_password_reset_token()
@@ -189,7 +187,7 @@ def password_reset():
     """Displays password reset form and resets password from password reset link"""
     if g.user:
         flash('You are already logged in', 'danger')
-        return redirect(f'/users/${g.user.user_id}/lists/tbr')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     
     form = UpdatePasswordForm()
     email = request.args.get('email')
@@ -222,6 +220,10 @@ def password_reset():
 @app.route('/updatepassword', methods=["POST"])
 def update_password():
     """Updates user's password"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
 
     user=db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
 
@@ -257,19 +259,15 @@ def create_lists(user):
 def display_user_profile(user_id):
     """Display user's profile for editing"""
 
-    if int(g.user.user_id) != int(user_id):
-        flash('You do not have permission to view this page', 'danger')
+    if not g.user:
+        flash('Please log in', 'danger')
         return redirect('/')
-        
+    
     form=UserProfileForm(obj=g.user)
     form2= UpdatePasswordForm()
-    print('*****************')
-    print('user edit form displayed')
 
     if form.validate_on_submit():
-        print('**********************')
-        print('form validated')
-        user = db.session.query(User).get(user_id)
+        user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
         user.username = form.username.data
         user.email = form.email.data
         user.user_image = form.user_image.data
@@ -307,11 +305,15 @@ def display_tbr_list(user_id):
         flash('Please log in', 'danger')
         return redirect('/')
     
-    return render_template('books/tbrlist.html')
+    return render_template('users/tbrlist.html')
 
 @app.route('/api/<user_id>/lists/tbr', methods=['GET'])
 def return_tbr_list(user_id):
     """Returns contents of tbr list to axios request"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
 
     list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
@@ -325,11 +327,15 @@ def display_dnf_list(user_id):
         flash('Please log in', 'danger')
         return redirect('/')
     
-    return render_template('books/dnflist.html')
+    return render_template('users/dnflist.html')
 
 @app.route('/api/<user_id>/lists/dnf', methods=['GET'])
 def return_dnf_list(user_id):
     """Returns contents of dnf list to axios request"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
 
     list = db.session.execute(db.select(List).where(List.list_type == 'DNF').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
@@ -343,11 +349,15 @@ def display_complete_list(user_id):
         flash('Please log in', 'danger')
         return redirect('/')
     
-    return render_template('books/completelist.html')
+    return render_template('users/completelist.html')
 
 @app.route('/api/<user_id>/lists/complete', methods=['GET'])
 def return_complete_list(user_id):
     """Returns contents of dnf list to axios request"""
+
+    if not g.user:
+        flash('Please log in', 'danger')
+        return redirect('/')
 
     list = db.session.execute(db.select(List).where(List.list_type == 'Complete').where(List.user_id == g.user.user_id)).scalar()
     serialized_user_books = [user_book.serialize_user_book() for user_book in list.user_books]
@@ -829,60 +839,60 @@ def create_calendar():
 
     return redirect(f'/users/{g.user.user_id}/calendar')
 
-@app.route('/posting', methods=['GET', 'POST'])
-def schedule_posting_days():
-    """Schedule a user's posting schedule on the google calendar"""
-    print('LOGGED HERE: Function Schedule Posting Days starts')
+# @app.route('/posting', methods=['GET', 'POST'])
+# def schedule_posting_days():
+#     """Schedule a user's posting schedule on the google calendar"""
+#     print('LOGGED HERE: Function Schedule Posting Days starts')
 
-    if not g.user: 
-        flash ('Please log in', 'danger')
-        return redirect('/') 
+#     if not g.user: 
+#         flash ('Please log in', 'danger')
+#         return redirect('/') 
     
-    credentials = Credentials(g.user.token, refresh_token=g.user.refresh_token, token_uri=g.user.token_uri, client_id=g.user.client_id, client_secret=g.user.client_secret, scopes=g.user.scopes)
+#     credentials = Credentials(g.user.token, refresh_token=g.user.refresh_token, token_uri=g.user.token_uri, client_id=g.user.client_id, client_secret=g.user.client_secret, scopes=g.user.scopes)
 
-    service = build('calendar', 'v3', credentials=credentials)
+#     service = build('calendar', 'v3', credentials=credentials)
 
-    form = PostDaysForm()
+#     form = PostDaysForm()
 
-    if form.validate_on_submit():
-        print('*****************')
-        print('validate on submit starts')
+#     if form.validate_on_submit():
+#         print('*****************')
+#         print('validate on submit starts')
     
-        last_post_date = form.last_post_date.data
-        posting_frequency = form.posting_frequency.data
+#         last_post_date = form.last_post_date.data
+#         posting_frequency = form.posting_frequency.data
 
-        ## Check if a posting date event currently exists
-        existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
-        ## Delete remaining recurring posting events
-        if existing_posting_event.google_event_id: 
-            print('****************')
-            print('if existing posting event')
-            post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
-            today = date.today()
-            post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
-            service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
-        ## Add new posting date event
-        event = {
-            'summary': 'Posting Day',
-            'start.date': last_post_date,
-            'end.date': last_post_date,
-            'recurrence': [f'RRULE: FREQ=DAILY; COUNT={posting_frequency}']
-        }
-        posting_day = service.events().insert(calendarId = g.user.calendar_id, body=event).execute()
-        service.close()
-        ## Update user profile
-        if g.user.posting_frequency != posting_frequency:
-            user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
-            user.posting_frequency = posting_frequency
-            db.session.add(user)
-            try: 
-                db.session.commit()
-            except: 
-                db.session.rollback()
+#         ## Check if a posting date event currently exists
+#         existing_posting_event = db.session.execute(db.select(Event).where(Event.user_id == g.user.user_id).where(Event.eventcategory == 'Posting')).scalar()
+#         ## Delete remaining recurring posting events
+#         if existing_posting_event.google_event_id: 
+#             print('****************')
+#             print('if existing posting event')
+#             post_event = service.events().get(calendarId=g.user.calendar_id, eventId = existing_posting_event.google_event_id).execute()
+#             today = date.today()
+#             post_event['recurrance'] = [f'RRULE: FREQ=DAILY; COUNT=g.user.posting_frequency; UNTIL={today}']
+#             service.events().update(calendarId=g.user.calendar_id, EventId = existing_posting_event.google_event_id, body=post_event).execute()
+#         ## Add new posting date event
+#         event = {
+#             'summary': 'Posting Day',
+#             'start.date': last_post_date,
+#             'end.date': last_post_date,
+#             'recurrence': [f'RRULE: FREQ=DAILY; COUNT={posting_frequency}']
+#         }
+#         posting_day = service.events().insert(calendarId = g.user.calendar_id, body=event).execute()
+#         service.close()
+#         ## Update user profile
+#         if g.user.posting_frequency != posting_frequency:
+#             user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+#             user.posting_frequency = posting_frequency
+#             db.session.add(user)
+#             try: 
+#                 db.session.commit()
+#             except: 
+#                 db.session.rollback()
 
-        return redirect(f'/users/{g.user.user_id}/calendar')
+#         return redirect(f'/users/{g.user.user_id}/calendar')
     
-    return render_template('/calendars/posting.html', form=form)
+#     return render_template('/calendars/posting.html', form=form)
 
 
 #########################################################################################

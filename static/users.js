@@ -203,6 +203,7 @@ $closeButton.on('click', function(event){
     $userImage.val('');
 })
 
+
 $forgotLink.on('click', function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();

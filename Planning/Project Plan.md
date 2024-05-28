@@ -5,26 +5,46 @@ TO DO LIST:
     ## route tests
         ## homepage routes
             ## figure out how to run tests on render
-        ## user routes & python function tests
+        ## auth routes
+            ## figure out how to run tests on render
+        ## user routes & python function tests (11)
+            ## write tests
+            ## run tests locally
+            ## fix broken tests
+            ## figure out how to run tests on render
+        ## book routes & python function tests (13)
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## book routes & python function tests
+        ## challenge routes & python function tests (9)
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## challenge routes & python function tests
-            ## write tests
-            ## run tests locally
-            ## figure out how to run tests on render
-        ## calendar routes & python function tests
+        ## calendar routes & python function tests (3)
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
     ## javascript tests
-        ## write tests
-        ## run tests locally
-        ## figure out how to run tests on render
+        ## books.js (5)
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
+        ## challenges.js (3)
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
+        ## lists.js (3)
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
+        ## models.js (3)
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
+        ## users.js (15)
+            ## write tests
+            ## run tests locally
+            ## figure out how to run tests on render
 ## 17 Styling
     ## favicon.ico
     ## logo

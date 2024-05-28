@@ -1,10 +1,10 @@
-"""User Views tests"""
+"""Auth Views tests"""
 
 import os
 from unittest import TestCase
-from app import do_login, do_logout, add_user_to_g
+from app import create_lists, add_book_to_tbr
 from flask import g, session
-from models import db, connect_db, User, Book, User_Book
+from models import db, connect_db, User, Book, User_Book, List, Challenge, User_Challenge, User_Book_List
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -21,10 +21,14 @@ class UserViewTestCase(TestCase):
     def setUp(self):
         """create test client, add sample data"""
 
+        User_Book_List.query.delete()
+        List.query.delete()
+        User_Challenge.query.delete()
+        Challenge.query.delete()
         User_Book.query.delete()
+        Book.query.delete()
         User.query.delete()
 
-        self.client = app.test_client()
 
         self.testuser = User.signup(username="testuser",
                                     email='testuser@test.com', 
@@ -32,108 +36,200 @@ class UserViewTestCase(TestCase):
                                     user_image=None)
         self.testuser2 = User.signup(username="testuser2", 
                                      email="testuser2@test.com", 
-                                     password='testuser2', 
-                                     user_image=None)
+                                     password = 'testuser2',
+                                     user_image = None)
+
         db.session.commit()
+
+        self.b1 = Book(google_id = "lahsgoiawog", 
+                 title = "test book", 
+                 authors = "Mr. Testy Test",
+                 publisher="PenguinRandomHouse", 
+                 pub_date = 2024)
+        
+        db.session.add(self.b1)
+        db.session.commit()
+
+        self.ub1 = User_Book(title = "test book", 
+                 user_id = self.testuser.user_id,
+                 book_id = self.b1.book_id,
+                 authors = "Mr. Testy Test",
+                 publisher="PenguinRandomHouse", 
+                 pub_date = 2024,
+                 thumbnail = "https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE",
+                 page_count = 100)
+        
+        db.session.add(self.ub1)
+        db.session.commit()
+
+        self.tbrlist = List(list_type = "TBR",
+                       user_id = self.testuser.user_id)
+        
+        db.session.add(self.tbrlist)
+        db.session.commit()
+
+        self.ubl1 = User_Book_List(list_id = self.tbrlist.list_id, 
+                              userbook_id = self.ub1.userbook_id)
+        
+        db.session.add(self.ubl1)
+        db.session.commit()
+
+        self.client = app.test_client()
+
     
     def tearDown(self):
-        """Clean up any fouled transactions"""
-
-        db.session.rollback()
-    
-    def test_add_user_to_g(self):
-        """Does add_user_to_g function work?"""
-        with app.test_request_context():
-            with self.client as c:
-                with c.session_transaction() as session:
-                    session[CURR_USER_KEY] = self.testuser.user_id
-                add_user_to_g()
-
-                self.assertEqual(g.user, self.testuser)
-    
-    def test_do_login(self):
-        """Does do_login function work?"""
-        with app.test_request_context():
-            with self.client as c:
-                do_login(self.testuser)
-
-                self.assertEqual(session[CURR_USER_KEY], self.testuser.user_id)
-    
-    def test_do_logout(self):
-        """Does do_logout function work?"""
-        with app.test_request_context():
-            with self.client as c:
-                with c.session_transaction() as session:
-                    session[CURR_USER_KEY] = self.testuser.user_id
-                do_logout()
-
-                self.assertFalse(session.get(CURR_USER_KEY))
-    
-    def test_signup_already_logged_in(self):
-        """Does site respond appropriately if user is already logged in?"""
+        """Clean up any fouled transactions and clear session and outbox"""
 
         with self.client as c: 
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
-            
-            resp = c.post('/signup')
+            with c.session_transaction() as change_session:
+                if change_session.get(CURR_USER_KEY):
+                    change_session.pop(CURR_USER_KEY)
+        db.session.rollback()
 
-            self.assertEqual(resp.status_code, 302)
-            self.assertEqual(resp.location, f'/users/{self.testuser.user_id}/lists/tbr')
+    def test_create_lists(self):
+        """Does the create_lists function create three lists for a user?"""
 
-    def test_signup_already_logged_in_redirect(self):
-        """Does site redirect appropriately if user is already logged in?"""
+        create_lists(self.testuser)
+        tbrlist = db.session.execute(db.select(List).where(List.user_id == self.testuser.user_id).where(List.list_type == 'TBR')).scalar()
+        dnflist = db.session.execute(db.select(List).where(List.user_id == self.testuser.user_id).where(List.user_id == self.testuser.user_id).where(List.list_type == 'DNF')).scalar()
+        completelist = db.session.execute(db.select(List).where(List.user_id == self.testuser.user_id).where(List.list_type == 'Complete')).scalar()
+
+        self.assertTrue(tbrlist)
+        self.assertTrue(dnflist)
+        self.assertTrue(completelist)
+
+    def test_display_user_profile_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to access a user profile?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
-            
-            resp = c.post('/signup', follow_redirects=True)
+            resp = c.get(f'/users/{self.testuser.user_id}')
+        
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.location, '/')
+    
+    def test_display_user_profile_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to access a user profile?"""
+
+        with self.client as c:
+            resp = c.get(f'/users/{self.testuser.user_id}', follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('You are already logged in', html)
+            self.assertIn('Please log in', html)
     
-    def test_signup_correct(self):
-        """Does signup route sign a user up for the site?"""
+    def test_display_user_profile_get(self):
+        """Does the site display the user's profile correctly?"""
 
         with self.client as c:
-            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None})
-            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
-
-            self.assertEqual(resp.status_code, 302)
-            self.assertEqual(resp.location, f'/users/{user_id}/lists/tbr')
-
-    def test_signup_correct_redirect(self):
-        """Does signup route sign a user up for the site?"""
-
-        with self.client as c:
-            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None}, follow_redirects=True)
-            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
-            user_image = db.session.execute(db.select(User.user_image).where(User.username == 'testuser3')).scalar()
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.get(f'/users/{self.testuser.user_id}')
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Add Books', html)
-            self.assertEqual(user_id, session[CURR_USER_KEY])
-            self.assertEqual(user_image, 'static/images/image.png')
+            self.assertIn('User Profile', html)
+            self.assertIn('testuser', html)
     
-    def test_signup_duplicate_email(self):
-        """Does a duplicate email return the correct json error response?"""
+    def test_display_user_profile_edit(self):
+        """Does the site update the user's profile correctly?"""
 
         with self.client as c:
-            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser2@test.com', 'user_image': None})
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser', 'email': 'testuser@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Changes saved', html)
+            self.assertEqual(self.testuser.posting_frequency, 15)
+    
+    def test_display_user_profile_duplicate_email(self):
+        """Does the site respond correctly when a user tries to update their email to an email already in the database?"""
+
+        with self.client as c:
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser', 'email': 'testuser2@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Email already in use', html)
+            self.assertEqual(self.testuser.posting_frequency, 0)
+    
+    def test_display_user_profile_duplicate_username(self):
+        """Does the site respond correctly when a user tries to update their username to a username already in the database"""
+
+        with self.client as c:
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser2', 'email': 'testuser@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Username already in use', html)
+            self.assertEqual(self.testuser.posting_frequency, 0)
+    
+    def test_display_tbr_list_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to access a tbr list?"""
+
+        with self.client as c:
+            resp = c.get(f'/users/{self.testuser.user_id}/lists/tbr')
+        
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.location, '/')
+    
+    def test_display_tbr_list_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to access a tbr list?"""
+
+        with self.client as c:
+            resp = c.get(f'/users/{self.testuser.user_id}/lists/tbr', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Please log in', html)
+
+    def test_display_tbr_list(self):
+        """Does the TBR list display correctly?"""
+
+        with self.client as c:
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            resp = c.get(f'/users/{self.testuser.user_id}/lists/tbr')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('tbrlistTable', html)
+
+    def test_return_tbr_list_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to access a tbr list api?"""
+
+        with self.client as c:
+            resp = c.get(f'/api/{self.testuser.user_id}/lists/tbr')
+        
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.location, '/')
+    
+    def test_return_tbr_list_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to access a tbr list api?"""
+
+        with self.client as c:
+            resp = c.get(f'/api/{self.testuser.user_id}/lists/tbr', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Please log in', html)
+    
+    def test_return_tbr_list(self):
+        """Does the site return the correct json when the tbr list is requested?"""
+
+        with self.client as c:
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+            resp = c.get(f'/api/{self.testuser.user_id}/lists/tbr')
             
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, {'error': 'Email already taken'})
-    
-    def test_signup_duplicate_username(self):
-        """Does a duplicate username return the correct json error response?"""
-
-        with self.client as c:
-            resp = c.post('/signup', json={'username': 'testuser', 'password': 'password', 'email': 'testuser3@test.com', 'user_image': None})
-
-            self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, {'error': 'Username already taken'})
-    
-
+            self.assertEqual(resp.json, {"id": self.ub1.userbook_id, "title": "test book", "author": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": "2024" , "cover": "https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE" , "pages": 100})
