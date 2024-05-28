@@ -4,8 +4,6 @@ TO DO LIST:
         ## figure out how to run tests on render
     ## route tests
         ## homepage routes
-            ## write tests
-            ## run tests locally
             ## figure out how to run tests on render
         ## user routes & python function tests
             ## write tests
