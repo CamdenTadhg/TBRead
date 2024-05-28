@@ -1,10 +1,12 @@
 TO DO LIST: 
 ## 18 Write tests for python & javascript
-    ## figure out how to run tests on render
-    ## figure out why tests aren't working
-    ## route tests
-    ## python function tests
     ## model tests
+    ## python function tests
+    ## route tests
+        ## user routes
+        ## book routes
+        ## challenge routes
+        ## calendar routes
     ## javascript tests
 ## 17 Styling
     ## favicon.ico
