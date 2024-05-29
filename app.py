@@ -407,6 +407,8 @@ def strip_tags(html):
     
 def add_book_to_database(google_id):
     with app.app_context():
+        title=authors=publisher=description=thumbnail=''
+        isbn=page_count=0
         api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
         response = requests.get(api_url)
         data = response.json()
@@ -433,24 +435,16 @@ def add_book_to_database(google_id):
             pub_date = '0000'
         if data['volumeInfo'].get('descripton'):
             description = strip_tags(data['volumeInfo']['description'])
-        else:
-            description = ''
         if data['volumeInfo'].get('industryIdentifiers'):
             for item in data['volumeInfo'].get('industryIdentifiers'):
                 if item['type'] == "ISBN_13":
                     isbn = item['identifier']
             if isbn == '':
                 isbn = 0
-        else:
-            isbn=0
         if data['volumeInfo'].get('pageCount'):
             page_count = data['volumeInfo'].get('pageCount')
-        else:
-            page_count = 0
         if data['volumeInfo'].get('imageLinks'):
             thumbnail = data['volumeInfo'].get('imageLinks').get('smallThumbnail')
-        else: 
-            thumbnail = ''
         new_book = Book(google_id=google_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, thumbnail=thumbnail)
         db.session.add(new_book)
         try: 
