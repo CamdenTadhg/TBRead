@@ -409,6 +409,7 @@ def add_book_to_database(google_id):
     with app.app_context():
         title=authors=publisher=description=thumbnail=''
         isbn=page_count=0
+        pub_date='0000'
         api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
         response = requests.get(api_url)
         data = response.json()
@@ -426,21 +427,15 @@ def add_book_to_database(google_id):
                 authors = f'{authorA} & {authorB}'
             else: 
                 authors = ', '.join(data['volumeInfo']['authors'])
-                print('*************************')
-                print(authors)
         publisher = data['volumeInfo'].get('publisher')
         if data['volumeInfo'].get('publishedDate'):
             pub_date = data['volumeInfo']['publishedDate'][0:4]
-        else:
-            pub_date = '0000'
         if data['volumeInfo'].get('descripton'):
             description = strip_tags(data['volumeInfo']['description'])
         if data['volumeInfo'].get('industryIdentifiers'):
             for item in data['volumeInfo'].get('industryIdentifiers'):
                 if item['type'] == "ISBN_13":
                     isbn = item['identifier']
-            if isbn == '':
-                isbn = 0
         if data['volumeInfo'].get('pageCount'):
             page_count = data['volumeInfo'].get('pageCount')
         if data['volumeInfo'].get('imageLinks'):
