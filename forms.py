@@ -64,7 +64,7 @@ class BookEditForm(FlaskForm):
     description = StringField('Description', widget=TextArea())
     isbn = IntegerField('ISBN', default=0)
     page_count = IntegerField('Page Count', default=0)
-    age_category = SelectField('Age Category', choices=[('TBD', 'TBD'), ('Adult', 'Adult'), ('YA', 'YA'), ('Childrens', 'Childrens'), ('Graphic', 'Graphic')])
+    age_category = SelectField('Age Category', choices=[('Select', 'Select'), ('Adult', 'Adult'), ('YA', 'YA'), ('Childrens', 'Childrens'), ('Graphic', 'Graphic')])
     thumbnail = StringField('Cover Image')
     notes = StringField('Notes', widget=TextArea())
     script = StringField('Script', widget=TextArea())

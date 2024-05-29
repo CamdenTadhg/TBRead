@@ -17,7 +17,7 @@ class AgeCategory(enum.Enum):
     YA = 'YA'
     Childrens = 'Childrens'
     Graphic = 'Graphic'
-    TBD = 'TBD'
+    Select = 'Select'
 
 class EventCategory(enum.Enum):
     Order = 'Order'
