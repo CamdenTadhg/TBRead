@@ -515,7 +515,10 @@ def edit_new_book(google_id):
         description = form.description.data
         isbn = form.isbn.data
         page_count = form.page_count.data
-        age_category = form.age_category.data
+        if form.age_category.data == 'N/A':
+            age_category = 'NA'
+        else:
+            age_category = form.age_category.data
         thumbnail = form.thumbnail.data
         notes = form.notes.data
         script = form.script.data
