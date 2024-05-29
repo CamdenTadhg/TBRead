@@ -432,7 +432,7 @@ def add_book_to_database(google_id):
         else:
             pub_date = '0000'
         if data['volumeInfo'].get('descripton'):
-            description = strip_tags(data['volumeInfo']['description']))
+            description = strip_tags(data['volumeInfo']['description'])
         if data['volumeInfo'].get('industryIdentifiers'):
             for item in data['volumeInfo'].get('industryIdentifiers'):
                 if item['type'] == "ISBN_13":
