@@ -17,7 +17,7 @@ class AgeCategory(enum.Enum):
     YA = 'YA'
     Childrens = 'Childrens'
     Graphic = 'Graphic'
-    Select = 'Select'
+    NA = 'N/A'
 
 class EventCategory(enum.Enum):
     Order = 'Order'
@@ -157,7 +157,7 @@ class User_Book(db.Model):
     description = db.Column(db.Text)
     isbn = db.Column(db.BigInteger)
     page_count = db.Column(db.Integer)
-    age_category = db.Column(db.Enum(AgeCategory), default='NA')
+    age_category = db.Column(db.Enum(AgeCategory))
     thumbnail = db.Column(db.Text)
     notes = db.Column(db.Text)
     script = db.Column(db.Text)
