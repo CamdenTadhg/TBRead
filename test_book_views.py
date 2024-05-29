@@ -111,5 +111,12 @@ class UserViewTestCase(TestCase):
         self.assertEqual(book.page_count, 258)
         self.assertIn('9nPrzgEACAAJ', book.thumbnail)
 
-    def test_add_book_to_database_no_thumbnail(self):
+    def test_add_book_to_database_special_case_one(self):
         """Does the site correctly process incoming google books data when the book has no thumbnail and no description?"""
+
+        return_value = add_book_to_database('')
+        book = db.session.execute(db.select(Book).where(Book.google_id == '')).scalar()
+
+        self.assertEqual(return_value, book.book_id)
+        self.assertFalse(book.thumbnail)
+        self.assertFalse(book.description)
