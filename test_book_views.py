@@ -6,7 +6,7 @@ from sqlalchemy import update
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
-from app import app, CURR_USER_KEY, addBookToDatabase, strip_tags
+from app import app, CURR_USER_KEY, add_book_to_database, strip_tags
 app.app_context().push()
 
 db.create_all()
@@ -94,3 +94,22 @@ class UserViewTestCase(TestCase):
         text = '<b>#1 <i>NEW YORK TIMES</i> BESTSELLER • “<i>The Uninhabitable Earth</i> hits you like a comet, with an overflow of insanely lyrical prose about our pending Armageddon.”—Andrew Solomon, author of <i>The Noonday Demon<br></i></b><br><b>With a new afterword</b><br><br>'
         
         self.assertEqual(strip_tags(text), '#1 NEW YORK TIMES BESTSELLER • “The Uninhabitable Earth hits you like a comet, with an overflow of insanely lyrical prose about our pending Armageddon.”—Andrew Solomon, author of The Noonday DemonWith a new afterword')
+
+    def test_add_book_to_database_standard(self):
+        """Does the site correctly process incoming google books data for title, single author, publisher, pub_date, description, ISBN, page_count, and thumbnail?"""
+
+        return_value = add_book_to_database('9nPrzgEACAAJ')
+        book = db.session.execute(db.select(Book).where(Book.google_id == '9nPrzgEACAAJ')).scalar()
+
+        self.assertEqual(return_value, book.book_id)
+        self.assertEqual(book.title, 'A Night of Wings and Starlight')
+        self.assertEqual(book.authors, 'Alexis L. Menard')
+        self.assertEqual(book.publisher, 'CITY OWL Press')
+        self.assertEqual(book.pub_date, '2022')
+        self.assertIn('Breaking the curse will risk her heart', book.description)
+        self.assertEqual(book.isbn, 9781648981708)
+        self.assertEqual(book.page_count, 258)
+        self.assertIn('9nPrzgEACAAJ', book.thumbnail)
+
+    def test_add_book_to_database_no_thumbnail(self):
+        """Does the site correctly process incoming google books data when the book has no thumbnail and no description?"""

@@ -405,7 +405,7 @@ def strip_tags(html):
         s.feed(html)
         return s.get_data()
     
-def addBookToDatabase(google_id):
+def add_book_to_database(google_id):
     with app.app_context():
         api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
         response = requests.get(api_url)
@@ -422,7 +422,7 @@ def addBookToDatabase(google_id):
                 authorA = data['volumeInfo']['authors'][0]
                 authorB = data['volumeInfo']['authors'][1]
                 authors = f'{authorA} & {authorB}'
-        else: 
+            else: 
                 authors = ', '.join(data['volumeInfo']['authors'])
                 print('*************************')
                 print(authors)
@@ -431,7 +431,8 @@ def addBookToDatabase(google_id):
             pub_date = data['volumeInfo']['publishedDate'][0:4]
         else:
             pub_date = '0000'
-        description = strip_tags(data['volumeInfo'].get('description'))
+        if data['volumeInfo'].get('descripton'):
+            description = strip_tags(data['volumeInfo']['description']))
         if data['volumeInfo'].get('industryIdentifiers'):
             for item in data['volumeInfo'].get('industryIdentifiers'):
                 if item['type'] == "ISBN_13":
@@ -500,7 +501,7 @@ def edit_new_book(google_id):
         description = strip_tags(book.description)
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
-        new_book_id = addBookToDatabase(google_id)
+        new_book_id = add_book_to_database(google_id)
         new_book = db.session.execute(db.select(Book).where(Book.book_id == new_book_id)).scalar()
         ## remove html tags from description
         description = strip_tags(new_book.description)
