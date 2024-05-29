@@ -524,11 +524,11 @@ def edit_new_book(google_id):
         if not check_book:
             new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
-            try: 
-                db.session.commit()
-            except: 
-                db.session.rollback()
-                flash('Something went wrong. Please try again', 'danger')
+            # try: 
+            db.session.commit()
+            # except: 
+            #     db.session.rollback()
+            #     flash('Something went wrong. Please try again', 'danger')
             add_book_to_tbr(new_user_book.userbook_id)
             return redirect(f'/users/{g.user.user_id}/lists/tbr')
         else:
