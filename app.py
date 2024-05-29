@@ -386,6 +386,25 @@ def delete_user():
 #########################################################################################
 # Book Routes
 
+class MLStripper(HTMLParser):
+    with app.app_context():
+        def __init__(self):
+            super().__init__()
+            self.reset()
+            self.strict=False
+            self.convert_charrefs=True
+            self.text = StringIO()
+        def handle_data(self, d):
+            self.text.write(d)
+        def get_data(self):
+            return self.text.getvalue()
+    
+def strip_tags(html):
+    with app.app_context():
+        s = MLStripper()
+        s.feed(html)
+        return s.get_data()
+    
 def addBookToDatabase(google_id):
     with app.app_context():
         api_url = f"https://www.googleapis.com/books/v1/volumes/{google_id}"
@@ -437,24 +456,7 @@ def addBookToDatabase(google_id):
             db.session.rollback()
         return new_book.book_id
 
-class MLStripper(HTMLParser):
-    with app.app_context():
-        def __init__(self):
-            super().__init__()
-            self.reset()
-            self.strict=False
-            self.convert_charrefs=True
-            self.text = StringIO()
-        def handle_data(self, d):
-            self.text.write(d)
-        def get_data(self):
-            return self.text.getvalue()
-    
-def strip_tags(html):
-    with app.app_context():
-        s = MLStripper()
-        s.feed(html)
-        return s.get_data()
+
 
 def add_book_to_tbr(userbook_id):
     with app.app_context():
@@ -751,12 +753,8 @@ def remove_book(userbook_id):
 @app.route('/email', methods=["POST"])
 def receive_email():
 
-    print('************************')
-    print('email received')
-
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
     email = envelope['from']
-    print(email)
     subject = request.form['subject']
     body = str(request.form['text'])
 
@@ -767,7 +765,6 @@ def receive_email():
         stmt = (update(User_Book).where(User_Book.userbook_id == userbook.userbook_id).values(notes = User_Book.notes + " " + body))
         db.session.execute(stmt)
         db.session.commit()
-        ('database updated')
     except: 
         db.session.rollback()
 

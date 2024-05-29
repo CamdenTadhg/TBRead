@@ -6,10 +6,9 @@ TO DO LIST:
         ## homepage routes
             ## figure out how to run tests on render
         ## auth routes
+            ## fix broken tests
             ## figure out how to run tests on render
-        ## user routes & python function tests (11)
-            ## write tests
-            ## run tests locally
+        ## user routes & python function tests
             ## fix broken tests
             ## figure out how to run tests on render
         ## book routes & python function tests (13)
@@ -17,10 +16,6 @@ TO DO LIST:
             ## run tests locally
             ## figure out how to run tests on render
         ## challenge routes & python function tests (9)
-            ## write tests
-            ## run tests locally
-            ## figure out how to run tests on render
-        ## calendar routes & python function tests (3)
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
@@ -85,26 +80,37 @@ TO DO LIST:
     ## schedule 1 - 12 months of books randomly
     ## oops I deleted my calendar button
     ## display book cover on calendar on start date
+    ## write tests for all calendar views
+    ## write tests for all calendar javascript
 ## 14 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
+    ## write tests
 ## 13 Refactor based on feedback from mentor and hatchways and Augustin
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
+    ## write tests
 ## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## increase the number of book covers displayed? 
     ## make it so books without covers will not display
+    ## write tests
 ## 9 Implement importation functionality
+    ## write tests
 ## 8 Implement OpenAI connection 
+    ## write tests
 ## 7 Implement friendship & challenging functionality 
+    ## write tests
 ## 6 Implement challenge categories
     ## include a way to search what books other people have assigned to what categories and add them to your lists
     ## a checklist of categories that users can check off
     ## hover over a book cover shows what category it is fulfilling
+    ## write tests
 ## 5 Implement bookstore connection
+    ## write tests
 ## 4 Implement library connection
+    ## write tests
 ## 3 Refactor and take out all the print & console.logs
 ## 2 Fully population database with 100 challenges and 500 books
 ## 1 Test with actual users and add functionality as needed
