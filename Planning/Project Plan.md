@@ -44,6 +44,8 @@ TO DO LIST:
     ## favicon.ico
     ## logo
     ## fix it so that on login, you get the appropriate flash message
+    ## fix tabs to be visible
+    ## fix sidebar
     ## go over site with Augustin for design considerations
     ## reformat user profile 
     ## list displays
@@ -51,7 +53,6 @@ TO DO LIST:
     ## search form display
     ## search results display
     ## display of authors on edit form
-    ## fix tabs to be visible
     ## make empty book list display look nice
     ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
