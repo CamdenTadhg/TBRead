@@ -430,7 +430,7 @@ def add_book_to_database(google_id):
         publisher = data['volumeInfo'].get('publisher')
         if data['volumeInfo'].get('publishedDate'):
             pub_date = data['volumeInfo']['publishedDate'][0:4]
-        if data['volumeInfo'].get('descripton'):
+        if data['volumeInfo'].get('description'):
             description = strip_tags(data['volumeInfo']['description'])
         if data['volumeInfo'].get('industryIdentifiers'):
             for item in data['volumeInfo'].get('industryIdentifiers'):
@@ -448,16 +448,12 @@ def add_book_to_database(google_id):
             db.session.rollback()
         return new_book.book_id
 
-
-
 def add_book_to_tbr(userbook_id):
     with app.app_context():
         if CURR_USER_KEY in session:
-            g.user = db.session.query(User).get(session[CURR_USER_KEY])
+            g.user = db.session.execute(db.select(User).where(User.user_id == session[CURR_USER_KEY])).scalar()
         else: 
             g.user = None
-        print('************')
-        print(g.user.user_id)
         list = db.session.execute(db.select(List).where(List.list_type == 'TBR').where(List.user_id == g.user.user_id)).scalar()
         userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
         list.user_books.append(userbook)
@@ -519,11 +515,11 @@ def edit_new_book(google_id):
         if not check_book:
             new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
-            # try: 
-            db.session.commit()
-            # except: 
-            #     db.session.rollback()
-            #     flash('Something went wrong. Please try again', 'danger')
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Something went wrong. Please try again', 'danger')
             add_book_to_tbr(new_user_book.userbook_id)
             return redirect(f'/users/{g.user.user_id}/lists/tbr')
         else:

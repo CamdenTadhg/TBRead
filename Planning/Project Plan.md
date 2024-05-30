@@ -6,13 +6,12 @@ TO DO LIST:
         ## homepage routes
             ## figure out how to run tests on render
         ## auth routes
-            ## fix broken tests
             ## figure out how to run tests on render
         ## user routes & python function tests
-            ## fix broken tests
             ## figure out how to run tests on render
         ## book routes & python function tests (13)
             ## write tests
+                ## was writing special case tests for add_book_to_database
             ## run tests locally
             ## figure out how to run tests on render
         ## challenge routes & python function tests (9)

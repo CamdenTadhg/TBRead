@@ -6,7 +6,8 @@ from sqlalchemy import update
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
-from app import app, CURR_USER_KEY, add_book_to_database, strip_tags
+from app import app, CURR_USER_KEY, add_book_to_database, strip_tags, add_book_to_tbr
+
 app.app_context().push()
 
 db.create_all()
@@ -70,12 +71,6 @@ class UserViewTestCase(TestCase):
         db.session.add_all([self.tbrlist, self.dnflist, self.completelist])
         db.session.commit()
 
-        self.ubl1 = User_Book_List(list_id = self.tbrlist.list_id, 
-                              userbook_id = self.ub1.userbook_id)
-        
-        db.session.add(self.ubl1)
-        db.session.commit()
-
         self.client = app.test_client()
 
     
@@ -112,11 +107,64 @@ class UserViewTestCase(TestCase):
         self.assertIn('9nPrzgEACAAJ', book.thumbnail)
 
     def test_add_book_to_database_special_case_one(self):
-        """Does the site correctly process incoming google books data when the book has no thumbnail and no description?"""
+        """Does the site correctly process incoming google books data when the book has no thumbnail, description, or ISBN?"""
 
-        return_value = add_book_to_database('')
-        book = db.session.execute(db.select(Book).where(Book.google_id == '')).scalar()
+        return_value = add_book_to_database('ef27ngEACAAJ')
+        book = db.session.execute(db.select(Book).where(Book.google_id == 'ef27ngEACAAJ')).scalar()
 
         self.assertEqual(return_value, book.book_id)
         self.assertFalse(book.thumbnail)
         self.assertFalse(book.description)
+        self.assertFalse(book.isbn)
+    
+    def test_add_book_to_database_special_case_two(self):
+        """Does the site correctly process incoming google books data when the book has a subtitle and two authors?"""
+
+        return_value = add_book_to_database('DyeOd0Vb5lQC')
+        book = db.session.execute(db.select(Book).where(Book.google_id == 'DyeOd0Vb5lQC')).scalar()
+
+        self.assertEqual(return_value, book.book_id)
+        self.assertEqual(book.title, "Intrinsic and Extrinsic Motivation: The Search for Optimal Motivation and Performance")
+        self.assertEqual(book.authors, "Carol Sansone & Judith M. Harackiewicz")
+    
+    def test_add_book_to_database_special_case_three(self):
+        """Does the site correctly process incoming google books data when the book has more than two authors?"""
+
+        return_value = add_book_to_database('0xRoEAAAQBAJ')
+        book = db.session.execute(db.select(Book).where(Book.google_id == '0xRoEAAAQBAJ')).scalar()
+
+        self.assertEqual(return_value, book.book_id)
+        self.assertEqual(book.authors, "Johnmarshall Reeve, Richard M. Ryan, Sung Hyeon Cheon, Lennia Matos, Haya Kaplan")
+    
+    def test_add_book_to_tbr(self):
+        """Does the site correctly add a given userbook to the user's TBR?"""
+
+        with self.client as c:    
+            with c.session_transaction() as session:
+                session[CURR_USER_KEY] = self.testuser.user_id
+
+            userbook_id = db.session.execute(db.select(User_Book.userbook_id).where(User_Book.title == "test book")).scalar()
+            c.get('/')
+            add_book_to_tbr(userbook_id)
+            user_book_list_record = db.session.execute(db.select(User_Book_List).where(User_Book_List.list_id == self.tbrlist.list_id).where(User_Book_List.userbook_id == userbook_id)).scalar()
+
+            self.assertTrue(user_book_list_record)
+    
+    def test_add_books_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to access the book search page?"""
+
+        with self.client as c:
+            resp = c.get('/books')
+        
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, '/')
+    
+    def test_add_books_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to access the book search page?"""
+
+        with self.client as c:
+            resp = c.get('/books', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Please log in', html)

@@ -4,7 +4,7 @@ import os
 from unittest import TestCase
 from app import do_login, do_logout, add_user_to_g, mail
 from flask import g, session
-from models import db, connect_db, User, Book, User_Book, List, Challenge, User_Challenge
+from models import db, connect_db, User, Book, User_Book, List, Challenge, User_Book_List, User_Challenge
 from sqlalchemy import update
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
@@ -22,6 +22,7 @@ class AuthViewTestCase(TestCase):
     def setUp(self):
         """create test client, add sample data"""
 
+        User_Book_List.query.delete()
         List.query.delete()
         User_Challenge.query.delete()
         Challenge.query.delete()
@@ -51,8 +52,8 @@ class AuthViewTestCase(TestCase):
                 if outbox:
                     outbox.pop()
         db.session.rollback()
-    
-    # DOES NOT WORK
+
+#DOES NOT WORK    
     def test_add_user_to_g(self):
         """Does add_user_to_g function work?"""
         with app.test_request_context():
@@ -70,8 +71,8 @@ class AuthViewTestCase(TestCase):
                 do_login(self.testuser)
 
                 self.assertEqual(session[CURR_USER_KEY], self.testuser.user_id)
-    
-    # DOES NOT WORK
+
+#DOES NOT WORK    
     def test_do_logout(self):
         """Does do_logout function work?"""
         with app.test_request_context():
@@ -80,7 +81,7 @@ class AuthViewTestCase(TestCase):
                     session[CURR_USER_KEY] = self.testuser.user_id
                 do_logout()
 
-                self.assertFalse(session.get(CURR_USER_KEY))
+                self.assertNotIn(CURR_USER_KEY, session)
     
     def test_signup_already_logged_in(self):
         """Does site respond appropriately if user is already logged in?"""

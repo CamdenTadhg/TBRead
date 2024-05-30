@@ -109,8 +109,8 @@ class UserViewTestCase(TestCase):
         with self.client as c:
             resp = c.get(f'/users/{self.testuser.user_id}')
         
-        self.assertEqual(resp.status_code, 302)
-        self.assertEqual(resp.location, '/')
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, '/')
     
     def test_display_user_profile_loggedout_redirect(self):
         """Does the site redirect correctly when an anonymous user tries to access a user profile?"""
@@ -387,7 +387,8 @@ class UserViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Please log in', html)
-    
+
+#DOES NOT WORK    
     def test_delete_user(self):
         """Does the site delete a user from the database?"""
 
@@ -402,7 +403,8 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.location, '/')
             self.assertFalse(user)
             self.assertFalse(session.get(CURR_USER_KEY))
-    
+
+#DOES NOT WORK    
     def test_delete_user_redirect(self):
         """Does the site redirect correctly when a user has been deleted?"""
 
