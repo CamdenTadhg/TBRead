@@ -11,18 +11,12 @@ import requests
 from io import StringIO
 from html.parser import HTMLParser
 import random
-import pdb
-import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
 import json 
 import google_auth_oauthlib.flow
 from google.oauth2.credentials import Credentials
-import string
 from datetime import date
-import re
-from oauthlib.oauth2 import TokenExpiredError
-from google.auth.transport.requests import Request
 
 CURR_USER_KEY = "curr_user"
 CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
@@ -485,13 +479,19 @@ def edit_new_book(google_id):
     
     book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
     if book:
-        description = strip_tags(book.description)
+        if book.description: 
+            description = strip_tags(book.description)
+        else: 
+            description = ''
         form=BookEditForm(title=book.title, authors=book.authors, publisher=book.publisher, pub_date=book.pub_date, description=description, isbn=book.isbn, page_count=book.page_count, thumbnail=book.thumbnail)
     else:
         new_book_id = add_book_to_database(google_id)
         new_book = db.session.execute(db.select(Book).where(Book.book_id == new_book_id)).scalar()
         ## remove html tags from description
-        description = strip_tags(new_book.description)
+        if new_book.description: 
+            description = strip_tags(new_book.description)
+        else: 
+            description = ''
         form =BookEditForm(title=new_book.title, authors=new_book.authors, publisher=new_book.publisher, pub_date=new_book.pub_date, description=description, isbn=new_book.isbn, page_count=new_book.page_count, thumbnail=new_book.thumbnail)
 
     if form.validate_on_submit():
@@ -546,7 +546,10 @@ def add_book_manually():
         description = form.description.data
         isbn = form.isbn.data
         page_count = form.page_count.data
-        age_category = form.age_category.data
+        if form.age_category.data == 'N/A':
+            age_category = 'NA'
+        else:
+            age_category = form.age_category.data
         thumbnail = form.thumbnail.data
         notes = form.notes.data
         script = form.script.data
@@ -634,31 +637,31 @@ def delete_book(userbook_id):
 @app.route('/users_books/<userbook_id>/transfer/<list_type>', methods=["POST"])
 def transfer_between_lists(userbook_id, list_type):
     """Transfer a book between lists"""
-    print('transfer request received')
 
     if not g.user:
         flash('Please log in', 'danger')
         return redirect('/')
-    print('list_type = ', list_type)
+
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
-    print(userbook)
     list = db.session.execute(db.select(List).where(List.list_type == list_type).where(List.user_id == g.user.user_id)).scalar()
-    print(list)
     if userbook: 
-        del userbook.lists[0]
-        userbook.lists.append(list)
-        print(userbook.lists)
-        db.session.add(userbook)
-        try: 
-            db.session.commit()
-        except: 
-            db.session.rollback()
-            flash('Something went wrong. Please try again.', 'danger')
+        if g.user.user_id == userbook.user_id:
+            del userbook.lists[0]
+            userbook.lists.append(list)
+            db.session.add(userbook)
+            try: 
+                db.session.commit()
+            except: 
+                db.session.rollback()
+                flash('Something went wrong. Please try again.', 'danger')
+        else: 
+            flash('You do not have permission to do that', 'danger')
+            return redirect(f'/users/{g.user.user_id}/lists/tbr')
     else:
         flash('Book not found. Please try again')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     if list_type == 'Complete':
         userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
-        print(userbook_challenges)
         for userbook_challenge in userbook_challenges:
             userbook_challenge.complete = True
             db.session.add(userbook_challenge)
@@ -689,6 +692,9 @@ def assign_book(userbook_id):
         return redirect('/')
     
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    if userbook.user_id != g.user.user_id:
+        flash('You do not have permission to do that', 'danger')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     data = request.json
     challenge_id = data.get('challenge_id')
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
@@ -704,7 +710,6 @@ def assign_book(userbook_id):
             db.session.rollback()
             flash('Something went wrong. Please try again.', 'danger')
         if userbook.lists[0].list_type == 'Complete':
-            print('userbook complete')
             userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
             userbook_challenge.complete = True
             db.session.add(userbook_challenge)
@@ -724,7 +729,11 @@ def remove_book(userbook_id):
         flash('Please log in', 'danger')
         return redirect('/')
 
+
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
+    if userbook.user_id != g.user.user_id:
+        flash('You do not have permission to do that', 'danger')
+        return redirect(f'/users/{g.user.user_id}/lists/tbr')
     data = request.json
     challenge_id = data.get('challenge_id')
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
@@ -745,6 +754,9 @@ def remove_book(userbook_id):
 def receive_email():
 
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
+    print('************************')
+    print(request.form['envelope'])
+    print(request.form)
     email = envelope['from']
     subject = request.form['subject']
     body = str(request.form['text'])

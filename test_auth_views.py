@@ -53,14 +53,13 @@ class AuthViewTestCase(TestCase):
                     outbox.pop()
         db.session.rollback()
 
-#DOES NOT WORK    
     def test_add_user_to_g(self):
         """Does add_user_to_g function work?"""
         with app.test_request_context():
             with self.client as c:
-                with c.session_transaction() as session:
-                    session[CURR_USER_KEY] = self.testuser.user_id
-                add_user_to_g()
+                with c.session_transaction() as change_session:
+                    change_session[CURR_USER_KEY] = self.testuser.user_id
+                c.get('/')
 
                 self.assertEqual(g.user, self.testuser)
     
@@ -72,23 +71,22 @@ class AuthViewTestCase(TestCase):
 
                 self.assertEqual(session[CURR_USER_KEY], self.testuser.user_id)
 
-#DOES NOT WORK    
     def test_do_logout(self):
         """Does do_logout function work?"""
         with app.test_request_context():
             with self.client as c:
-                with c.session_transaction() as session:
-                    session[CURR_USER_KEY] = self.testuser.user_id
+                with c.session_transaction() as change_session:
+                    change_session[CURR_USER_KEY] = self.testuser.user_id
                 do_logout()
 
-                self.assertNotIn(CURR_USER_KEY, session)
-    
+                self.assertFalse(session.get(CURR_USER_KEY))
+            
     def test_signup_already_logged_in(self):
         """Does site respond appropriately if user is already logged in?"""
 
         with self.client as c: 
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'userImage': ''})
 
@@ -99,8 +97,8 @@ class AuthViewTestCase(TestCase):
         """Does site redirect appropriately if user is already logged in?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'userImage': ''},  follow_redirects=True)
             html = resp.get_data(as_text=True)
@@ -158,8 +156,8 @@ class AuthViewTestCase(TestCase):
         """Does the site respond appropriately if a logged in user tries to log in?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/login', json={'username': 'testuser', 'password': 'testuser'})
 
@@ -170,8 +168,8 @@ class AuthViewTestCase(TestCase):
         """Does site redirect appropriately if a logged in user tries to log in?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/login', json={'username': 'testuser', 'password': 'testuser'}, follow_redirects=True)
             html = resp.get_data(as_text=True)
@@ -240,13 +238,12 @@ class AuthViewTestCase(TestCase):
             self.assertIn('You are not logged in', html)
             self.assertIn('Sign up', html)
     
-    # DOES NOT WORK
     def test_logout_correct(self):
         """Does the site log a user out correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
 
             resp = c.post('/logout')
 
@@ -254,13 +251,12 @@ class AuthViewTestCase(TestCase):
             self.assertFalse(session.get(CURR_USER_KEY))
             self.assertEqual(resp.location, '/')
     
-    # DOES NOT WORK
     def test_logout_correct_redirect(self):
         """Does the site redirect correctly after logging a user out"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/logout', follow_redirects=True)
             html = resp.get_data(as_text=True)
@@ -275,8 +271,8 @@ class AuthViewTestCase(TestCase):
         """Does the site respond correctly if a logged-in user tries to send a username reminder?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             with mail.record_messages() as outbox:
             
                 resp = c.post('/forgotusername', json={'email': 'testuser@test.com'})
@@ -289,8 +285,8 @@ class AuthViewTestCase(TestCase):
         """Does the site redirect correctly if a logged-in user tries to send a username reminder?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             with mail.record_messages() as outbox:
             
                 resp = c.post('/forgotusername', json={'email': 'testuser@test.com'}, follow_redirects=True)
@@ -328,8 +324,8 @@ class AuthViewTestCase(TestCase):
         """Does the site respond correctly if a logged-in user tries to send a password reset?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             with mail.record_messages() as outbox:
                 resp = c.post('/forgotpassword', json={'email': 'testuser@test.com'})
 
@@ -341,8 +337,8 @@ class AuthViewTestCase(TestCase):
         """Does the site redirect correctly if a logged-in user tries to send a password reset?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             with mail.record_messages() as outbox:
                 resp = c.post('/forgotpassword', json={'email': 'testuser@test.com'}, follow_redirects=True)
                 html = resp.get_data(as_text=True)
@@ -380,8 +376,8 @@ class AuthViewTestCase(TestCase):
         """Does the site respond correctly if a logged in user tries to use a password reset link?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
 
             stmt = (update(User).where(User.user_id == self.testuser.user_id).values(password_reset_token = 'prt'))
             db.session.execute(stmt)
@@ -394,8 +390,8 @@ class AuthViewTestCase(TestCase):
     def test_password_reset_loggedin_redirect(self):
         """Does the site redirect correctly if a logged in user tries to use a password reset link?"""
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
 
             stmt = (update(User).where(User.user_id == self.testuser.user_id).values(password_reset_token = 'prt'))
             db.session.execute(stmt)
@@ -505,8 +501,8 @@ class AuthViewTestCase(TestCase):
         """Does the site send the appropriate json when a user's password is updated? """
 
         with self.client as c:            
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
 
             oldpassword = db.session.execute(db.select(User.password).where(User.user_id == self.testuser.user_id)).scalar()
             resp = c.post('/updatepassword', json={'password': 'kJeP7!9!wYGou%WD', 'password2': 'kJeP7!9!wYGou%WD'})

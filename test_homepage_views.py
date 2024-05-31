@@ -52,8 +52,8 @@ class HomepageTestCase(TestCase):
     def test_homepage_loggedin(self):
         """Does the logged in homepage redirect correctly?"""
         with self.client as c:
-            with c. session_transaction() as session:
-                session[CURR_USER_KEY] = self.test_user.user_id
+            with c. session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.test_user.user_id
             user_id = self.test_user.user_id
             resp = c.get('/')
 

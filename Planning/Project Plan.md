@@ -1,5 +1,6 @@
 TO DO LIST: 
-## 18 Write tests for python & javascript
+
+## 19 Write tests for python & javascript
     ## model tests
         ## figure out how to run tests on render
     ## route tests
@@ -9,59 +10,54 @@ TO DO LIST:
             ## figure out how to run tests on render
         ## user routes & python function tests
             ## figure out how to run tests on render
-        ## book routes & python function tests (13)
+        ## book routes & python function tests
             ## write tests
-                ## was writing special case tests for add_book_to_database
             ## run tests locally
             ## figure out how to run tests on render
-        ## challenge routes & python function tests (9)
+        ## challenge routes & python function tests
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
     ## javascript tests
-        ## books.js (5)
+        ## books.js
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## challenges.js (3)
+        ## challenges.js
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## lists.js (3)
+        ## lists.js
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## models.js (3)
+        ## models.js
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-        ## users.js (15)
+        ## users.js
             ## write tests
             ## run tests locally
             ## figure out how to run tests on render
-## 17 Styling
+## 18 Styling
     ## favicon.ico
     ## logo
     ## fix it so that on login, you get the appropriate flash message
     ## fix tabs to be visible
     ## fix sidebar
-    ## go over site with Augustin for design considerations
-    ## reformat user profile 
-    ## list displays
-    ## add books button to the right place
-    ## search form display
-    ## search results display
-    ## display of authors on edit form
-    ## make empty book list display look nice
-    ## make tables go across the full page regardless of how long the text content is
     ## better response to axios errors than stupid little alerts
-## 16 Documentation
+    ## go over site with Augustin for design considerations
+## 17 Documentation
     ## create ReadMe
 
 
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
+## 16 Fix delete and transfer book function
+    ## move it to javascript so that the page doesn't have to reload
+        ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points
+    ## but have javascript re-request the table so that it gets updated
 ## 15 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule

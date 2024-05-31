@@ -126,8 +126,8 @@ class UserViewTestCase(TestCase):
         """Does the site display the user's profile correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.get(f'/users/{self.testuser.user_id}')
             html = resp.get_data(as_text=True)
@@ -140,8 +140,8 @@ class UserViewTestCase(TestCase):
         """Does the site update the user's profile correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser', 'email': 'testuser@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
             html = resp.get_data(as_text=True)
@@ -154,8 +154,8 @@ class UserViewTestCase(TestCase):
         """Does the site respond correctly when a user tries to update their email to an email already in the database?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser', 'email': 'testuser2@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
             html = resp.get_data(as_text=True)
@@ -168,8 +168,8 @@ class UserViewTestCase(TestCase):
         """Does the site respond correctly when a user tries to update their username to a username already in the database"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post(f'/users/{self.testuser.user_id}', data = {'username': 'testuser2', 'email': 'testuser@test.com', 'user_image': '/static/images/image.png', 'reading_time_work_day': 4, 'reading_time_day_off': 0, 'reading_speed_adult': 0, 'reading_speed_YA': 0, 'reading_speed_children': 0, 'reading_speed_graphic': 0, 'posting_frequency': 15, 'prep_days': 4, 'content_account': 'testuser', 'email_reminders': True})
             html = resp.get_data(as_text=True)
@@ -201,8 +201,8 @@ class UserViewTestCase(TestCase):
         """Does the TBR list display correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             resp = c.get(f'/users/{self.testuser.user_id}/lists/tbr')
             html = resp.get_data(as_text=True)
 
@@ -232,8 +232,8 @@ class UserViewTestCase(TestCase):
         """Does the site return the correct json when the tbr list is requested?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             resp = c.get(f'/api/{self.testuser.user_id}/lists/tbr')
             
             self.assertEqual(resp.status_code, 200)
@@ -262,8 +262,8 @@ class UserViewTestCase(TestCase):
         """Does the DNF list display correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             resp = c.get(f'/users/{self.testuser.user_id}/lists/dnf')
             html = resp.get_data(as_text=True)
 
@@ -293,8 +293,8 @@ class UserViewTestCase(TestCase):
         """Does the site return the correct json when the dnf list is requested?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             stmt = (update(User_Book_List).where(User_Book_List.userbook_id == self.ub1.userbook_id).values(list_id = self.dnflist.list_id))
             db.session.execute(stmt)
             db.session.commit()
@@ -327,8 +327,8 @@ class UserViewTestCase(TestCase):
         """Does the Complete list display correctly?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             resp = c.get(f'/users/{self.testuser.user_id}/lists/complete')
             html = resp.get_data(as_text=True)
 
@@ -358,8 +358,8 @@ class UserViewTestCase(TestCase):
         """Does the site return the correct json when the complete list is requested?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             stmt = (update(User_Book_List).where(User_Book_List.userbook_id == self.ub1.userbook_id).values(list_id = self.completelist.list_id))
             db.session.execute(stmt)
             db.session.commit()
@@ -388,13 +388,12 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Please log in', html)
 
-#DOES NOT WORK    
     def test_delete_user(self):
         """Does the site delete a user from the database?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/users/delete')
             user = db.session.execute(db.select(User).where(User.user_id == self.testuser.user_id)).scalar()
@@ -404,13 +403,12 @@ class UserViewTestCase(TestCase):
             self.assertFalse(user)
             self.assertFalse(session.get(CURR_USER_KEY))
 
-#DOES NOT WORK    
     def test_delete_user_redirect(self):
         """Does the site redirect correctly when a user has been deleted?"""
 
         with self.client as c:
-            with c.session_transaction() as session:
-                session[CURR_USER_KEY] = self.testuser.user_id
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
             
             resp = c.post('/users/delete', follow_redirects=True)
             user = db.session.execute(db.select(User).where(User.user_id == self.testuser.user_id)).scalar()
