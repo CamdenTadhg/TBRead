@@ -1024,6 +1024,7 @@ def join_challenge(challenge_id):
     try: 
         db.session.add(user)
         db.session.commit()
+        flash(f'You joined the {challenge.name} challenge', 'success')
     except IntegrityError: 
         db.session.rollback()
         flash('You are already signed up for this challenge.', 'danger')
@@ -1031,7 +1032,6 @@ def join_challenge(challenge_id):
         db.session.rollback()
         flash('Something went wrong. Please try again.', 'danger')
 
-    flash(f'You have joined the {challenge.name} challenge', 'success')
     return redirect('/challenges')
 
 @app.route('/challenges/leave/<challenge_id>', methods=["POST"])
@@ -1048,10 +1048,12 @@ def leave_challenge(challenge_id):
     db.session.add(user)
     try:
         db.session.commit()
+        flash(f'You left the {challenge.name} challenge', 'danger')
+
     except: 
         db.session.rollback()
+        flash('Something went wrong. Please try again', 'danger')
 
-    flash(f'You have left the {challenge.name} challenge', 'danger')
     return redirect(f'/users/{g.user.user_id}/challenges')
 
 @app.route('/users/<user_id>/challenges/<challenge_id>', methods=["GET", "POST"])
