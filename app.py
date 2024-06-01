@@ -709,16 +709,17 @@ def assign_book(userbook_id):
         except: 
             db.session.rollback()
             flash('Something went wrong. Please try again.', 'danger')
+        userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
         if userbook.lists[0].list_type == 'Complete':
-            userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
             userbook_challenge.complete = True
-            db.session.add(userbook_challenge)
-            try: 
-                db.session.commit()
-            except:
-                db.session.rollback()
-                flash('Something went wrong. Please try again', 'danger')
-    
+        else: 
+            userbook_challenge.complete = False
+        db.session.add(userbook_challenge)
+        try: 
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('Something went wrong. Please try again', 'danger')
     return jsonify({'success': 'Book added'})
 
 @app.route('/api/users_books/<userbook_id>/remove', methods=['POST'])
@@ -754,9 +755,6 @@ def remove_book(userbook_id):
 def receive_email():
 
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
-    print('************************')
-    print(request.form['envelope'])
-    print(request.form)
     email = envelope['from']
     subject = request.form['subject']
     body = str(request.form['text'])
@@ -978,7 +976,7 @@ def add_challenge():
             db.session.commit()
         except:
             db.session.rollback()
-            flash('Challenge not added. Please try again.', 'danger')
+            flash('Something went wrong. Please try again.', 'danger')
         return redirect('/challenges')
 
     return render_template('challenges/new.html', form=form)
@@ -1033,6 +1031,7 @@ def join_challenge(challenge_id):
         db.session.rollback()
         flash('Something went wrong. Please try again.', 'danger')
 
+    flash(f'You have joined the {challenge.name} challenge', 'success')
     return redirect('/challenges')
 
 @app.route('/challenges/leave/<challenge_id>', methods=["POST"])
@@ -1052,6 +1051,7 @@ def leave_challenge(challenge_id):
     except: 
         db.session.rollback()
 
+    flash(f'You have left the {challenge.name} challenge', 'danger')
     return redirect(f'/users/{g.user.user_id}/challenges')
 
 @app.route('/users/<user_id>/challenges/<challenge_id>', methods=["GET", "POST"])

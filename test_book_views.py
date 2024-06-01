@@ -1,8 +1,12 @@
+"""Book Views tests"""
+
+
 import os
 from unittest import TestCase
 from flask import g, session
 from models import db, connect_db, User, Book, User_Book, List, Challenge, User_Challenge, User_Book_List, User_Book_Challenge
 from sqlalchemy import update, insert
+from werkzeug.datastructures import ImmutableMultiDict
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -14,8 +18,8 @@ db.create_all()
 
 app.config['WTF_CSRF_ENABLED'] = False
 
-class UserViewTestCase(TestCase):
-    """Test views for users"""
+class BookViewTestCase(TestCase):
+    """Test views for books"""
 
     def setUp(self):
         """create test client, add sample data"""
@@ -883,8 +887,8 @@ class UserViewTestCase(TestCase):
             db.session.execute(stmt)
             db.session.commit()
 
-            resp = c.post('/email', data={'envelope': {"to": }, 'subject': 'test book', 'text': 'test adding to notes'})
+            resp = c.post('/email', data=ImmutableMultiDict([('subject', 'test book'), ('text', 'test adding to notes'), ('envelope', '{"to": ["notes@tb-read.com"], "from":"testuser@test.com"}')]))
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn(self.ub1.notes, 'did i get deleted?')
-            self.assertIn(self.ub1.notes, 'test adding to notes')
+            self.assertIn('did i get deleted?', self.ub1.notes)
+            self.assertIn('test adding to notes', self.ub1.notes)

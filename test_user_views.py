@@ -1,4 +1,4 @@
-"""Auth Views tests"""
+"""User Views tests"""
 
 import os
 from unittest import TestCase
