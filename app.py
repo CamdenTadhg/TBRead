@@ -1024,7 +1024,7 @@ def join_challenge(challenge_id):
     try: 
         db.session.add(user)
         db.session.commit()
-        flash(f'You joined the {challenge.name} challenge', 'success')
+        flash(f'You joined the {challenge.name}', 'success')
     except IntegrityError: 
         db.session.rollback()
         flash('You are already signed up for this challenge.', 'danger')
@@ -1048,7 +1048,7 @@ def leave_challenge(challenge_id):
     db.session.add(user)
     try:
         db.session.commit()
-        flash(f'You left the {challenge.name} challenge', 'danger')
+        flash(f'You left the {challenge.name}', 'danger')
 
     except: 
         db.session.rollback()
@@ -1073,6 +1073,8 @@ def edit_user_challenge(user_id, challenge_id):
 
     if form.validate_on_submit():
         user_challenge.start_date = form.start_date.data
+        print('*******************')
+        print(form.start_date.data)
         user_challenge.end_date = form.end_date.data
         db.session.add(user_challenge)
         try: 

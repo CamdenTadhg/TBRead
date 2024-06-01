@@ -412,7 +412,7 @@ class ChallengeViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('You have joined the test challenge challenge', html)
+            self.assertIn('You joined the Double Test Challenge', html)
     
     def test_join_challenge_already_in(self):
         """Does the site respond correctly when a user tries to join a challenge they have already joined?"""
@@ -438,3 +438,91 @@ class ChallengeViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('You are already signed up for this challenge', html)
+
+    def test_leave_challenge_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to leave a challenge?"""
+
+        with self.client as c:
+            resp = c.post(f'/challenges/leave/{self.challenge.challenge_id}')
+        
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, '/')
+    
+    def test_leave_challenge_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to leave a challenge?"""
+
+        with self.client as c:
+            resp = c.post(f'/challenges/leave/{self.challenge.challenge_id}', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Please log in', html)
+    
+    def test_leave_challenge(self):
+        """Does the site correctly remove a user_challenge record when a user requests to leave a challenge?"""
+
+        with self.client as c:
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/challenges/leave/{self.challenge.challenge_id}')
+            user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == self.testuser.user_id).where(User_Challenge.challenge_id == self.challenge.challenge_id)).scalar()
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, f'/users/{self.testuser.user_id}/challenges')
+            self.assertFalse(user_challenge)
+    
+    def test_leave_challenge_redirect(self):
+        """Does the site redirect correctly after removing a user from a challenge?"""
+
+        with self.client as c:
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/challenges/leave/{self.challenge.challenge_id}', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('You left the test challenge', html)
+
+    def test_edit_user_challenge_loggedout(self):
+        """Does the site respond correctly when an anonymous user tries to edit a user challenge?"""
+
+        with self.client as c:
+            resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}')
+        
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, '/')
+    
+    def test_edit_user_challenge_loggedout_redirect(self):
+        """Does the site redirect correctly when an anonymous user tries to edit a user challenge?"""
+
+        with self.client as c:
+            resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Please log in', html)
+    
+    def test_edit_user_challenge_get(self):
+        """Does the site correctly display the form for editing a user's challenge"""
+
+        with self.client as c:
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Your Challenge', html)
+            self.assertIn('test challenge', html)
+    
+    def test_edit_user_challenge(self):
+        """Does the site correctly edit a user's challenge?"""
+
+        with self.client as c:
+            with c.session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.testuser.user_id
+            
+            resp = c.post(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}', data={'start_date': ''})
