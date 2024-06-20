@@ -498,7 +498,7 @@ class ChallengeViewTestCase(TestCase):
         """Does the site redirect correctly when an anonymous user tries to edit a user challenge?"""
 
         with self.client as c:
-            resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}')
+            resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}', follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
@@ -510,6 +510,10 @@ class ChallengeViewTestCase(TestCase):
         with self.client as c:
             with c.session_transaction() as change_session:
                 change_session[CURR_USER_KEY] = self.testuser.user_id
+
+            stmt = (insert(User_Book_Challenge).values(userbook_id = self.ub1.userbook_id, challenge_id = self.challenge.challenge_id, complete=True))
+            db.session.execute(stmt)
+            db.session.commit()
             
             resp = c.get(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}')
             html = resp.get_data(as_text=True)
@@ -517,6 +521,7 @@ class ChallengeViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Edit Your Challenge', html)
             self.assertIn('test challenge', html)
+            self.assertIn('src="https://books.google.com/books?id=wrOQLV6xB-wC&amp;printsec=frontcover&amp;dq=harry+potter&amp;hl=en&amp;newbks=1&amp;newbks_redir=1&amp;sa=X&amp;ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE"', html)
     
     def test_edit_user_challenge(self):
         """Does the site correctly edit a user's challenge?"""
@@ -525,4 +530,9 @@ class ChallengeViewTestCase(TestCase):
             with c.session_transaction() as change_session:
                 change_session[CURR_USER_KEY] = self.testuser.user_id
             
-            resp = c.post(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}', data={'start_date': ''})
+            resp = c.post(f'/users/{self.testuser.user_id}/challenges/{self.challenge.challenge_id}', data={'start_date': '1/1/2024', 'end_date': '12/31/2024'})
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('test challenge', html)
+            self.assertIn('1/1/2024', html)

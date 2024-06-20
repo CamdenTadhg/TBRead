@@ -2,7 +2,7 @@
 
 import os
 from unittest import TestCase
-from models import db, User, Book, User_Book
+from models import db, User, Book, User_Book, User_Book_List, User_Book_Challenge, Challenge, User_Challenge, List
 
 os.environ['DATABASE_URL'] = "postgresql:///tbread-test"
 
@@ -19,7 +19,12 @@ class HomepageTestCase(TestCase):
     def setUp(self):
         """create test client, add sample data"""
 
+        User_Book_Challenge.query.delete()
+        User_Challenge.query.delete()
+        User_Book_List.query.delete()
         User_Book.query.delete()
+        Challenge.query.delete()
+        List.query.delete()
         User.query.delete()
         Book.query.delete()
 

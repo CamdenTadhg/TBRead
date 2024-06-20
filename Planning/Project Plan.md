@@ -1,57 +1,48 @@
 TO DO LIST: 
 
-## 19 Write tests for python & javascript
-    ## figure out how to run tests on render
-        ## model tests
-        ## homepage routes
-        ## auth routes
-        ## user routes
-        ## book routes
+## 20 Write tests for python & javascript
     ## challenge routes & python function tests
         ## write tests
         ## run tests locally
-        ## figure out how to run tests on render
     ## javascript tests
         ## books.js
             ## write tests
             ## run tests locally
-            ## figure out how to run tests on render
         ## challenges.js
             ## write tests
             ## run tests locally
-            ## figure out how to run tests on render
         ## lists.js
             ## write tests
             ## run tests locally
-            ## figure out how to run tests on render
         ## models.js
             ## write tests
             ## run tests locally
-            ## figure out how to run tests on render
         ## users.js
             ## write tests
             ## run tests locally
-            ## figure out how to run tests on render
-## 18 Styling
+## 19 Styling
     ## favicon.ico
     ## logo
+    ## make it so books without covers will not display on home page
     ## fix it so that on login, you get the appropriate flash message
     ## fix tabs to be visible
     ## fix sidebar
-    ## better response to axios errors than stupid little alerts
     ## go over site with Augustin for design considerations
-## 17 Documentation
+## 18 Documentation
     ## create ReadMe
 
 
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
-## 16 Fix delete and transfer book function
+    ## figure out how to run tests on render
+        ## python tests
+        ## javascrip tests
+## 17 Fix delete and transfer book function
     ## move it to javascript so that the page doesn't have to reload
         ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points
     ## but have javascript re-request the table so that it gets updated
-## 15 Implement schedule books functionality
+## 16 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
@@ -71,19 +62,20 @@ TO DO LIST:
     ## display book cover on calendar on start date
     ## write tests for all calendar views
     ## write tests for all calendar javascript
-## 14 Implement email reminders functionality 
+## 15 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
     ## write tests
+# 14 Create an architecture diagram
 ## 13 Refactor based on feedback from mentor and hatchways and Augustin
+    ## better response to axios errors than stupid little alerts
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
     ## write tests
 ## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## increase the number of book covers displayed? 
-    ## make it so books without covers will not display
     ## write tests
 ## 9 Implement importation functionality
     ## write tests
