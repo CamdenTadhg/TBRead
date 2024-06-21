@@ -1,0 +1,18 @@
+{
+  "name": "tbread",
+  "version": "1.0.0",
+  "description": "We have broken down the Capstone Project into easy-to-follow steps. Each step of the capstone contains a link with instructions for that step. Here’s a quick overview of what you’ll do for each step of your capstone project:",
+  "main": "lists.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "author": "camden",
+  "license": "ISC",
+  "dependencies": {
+    "jquery.fancytable": "^1.0.34",
+    "minify": "^8.0.4"
+  },
+  "devDependencies": {
+    "jasmine": "^5.1.0"
+  }
+}

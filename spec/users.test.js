@@ -1,5 +1,15 @@
+const $ = require('jquery');
+// const { JSDOM } = require('jsdom');
 
-describe('validation of signup form', function(){
+// const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {url: 'http://tb-read.com'});
+
+// global.window = dom.window;
+// global.document - dom.window.document;
+// global.$ = $(dom.window);
+
+console.log('starting test file');
+
+describe('validation of signup form', () => { 
     let $signupButton, $modalBody, $signupPassword, signupPassword2, signupViaAxiosSpy, signupReturnedErrorHandlerSpy;
     beforeEach(() => {
         $signupUsername = $('<input id="signup_username" type="text">');
@@ -38,7 +48,7 @@ describe('validation of signup form', function(){
         });
     });
 
-    it('validates correct information', async function(){
+    it('validates correct information', async () => {
         $signupUsername.val('testuser');
         $signupEmail.val('testuser@test.com');
         $signupPassword.val('eQcBH9c%%h8QT8gM');
@@ -50,7 +60,7 @@ describe('validation of signup form', function(){
         expect(window.location.reload).toHaveBeenCalledTimes(1);
     });
 
-    it('rejects non matching passwords', function(){
+    it('rejects non matching passwords', () =>{
         $signupUsername.val('testuser');
         $signupEmail.val('testuser@test.com');
         $signupPassword.val('eQcBh9c%%h8QT8gm');
@@ -62,8 +72,8 @@ describe('validation of signup form', function(){
         expect(window.location.reload).toHaveBeenCalledTimes(0);
         expect($modalBody.find('.error-div').text()).toBe('Passwords do not match. Please try again');
     });
-
-    it('rejects insecure passwords', function(){
+    
+    it('rejects insecure passwords', () => {
         $signupUsername.val('testuser');
         $signupEmail.val('testuser@test.com');
         $signupPassword.val('password');
@@ -76,7 +86,12 @@ describe('validation of signup form', function(){
         expect($modalBody.find('.error-div').text()).toBe('Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, and one number');
     });
 
-    it('rejects missing data', function(){
+    it('rejects missing data', () => {
     });
-    it('rejects invalid email', function(){});
+    it('rejects invalid email', () => {});
 });
+
+// afterAll(() => {
+//     if(global.window) delete global.window;
+//     if(global.document) delete global.document;
+// });
