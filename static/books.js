@@ -9,7 +9,6 @@ const $removeChallengeButton = $('.remove-challenge-button');
 
 //book search click event handler
 $bookSearchButton.on('click', async function(event) {
-    console.log('search button pressed')
     event.preventDefault();
     $apiSearchResults.empty();
     let field = $field.val();
@@ -30,9 +29,7 @@ async function searchGoogleBooks(field, term){
         term = term.replace(/ /g, '%20');
         var url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
     }
-    console.log(url);
     let response = await axios.get(url)
-    console.log(response);
     return response.data.items;
 }
 
@@ -69,26 +66,20 @@ function displaySearchResults(response){
 //assign a book as part of a challenge
 $assignChallengeButton.on('click', async function(event){
     event.preventDefault();
-    console.log('starting assign challenge');
     $assignToChallengeForm.find('.error-span').remove();
-    console.log($challengesField.val());
     //get the challenge being assigned to
     const challenge_id = $challengesField.val();
     //get the userbook_id
     currentURL = window.location.href;
     const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
-    console.log('userbook_id:', userbook_id);
     //send the data
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
-    console.log(response);
     if (response.data['success']){
-        console.log('success response');
         $errorSpan = $('<span class="text-sm text-success error-span">Book assigned to challenge</span>');
         $assignToChallengeForm.append($errorSpan);
     }
     if (response.data['error']){
-        console.log('error response');
         $errorSpan = $('<span class="text-sm text-danger error-span">This book is already assigned to this challenge.</span>');
         $assignToChallengeForm.append($errorSpan);
     }
@@ -97,23 +88,17 @@ $assignChallengeButton.on('click', async function(event){
 //remove a book as part of a challenge
 $removeChallengeButton.on('click', async function(event){
     event.preventDefault();
-    console.log('starting remove challenge');
     $assignToChallengeForm.find('.error-span').remove();
-    console.log($challengesField.val());
     const challenge_id = $challengesField.val();
     currentURL = window.location.href;
     const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
-    console.log('userbook_id:', userbook_id);
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/remove`, data);
-    console.log(response);
     if (response.data['success']){
-        console.log('success response');
         $errorSpan = $('<span class="text-sm text-success error-span">Book removed from challenge</span>');
         $assignToChallengeForm.append($errorSpan);
     }
     if (response.data['error']){
-        console.log('error response');
         $errorSpan = $('<span class="text-sm text-danger error-span">This book is not assigned to this challenge</span>')
         $assignToChallengeForm.append($errorSpan);
     }

@@ -1,9 +1,7 @@
 TO DO LIST: 
 
 ## 20 Write tests for python & javascript
-    ## challenge routes & python function tests
-        ## write tests
-        ## run tests locally
+    ## Fix signup form to complete validation
     ## javascript tests
         ## books.js
             ## write tests

@@ -3,7 +3,7 @@ let $signupPassword2 = $('#password2');
 let $signupUsername = $('#signup_username');
 let $loginUsername = $('#login_username');
 let $loginPassword = $('#login_password');
-let $signup_email = $('#signup_email');
+let $signupEmail = $('#signup_email');
 let $email = $('#email');
 let $password = $('#password');
 let $userImage = $('#user_image');
@@ -32,6 +32,7 @@ $signupButton.on('click', async function(event){
         let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, and one number</div>');
         $modalBody.append($errorDiv);
     }
+    //validate username & email
     else {
         let response = await signupViaAxios();
         if (response['error']){
@@ -47,7 +48,7 @@ $signupButton.on('click', async function(event){
 async function signupViaAxios(){
     const username = $signupUsername.val();
     const password = $signupPassword.val();
-    const email = $signup_email.val();
+    const email = $signupEmail.val();
     const userImage = $userImage.val();
     const userData = {username: username, password: password, email: email, userImage: userImage};
     const response = await axios.post('/signup', userData)
