@@ -22,9 +22,14 @@ $signupButton.on('click', async function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    //validate all data is present
+    if (!$signupUsername.val() || !$signupPassword.val() || $signupPassword2.val() || $signupEmail.val()){
+        let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
+        $modalBody.append($errorDiv);
+    }
     //validate matching passwords
     if ($signupPassword.val() !== $signupPassword2.val()){
-        let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match. Please try again</div>');
+        let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
     //validate secure password
@@ -32,7 +37,7 @@ $signupButton.on('click', async function(event){
         let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
-    //validate username & email
+    //validate username & email are unique
     else {
         let response = await signupViaAxios();
         if (response['error']){
