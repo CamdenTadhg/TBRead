@@ -23,12 +23,12 @@ $signupButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
     //validate all data is present
-    if (!$signupUsername.val() === '' || !$signupPassword.val()=== '' || $signupPassword2.val() === '' || $signupEmail.val() === ''){
+    if ($signupUsername.val() === '' || $signupPassword.val()=== '' || $signupPassword2.val() === '' || $signupEmail.val() === ''){
         let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
         $modalBody.append($errorDiv);
     }
     //validate matching passwords
-    if ($signupPassword.val() !== $signupPassword2.val()){
+    else if ($signupPassword.val() !== $signupPassword2.val()){
         let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
@@ -76,6 +76,11 @@ function signupReturnedErrorHandler(response){
 $loginButton.on('click', async function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();
+    //validate all data is present
+    if ($loginUsername.val() === '' || $loginPassword.val()=== ''){
+        let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
+        $modalBody.append($errorDiv);
+    }
     let response = await loginViaAxios();
     if (response['error']){
         loginReturnedErrorHandler(response);
