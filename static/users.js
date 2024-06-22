@@ -29,7 +29,7 @@ $signupButton.on('click', async function(event){
     }
     //validate secure password
     else if (!passwordRegex.test($signupPassword.val())){
-        let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, and one number</div>');
+        let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
     //validate username & email

@@ -1,5 +1,5 @@
 TO DO LIST: 
-
+## 21 Fix bug that lets you log in with no username
 ## 20 Write tests for python & javascript
     ## Fix signup form to complete validation
     ## javascript tests
@@ -69,6 +69,7 @@ TO DO LIST:
 # 14 Create an architecture diagram
 ## 13 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
+    ## fix signup bug (giving you the password error when your password is good if other field are blank)
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
     ## write tests

@@ -1,14 +1,3 @@
-const $ = require('jquery');
-// const { JSDOM } = require('jsdom');
-
-// const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {url: 'http://tb-read.com'});
-
-// global.window = dom.window;
-// global.document - dom.window.document;
-// global.$ = $(dom.window);
-
-console.log('starting test file');
-
 describe('validation of signup form', () => { 
     let $signupButton, $modalBody, $signupPassword, signupPassword2, signupViaAxiosSpy, signupReturnedErrorHandlerSpy;
     beforeEach(() => {
@@ -33,7 +22,7 @@ describe('validation of signup form', () => {
             }
             //validate secure password
             else if (!passwordRegex.test($signupPassword.val())){
-                let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, and one number</div>');
+                let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
                 $modalBody.append($errorDiv);
             }
             else {
@@ -90,8 +79,3 @@ describe('validation of signup form', () => {
     });
     it('rejects invalid email', () => {});
 });
-
-// afterAll(() => {
-//     if(global.window) delete global.window;
-//     if(global.document) delete global.document;
-// });
