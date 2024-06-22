@@ -23,7 +23,7 @@ $signupButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
     //validate all data is present
-    if (!$signupUsername.val() || !$signupPassword.val() || $signupPassword2.val() || $signupEmail.val()){
+    if (!$signupUsername.val() === '' || !$signupPassword.val()=== '' || $signupPassword2.val() === '' || $signupEmail.val() === ''){
         let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
         $modalBody.append($errorDiv);
     }
