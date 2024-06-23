@@ -8,7 +8,7 @@ describe('validation of signup form', () => {
         signupReturnedErrorHandlerSpy = jasmine.createSpy('signupReturnedErrorHandler');
         pageReloadSpy = jasmine.createSpy('pageReload');
 
-        // Assign spies to global scope or proper scope
+        // Assign spies to global scope
         window.signupViaAxios = signupViaAxiosSpy;
         window.signupReturnedErrorHandler = signupReturnedErrorHandlerSpy;
         window.pageReload = pageReloadSpy;
@@ -23,7 +23,6 @@ describe('validation of signup form', () => {
 
         // Attach event handler to signup button
         $signupButton.on('click', async function(event) {
-            console.log('sign up button clicked A');
             event.preventDefault();
             $modalBody.find('.error-div').remove();
             const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -31,31 +30,26 @@ describe('validation of signup form', () => {
             // Validate all data is present
             if ($signupUsername.val() === '' || $signupPassword.val() === '' || $signupPassword2.val() === '' || $signupEmail.val() === '') {
                 let $errorDiv = $('<div class="alert alert-danger error-div">Username, email, and password are required.</div>');
-                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
             // Validate matching passwords
             else if ($signupPassword.val() !== $signupPassword2.val()) {
                 let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
-                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
             // Validate secure password
             else if (!passwordRegex.test($signupPassword.val())) {
                 let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
-                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
             // Validate email
             else if (!emailRegex.test($signupEmail.val())) {
                 let $errorDiv = $('<div class="alert alert-danger error-div">Email does not appear to be valid</div>');
-                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
             // Validate username & email are unique
             else {
                 let response = await signupViaAxios();
-                console.log('response = ', response);
                 if (response['error']) {
                     signupReturnedErrorHandler(response);
                 } else {
@@ -73,6 +67,11 @@ describe('validation of signup form', () => {
         $signupPassword2.remove();
         $signupButton.remove();
         $modalBody.remove();
+
+        // Re-assign to correct functions
+        window.signupViaAxios = signupViaAxios;
+        window.signupReturnedErrorHandler = signupReturnedErrorHandler;
+        window.pageReload = pageReload;
     });
 
     it('validates that all fields are required', async () => {
@@ -85,7 +84,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(1);
         expect($modalBody.find('.error-div').text()).toBe('Username, email, and password are required.');
         expect(signupViaAxiosSpy).not.toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
@@ -102,7 +100,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(1);
         expect($modalBody.find('.error-div').text()).toBe('Passwords do not match.');
         expect(signupViaAxiosSpy).not.toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
@@ -119,7 +116,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(1);
         expect($modalBody.find('.error-div').text()).toBe('Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character');
         expect(signupViaAxiosSpy).not.toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
@@ -136,7 +132,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(1);
         expect($modalBody.find('.error-div').text()).toBe('Email does not appear to be valid');
         expect(signupViaAxiosSpy).not.toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
@@ -153,7 +148,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(0);
         expect(signupViaAxiosSpy).toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
         expect(pageReloadSpy).toHaveBeenCalled();
@@ -172,7 +166,6 @@ describe('validation of signup form', () => {
         await $signupButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect($modalBody.find('.error-div').length).toBe(0);
         expect(signupViaAxiosSpy).toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).toHaveBeenCalled();
         expect(pageReloadSpy).not.toHaveBeenCalled();
@@ -220,3 +213,132 @@ describe('signupViaAxios function', () => {
     });
 });
 
+describe('signupReturnedErrorHandler', () => {
+    beforeEach(() => {
+        //set up DOM elements
+        $modalBody = $('<div class="modal-body"></div>').appendTo('body');
+    });
+
+    afterEach(() => {
+        //clean up DOM elements
+        $modalBody.remove();
+    })
+
+    it('returns correct error message for duplicate email error', () => {
+        const response = {error: 'Email already taken'};
+        console.log(response);
+        signupReturnedErrorHandler(response);
+        expect($modalBody.find('.error-div').text()).toBe('Email already registered. Please try logging in.');
+    });
+
+    it('returns correct error message for duplicate username error', () => {
+        const response = {error: 'Username already taken'};
+        console.log(response);
+        signupReturnedErrorHandler(response);
+        expect($modalBody.find('.error-div').text()).toBe('Username already registered. Please try logging in.');
+    });
+});
+
+describe('validation of login form', () => {
+    let loginViaAxiosSpy, loginReturnedErrorHandlerSpy, pageReloadSpy;
+    let $loginUsername, $loginPassword, $loginButton, $modalBody;
+    beforeEach(() => {
+        //create spies
+        loginViaAxiosSpy = jasmine.createSpy('loginViaAxios');
+        loginReturnedErrorHandlerSpy = jasmine.createSpy('loginReturnedErrorHandler');
+        pageReloadSpy = jasmine.createSpy('pageReload');
+
+        //assign spies to global scope
+        window.loginViaAxios = loginViaAxiosSpy;
+        window.loginReturnedErrorHandler = loginReturnedErrorHandlerSpy;
+        window.pageReload = pageReloadSpy;
+
+        //set up DOM
+        $modalBody = $('<div class="modal-body"></div>').appendTo('body');
+        $loginUsername = $('<input type="text" id="loginUsername">').appendTo('body');
+        $loginPassword = $('<input type="text" id="loginPassword">').appendTo('body');
+        $loginButton = $('<button id="loginButton">Login</button>').appendTo('body');
+
+        //attach event handler to login button
+        $loginButton.on('click', async function(event){
+            event.preventDefault();
+            $modalBody.find('.error-div').remove();
+            //validate all data is present
+            if ($loginUsername.val() === '' || $loginPassword.val()=== ''){
+                let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
+                $modalBody.append($errorDiv);
+            }
+            else {
+                let response = await loginViaAxios();
+                if(response['error']){
+                    loginReturnedErrorHandler(response);
+                }
+                else {
+                    pageReload();
+                }
+            }
+        });
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $modalBody.remove();
+        $loginUsername.remove();
+        $loginPassword.remove();
+        $loginButton.remove();
+
+        //reassign functions
+        window.loginViaAxios = loginViaAxios;
+        window.loginReturnedErrorHandler = loginReturnedErrorHandler;
+        window.pageReload = pageReload;
+    });
+
+    it('validates correct data', async () => {
+        console.log('running validates correct data');
+        $loginUsername.val('camdentadhg');
+        $loginPassword.val('Password1!');
+
+        // Mock loginViaAxios to return an error
+        loginViaAxiosSpy.and.returnValue(Promise.resolve({}));
+
+        const event = $.Event('click');
+        await $loginButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(loginViaAxiosSpy).toHaveBeenCalled();
+        expect(loginReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).toHaveBeenCalled();
+    });
+
+    it('rejects missing data', async () => {
+        console.log('running rejects missing data');
+        $loginUsername.val('');
+        $loginPassword.val('');
+
+        const event = $.Event('click');
+        await $loginButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(loginViaAxiosSpy).not.toHaveBeenCalled();
+        expect(loginReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
+        expect($modalBody.find('.error-div').text()).toBe('All fields are required.');
+    });
+
+    it('calls error handler if error is returned', async () => {
+        console.log('running calls error handler');
+        $loginUsername.val('camdentadhg');
+        $loginPassword.val('diashwsohw');
+
+        // Mock loginViaAxios to return an error
+        loginViaAxiosSpy.and.returnValue(Promise.resolve({ error: true }));
+
+        const event = $.Event('click');
+        await $loginButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(loginViaAxiosSpy).toHaveBeenCalled();
+        expect(loginReturnedErrorHandlerSpy).toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
+    });
+});

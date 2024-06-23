@@ -19,6 +19,7 @@ let $closeButton = $('.close-button');
 
 // validation of signup form
 $signupButton.on('click', async function(event){
+    console.log('signup button clicked');
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -50,10 +51,15 @@ $signupButton.on('click', async function(event){
             signupReturnedErrorHandler(response);
         }
         else {
-            location.reload();
+            pageReload();
         }
     }
 });
+
+//pageReload function for testing purposes
+function pageReload(){
+    window.location.reload();
+}
 
 //send signup data via axios
 async function signupViaAxios(){
@@ -87,12 +93,14 @@ $loginButton.on('click', async function(event){
         let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
         $modalBody.append($errorDiv);
     }
-    let response = await loginViaAxios();
-    if (response['error']){
-        loginReturnedErrorHandler(response);
-    }
     else {
-        location.reload();
+        let response = await loginViaAxios();
+        if(response['error']){
+            loginReturnedErrorHandler(response);
+        }
+        else {
+            pageReload();
+        }
     }
 });
 

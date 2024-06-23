@@ -1,24 +1,20 @@
 TO DO LIST: 
-## 21 Fix bug that lets you log in with no username
 ## 20 Write tests for python & javascript
-    ## Add jasmine to all the appropriate places, check sign up, commit
     ## javascript tests
         ## users.js
-            ## write tests
-                ## get the two tests chatgpt wrote running
-                ## write your own tests. On each test completion, check signup, and commit
+            ## write tests (12)
             ## run tests locally
-        ## books.js
-            ## write tests
+        ## books.js 
+            ## write tests (5)
             ## run tests locally
         ## challenges.js
-            ## write tests
+            ## write tests (4)
             ## run tests locally
         ## lists.js
-            ## write tests
+            ## write tests (4)
             ## run tests locally
         ## models.js
-            ## write tests
+            ## write tests(3)
             ## run tests locally
 
 ## 19 Styling
