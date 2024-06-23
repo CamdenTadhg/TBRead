@@ -106,10 +106,12 @@ $loginButton.on('click', async function(event){
 
 //send login data via axios
 async function loginViaAxios(){
+    console.log('running loginViaAxios');
     const username = $loginUsername.val();
     const password = $loginPassword.val();
     const userData = {username: username, password: password};
     const response = await axios.post('/login', userData);
+    console.log(response);
     return response.data;
 }
 

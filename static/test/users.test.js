@@ -172,6 +172,7 @@ describe('validation of signup form', () => {
     });
 });
 
+//INTERMITTENTLY FAILING
 describe('signupViaAxios function', () => {
     let axiosPostSpy;
 
@@ -294,7 +295,6 @@ describe('validation of login form', () => {
     });
 
     it('validates correct data', async () => {
-        console.log('running validates correct data');
         $loginUsername.val('camdentadhg');
         $loginPassword.val('Password1!');
 
@@ -311,7 +311,6 @@ describe('validation of login form', () => {
     });
 
     it('rejects missing data', async () => {
-        console.log('running rejects missing data');
         $loginUsername.val('');
         $loginPassword.val('');
 
@@ -326,7 +325,6 @@ describe('validation of login form', () => {
     });
 
     it('calls error handler if error is returned', async () => {
-        console.log('running calls error handler');
         $loginUsername.val('camdentadhg');
         $loginPassword.val('diashwsohw');
 
@@ -340,5 +338,34 @@ describe('validation of login form', () => {
         expect(loginViaAxiosSpy).toHaveBeenCalled();
         expect(loginReturnedErrorHandlerSpy).toHaveBeenCalled();
         expect(pageReloadSpy).not.toHaveBeenCalled();
+    });
+});
+
+//INTERMITTENTLY FAILING
+describe('loginViaAxios', () => {
+    let axiosPostSpy;
+
+    beforeEach(() => {
+    //create spies
+    axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({success: true}));
+
+    //set up DOM
+    $loginUsername = $('<input type="text" id="loginUsername">');
+    $loginPassword = $('<input type="text" id="loginPassword">');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $loginUsername.remove();
+        $loginPassword.remove();
+    });
+
+    it('sends login data via axios and returns response data', async () => {
+        $loginUsername.val('camdentadhg');
+        $loginPassword.val('lkajslkjas');
+        const response = await loginViaAxios();
+
+        expect(axiosPostSpy).toHaveBeenCalledWith('/login', {username: 'camdentadhg', password: 'lkajslkjas'});
+        expect(response).toEqual({success: true});
     });
 });
