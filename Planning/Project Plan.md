@@ -1,7 +1,6 @@
 TO DO LIST: 
 ## 21 Fix bug that lets you log in with no username
 ## 20 Write tests for python & javascript
-    ## validate email, check sign up, commit
     ## Add jasmine to all the appropriate places, check sign up, commit
     ## javascript tests
         ## users.js
