@@ -22,6 +22,7 @@ $signupButton.on('click', async function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     //validate all data is present
     if ($signupUsername.val() === '' || $signupPassword.val()=== '' || $signupPassword2.val() === '' || $signupEmail.val() === ''){
         let $errorDiv = $('<div class="alert alert-danger error-div">All fields are required.</div>');
@@ -35,6 +36,11 @@ $signupButton.on('click', async function(event){
     //validate secure password
     else if (!passwordRegex.test($signupPassword.val())){
         let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
+        $modalBody.append($errorDiv);
+    }
+    //validate valid email
+    else if (!emailRegex.test($signupEmail.val())){
+        let $errorDiv = $('<div class="alert alert-danger error-div">Email does not appear valid</div>');
         $modalBody.append($errorDiv);
     }
     //validate username & email are unique

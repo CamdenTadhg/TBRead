@@ -1,81 +1,222 @@
-describe('validation of signup form', () => { 
-    let $signupButton, $modalBody, $signupPassword, signupPassword2, signupViaAxiosSpy, signupReturnedErrorHandlerSpy;
-    beforeEach(() => {
-        $signupUsername = $('<input id="signup_username" type="text">');
-        $signupEmail=$('<input id="singup_email" type="text">');
-        $signupPassword = $('<input id="singup_password" type="password">');
-        $signupPassword2 = $('<input id="password2" type="password>"')
-        $signupButton = $('<button id="signup-button>Sign up</button>"');
-        $modalBody = $('<div id="modal-body></div>');
-        signupViaAxiosSpy = jasmine.createSpy('signupViaAxios');
-        signupReturnedErrorHandlerSpy = jasmine.createSpy('signupReturnedErrorHandler');
-        preventDefault = jasmine.createSpy('preventDefault');
+describe('validation of signup form', () => {
+    let signupViaAxiosSpy, signupReturnedErrorHandlerSpy, preventDefaultSpy, pageReloadSpy;
+    let $signupUsername, $signupEmail, $signupPassword, $signupPassword2, $signupButton, $modalBody;
 
-        $signupButton.on('click', async function(event){
+    beforeEach(() => {
+        // Set up spies
+        signupViaAxiosSpy = jasmine.createSpy('signupViaAxios').and.returnValue(Promise.resolve({}));
+        signupReturnedErrorHandlerSpy = jasmine.createSpy('signupReturnedErrorHandler');
+        pageReloadSpy = jasmine.createSpy('pageReload');
+
+        // Assign spies to global scope or proper scope
+        window.signupViaAxios = signupViaAxiosSpy;
+        window.signupReturnedErrorHandler = signupReturnedErrorHandlerSpy;
+        window.pageReload = pageReloadSpy;
+
+        // Set up DOM elements
+        $signupUsername = $('<input id="signupUsername" type="text">').appendTo('body');
+        $signupEmail = $('<input id="signupEmail" type="email">').appendTo('body');
+        $signupPassword = $('<input id="signupPassword" type="password">').appendTo('body');
+        $signupPassword2 = $('<input id="signupPassword2" type="password">').appendTo('body');
+        $signupButton = $('<button id="signupButton">Sign Up</button>').appendTo('body');
+        $modalBody = $('<div class="modal-body"></div>').appendTo('body');
+
+        // Attach event handler to signup button
+        $signupButton.on('click', async function(event) {
+            console.log('sign up button clicked A');
             event.preventDefault();
             $modalBody.find('.error-div').remove();
             const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-            //validate matching passwords
-            if ($signupPassword.val() !== $signupPassword2.val()){
-                let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match. Please try again</div>');
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            // Validate all data is present
+            if ($signupUsername.val() === '' || $signupPassword.val() === '' || $signupPassword2.val() === '' || $signupEmail.val() === '') {
+                let $errorDiv = $('<div class="alert alert-danger error-div">Username, email, and password are required.</div>');
+                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
-            //validate secure password
-            else if (!passwordRegex.test($signupPassword.val())){
+            // Validate matching passwords
+            else if ($signupPassword.val() !== $signupPassword2.val()) {
+                let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
+                console.log($errorDiv);
+                $modalBody.append($errorDiv);
+            }
+            // Validate secure password
+            else if (!passwordRegex.test($signupPassword.val())) {
                 let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
+                console.log($errorDiv);
                 $modalBody.append($errorDiv);
             }
+            // Validate email
+            else if (!emailRegex.test($signupEmail.val())) {
+                let $errorDiv = $('<div class="alert alert-danger error-div">Email does not appear to be valid</div>');
+                console.log($errorDiv);
+                $modalBody.append($errorDiv);
+            }
+            // Validate username & email are unique
             else {
                 let response = await signupViaAxios();
-                if (response['error']){
+                console.log('response = ', response);
+                if (response['error']) {
                     signupReturnedErrorHandler(response);
-                }
-                else {
-                    location.reload();
+                } else {
+                    pageReload();
                 }
             }
         });
     });
 
-    it('validates correct information', async () => {
-        $signupUsername.val('testuser');
-        $signupEmail.val('testuser@test.com');
-        $signupPassword.val('eQcBH9c%%h8QT8gM');
-        $signupPassword2.val('eQcBH9c%%h8QT8gM');
-        spyOn(window.location, 'reload');
-        $signupButton.triggerHandler('click');
-        expect(preventDefault).toHaveBeenCalledTimes(1);
-        expect(signupViaAxiosSpy).toHaveBeenCalledTimes(1);
-        expect(window.location.reload).toHaveBeenCalledTimes(1);
+    afterEach(() => {
+        // Clean up DOM elements
+        $signupUsername.remove();
+        $signupEmail.remove();
+        $signupPassword.remove();
+        $signupPassword2.remove();
+        $signupButton.remove();
+        $modalBody.remove();
     });
 
-    it('rejects non matching passwords', () =>{
-        $signupUsername.val('testuser');
-        $signupEmail.val('testuser@test.com');
-        $signupPassword.val('eQcBh9c%%h8QT8gm');
-        $signupPassword2.val('eQcBh0c%%h8QT8gm');
-        spyOn(window.location, 'reload');
-        $signupButton.trigger('click');
-        expect(preventDefault).toHaveBeenCalledTimes(1);
-        expect(signupViaAxiosSpy).toHaveBeenCalledTimes(0);
-        expect(window.location.reload).toHaveBeenCalledTimes(0);
-        expect($modalBody.find('.error-div').text()).toBe('Passwords do not match. Please try again');
+    it('validates that all fields are required', async () => {
+        $signupUsername.val('');
+        $signupEmail.val('');
+        $signupPassword.val('');
+        $signupPassword2.val('');
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(1);
+        expect($modalBody.find('.error-div').text()).toBe('Username, email, and password are required.');
+        expect(signupViaAxiosSpy).not.toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
     });
-    
-    it('rejects insecure passwords', () => {
-        $signupUsername.val('testuser');
+
+    it('validates that passwords match', async () => {
+        $signupUsername.val('testuser15');
         $signupEmail.val('testuser@test.com');
-        $signupPassword.val('password');
+        $signupPassword.val('password1!');
+        $signupPassword2.val('password2!');
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(1);
+        expect($modalBody.find('.error-div').text()).toBe('Passwords do not match.');
+        expect(signupViaAxiosSpy).not.toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
+    });
+
+    it('validates secure password', async () => {
+        $signupUsername.val('testuser15');
+        $signupEmail.val('testuser@test.com');
+        $signupPassword.val('password'); // Not a secure password
         $signupPassword2.val('password');
-        spyOn(window.location, 'reload');
-        $signupButton.trigger('click');
-        expect(preventDefault).toHaveBeenCalledTimes(1);
-        expect(signupViaAxiosSpy).toHaveBeenCalledTimes(0);
-        expect(window.location.reload).toHaveBeenCalledTimes(0);
-        expect($modalBody.find('.error-div').text()).toBe('Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, and one number');
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(1);
+        expect($modalBody.find('.error-div').text()).toBe('Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character');
+        expect(signupViaAxiosSpy).not.toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
     });
 
-    it('rejects missing data', () => {
+    it('validates email format', async () => {
+        $signupUsername.val('testuser15');
+        $signupEmail.val('invalid-email');
+        $signupPassword.val('Password1!');
+        $signupPassword2.val('Password1!');
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(1);
+        expect($modalBody.find('.error-div').text()).toBe('Email does not appear to be valid');
+        expect(signupViaAxiosSpy).not.toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
     });
-    it('rejects invalid email', () => {});
+
+    it('calls signupViaAxios and handles the response when validation passes', async () => {
+        $signupUsername.val('testuser15');
+        $signupEmail.val('testuser@test.com');
+        $signupPassword.val('Password1!');
+        $signupPassword2.val('Password1!');
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(0);
+        expect(signupViaAxiosSpy).toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
+        expect(pageReloadSpy).toHaveBeenCalled();
+    });
+
+    it('calls signupReturnedErrorHandler when signupViaAxios returns an error', async () => {
+        $signupUsername.val('testuser15');
+        $signupEmail.val('testuser@test.com');
+        $signupPassword.val('Password1!');
+        $signupPassword2.val('Password1!');
+
+        // Mock signupViaAxios to return an error
+        signupViaAxiosSpy.and.returnValue(Promise.resolve({ error: true }));
+
+        const event = $.Event('click');
+        await $signupButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect($modalBody.find('.error-div').length).toBe(0);
+        expect(signupViaAxiosSpy).toHaveBeenCalled();
+        expect(signupReturnedErrorHandlerSpy).toHaveBeenCalled();
+        expect(pageReloadSpy).not.toHaveBeenCalled();
+    });
 });
+
+describe('signupViaAxios function', () => {
+    let axiosPostSpy;
+
+    beforeEach(() => {
+        // Set up spies and DOM elements
+        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({ data: { success: true } }));
+
+        // Set up DOM elements
+        $signupUsername = $('<input id="signupUsername" type="text">').appendTo('body');
+        $signupEmail = $('<input id="signupEmail" type="email">').appendTo('body');
+        $signupPassword = $('<input id="signupPassword" type="password">').appendTo('body');
+        $userImage = $('<input id="userImage" type="text">').appendTo('body');
+    });
+
+    afterEach(() => {
+        // Clean up DOM elements
+        $signupUsername.remove();
+        $signupEmail.remove();
+        $signupPassword.remove();
+        $userImage.remove();
+    });
+
+    it('sends signup data via axios and returns response data', async () => {
+        // Set values to DOM elements
+        $signupUsername.val('testuser15');
+        $signupEmail.val('testuser@test.com');
+        $signupPassword.val('Password1!');
+        $userImage.val('imagePath');
+
+        const response = await signupViaAxios();
+
+        expect(axiosPostSpy).toHaveBeenCalledWith('/signup', {
+            username: 'testuser15',
+            password: 'Password1!',
+            email: 'testuser@test.com',
+            userImage: 'imagePath'
+        });
+        expect(response).toEqual({ success: true });
+    });
+});
+
