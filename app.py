@@ -83,9 +83,6 @@ def signup():
         user_image = '/static/images/image.png'
 
     try: 
-        print('*********************')
-        print('username is ', request.json['username'])
-        print('email is ', request.json['email'])
         user = User.signup(
             username=request.json['username'],
             password=request.json['password'], 

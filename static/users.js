@@ -75,10 +75,12 @@ async function signupViaAxios(){
 //deal with signup returned error
 function signupReturnedErrorHandler(response){
     if (response['error'] === 'Email already taken'){
+        console.log('email already taken if');
         let $errorDiv = $('<div class="alert alert-danger error-div">Email already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Username already taken'){
+        console.log('username already taken if');
         let $errorDiv = $('<div class="alert alert-danger error-div">Username already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
@@ -117,11 +119,14 @@ async function loginViaAxios(){
 
 //deal with login returned error
 function loginReturnedErrorHandler(response){
+    console.log('running loginReturnedErrorHandler function');
     if (response['error'] === 'Invalid username'){
+        console.log('invalid username if');
         let $errorDiv = $('<div class="alert alert-danger error-div">Invalid username</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Invalid password'){
+        console.log('invalid password if');
         let $errorDiv = $('<div class="alert alert-danger error-div">Invalid password</div>');
         $modalBody.append($errorDiv);
     }
@@ -141,7 +146,7 @@ $sendreminderButton.on('click', async function(event){
         let $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
         $modalBody.append($errorDiv)
     }
-})
+});
 
 //send email via axios to send username reminder
 async function usernameReminderViaAxios(){
@@ -166,7 +171,7 @@ $sendResetButton.on('click', async function(event){
         let $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
         $modalBody.append($errorDiv);
     }
-})
+});
 
 //send email via axios to send password reset
 async function passwordResetViaAxios(){

@@ -69,9 +69,12 @@ describe('validation of signup form', () => {
         $modalBody.remove();
 
         // Re-assign to correct functions
+        // THIS CODE ISN'T WORKING
         window.signupViaAxios = signupViaAxios;
         window.signupReturnedErrorHandler = signupReturnedErrorHandler;
         window.pageReload = pageReload;
+
+
     });
 
     it('validates that all fields are required', async () => {
@@ -160,7 +163,7 @@ describe('validation of signup form', () => {
         $signupPassword2.val('Password1!');
 
         // Mock signupViaAxios to return an error
-        signupViaAxiosSpy.and.returnValue(Promise.resolve({ error: true }));
+        signupViaAxiosSpy.and.returnValue(Promise.resolve({ error: 'yes' }));
 
         const event = $.Event('click');
         await $signupButton.trigger(event);
@@ -172,7 +175,7 @@ describe('validation of signup form', () => {
     });
 });
 
-//INTERMITTENTLY FAILING
+//FAILING. The setting of signupViaAxiosSpy to return value of error:"yes" in the previous test is carrying over into this test, but the spy should have been unassigned in the afterEach function so I don't understand why this is happening. 
 describe('signupViaAxios function', () => {
     let axiosPostSpy;
 
@@ -214,6 +217,7 @@ describe('signupViaAxios function', () => {
     });
 });
 
+//FAILING. Actual code works fine on the front end. Test is not entering corresponding if statements, despite statement condition registering as true. 
 describe('signupReturnedErrorHandler', () => {
     beforeEach(() => {
         //set up DOM elements
@@ -226,16 +230,20 @@ describe('signupReturnedErrorHandler', () => {
     })
 
     it('returns correct error message for duplicate email error', () => {
+        console.log('running returns correct error message for duplicate email error');
         const response = {error: 'Email already taken'};
-        console.log(response);
+        console.log(response['error'] === 'Email already taken');
         signupReturnedErrorHandler(response);
+        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div').text()).toBe('Email already registered. Please try logging in.');
     });
 
     it('returns correct error message for duplicate username error', () => {
+        console.log('running returns correct error message for duplicate username error');
         const response = {error: 'Username already taken'};
-        console.log(response);
+        console.log(response['error'] === 'Username already taken');
         signupReturnedErrorHandler(response);
+        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div').text()).toBe('Username already registered. Please try logging in.');
     });
 });
@@ -329,7 +337,7 @@ describe('validation of login form', () => {
         $loginPassword.val('diashwsohw');
 
         // Mock loginViaAxios to return an error
-        loginViaAxiosSpy.and.returnValue(Promise.resolve({ error: true }));
+        loginViaAxiosSpy.and.returnValue(Promise.resolve({ error: 'yes' }));
 
         const event = $.Event('click');
         await $loginButton.trigger(event);
@@ -338,16 +346,17 @@ describe('validation of login form', () => {
         expect(loginViaAxiosSpy).toHaveBeenCalled();
         expect(loginReturnedErrorHandlerSpy).toHaveBeenCalled();
         expect(pageReloadSpy).not.toHaveBeenCalled();
+
     });
 });
 
-//INTERMITTENTLY FAILING
+//FAILING. The setting of loginViaAxiosSpy to return value of error:"yes" in the previous test is carrying over into this test, but the spy should have been unassigned in the afterEach function so I don't understand why this is happening. 
 describe('loginViaAxios', () => {
     let axiosPostSpy;
 
     beforeEach(() => {
     //create spies
-    axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({success: true}));
+    axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({data: {success: true}}));
 
     //set up DOM
     $loginUsername = $('<input type="text" id="loginUsername">');
@@ -369,3 +378,209 @@ describe('loginViaAxios', () => {
         expect(response).toEqual({success: true});
     });
 });
+
+//FAILING. I think this is also an issue with the spy not being undone because it runs fine on its own. It's not running the actual function. 
+describe('loginReturnedErrorHandler', () => {
+    beforeEach(() => {
+        //set up DOM
+        $modalBody = $('<div class="modalBody"></div>').appendTo('body');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $modalBody.remove();
+    });
+
+    it('returns correct error message for invalid username', () => {
+        console.log('running returns correct error message for invalid username');
+        const response = {error: 'Invalid username'};
+        loginReturnedErrorHandler(response);
+
+        console.log($modalBody.find('.error-div'));
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Invalid username');
+    });
+
+    it('returns correct error message for invalid password', () => {
+        console.log('running returns correct error message for invalid password');
+        const response = {error: 'Invalid password'};
+        loginReturnedErrorHandler(response);
+
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Invalid password');
+    });
+});
+
+describe('send reminder event handler', () => {
+    beforeEach(() => {
+        //setup spies
+        usernameReminderViaAxiosSpy = jasmine.createSpy('usernameReminderViaAxios');
+        window.usernameReminderViaAxios = usernameReminderViaAxiosSpy;
+
+        //set up DOM
+        $modalBody = $('<div class="modalBody"></div>').appendTo('body');
+        $sendreminderButton = $('<button id="send_reminder_button">Send username Reminder</button>')
+
+        //attach event handler to button
+        $sendreminderButton.on('click', async function(event){
+            console.log('send reminder button clicked')
+            event.preventDefault();
+            $modalBody.find('.error-div').remove();
+            let response = await usernameReminderViaAxios();
+            if (response['error']) {
+                let $errorDiv = $('<div class="alert alert-danger error-div">Email not in database. Please signup.</div>');
+                $modalBody.append($errorDiv);
+            }
+            if (response['success']){
+                let $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
+                $modalBody.append($errorDiv)
+            }
+        });
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $modalBody.remove();
+        $sendreminderButton.remove();
+    });
+
+    it('returns correct message for invalid email', async () => {
+        console.log('running returns correct message for invalid email');
+        usernameReminderViaAxiosSpy.and.returnValue(Promise.resolve({error: 'yes'}));
+
+        const event = $.Event('click')
+        await $sendreminderButton.trigger(event);
+
+        expect(usernameReminderViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Email not in database. Please signup.');
+        console.log($modalBody.find('.error-div'));
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
+    });
+
+    it('returns correct message for valid email', async () => {
+        console.log('running returns correct message for valid email');
+        usernameReminderViaAxiosSpy.and.returnValue(Promise.resolve({success: true}));
+        
+        const event = $.Event('click');
+        await $sendreminderButton.trigger(event);
+
+        expect(usernameReminderViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
+        console.log($modalBody.find('.error-div'));
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-success');
+    })
+});
+
+describe('usernameReminderViaAxios', () => {
+    let axiosPostSpy;
+
+    beforeEach(() => {
+        //create spy
+        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({data: {success: true}}));
+        //set up the DOM
+        $email = $('<input type="text" id="email">');
+    });
+
+    afterEach(() => {
+        //clean up the DOM
+        $email.remove();
+    });
+
+    it('sends the appropriate data via axios and returns the response', async () => {
+        $email.val('camden@test.com');
+        let response = await usernameReminderViaAxios();
+
+        expect(axiosPostSpy).toHaveBeenCalledWith('/forgotusername', {email: 'camden@test.com'});
+        expect(response).toEqual({success: true});
+    });
+});
+
+describe('send reset event handler', () => {
+    beforeEach(() => {
+        //setup spies
+        passwordResetViaAxiosSpy = jasmine.createSpy('passwordResetViaAxios');
+        window.passwordResetViaAxios = passwordResetViaAxiosSpy;
+
+        //set up DOM
+        $modalBody = $('<div class="modalBody"></div>').appendTo('body');
+        $sendResetButton = $('<button id="send_reset_button">Reset password</button>')
+
+        //attach event handler to button
+        $sendResetButton.on('click', async function(event){
+            event.preventDefault();
+            $modalBody.find('.error-div').remove();
+            let response = await passwordResetViaAxios();
+            if (response['error']){
+                let $errorDiv = $('<div class="alert alert-danger error-div">Email not in database. Please signup.</div>');
+                $modalBody.append($errorDiv);
+            }
+            if (response['success']){
+                let $errorDiv = $('<div class="alert alert-success error-div">Email sent</div>');
+                $modalBody.append($errorDiv);
+            }
+        });
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $modalBody.remove();
+        $sendResetButton.remove();
+    });
+
+    it('returns correct message for invalid email', async () => {
+        console.log('running returns correct message for invalid email');
+        passwordResetViaAxiosSpy.and.returnValue(Promise.resolve({error: 'yes'}));
+
+        const event = $.Event('click')
+        await $sendResetButton.trigger(event);
+
+        expect(passwordResetViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Email not in database. Please signup.');
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
+    });
+
+    it('returns correct message for valid email', async () => {
+        console.log('running returns correct message for valid email');
+        passwordResetViaAxiosSpy.and.returnValue(Promise.resolve({success: true}));
+        
+        const event = $.Event('click');
+        await $sendResetButton.trigger(event);
+
+        expect(passwordResetViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
+        console.log($modalBody.find('.error-div'));
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-success');
+    })
+});
+
+describe('passwordResetViaAxios', () => {
+    let axiosPostSpy;
+    beforeEach(() => {
+        //create spy
+        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({data: {success: true}}));
+
+        //set up DOM
+        $email = $('<input type="text" id="email">');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $email.remove();
+    });
+
+    it('sends email via axios and returns response', async () => {
+        $email.val('camden@test.com');
+        const response = await passwordResetViaAxios();
+
+        expect(axiosPostSpy).toHaveBeenCalledWith('/forgotpassword', {email: 'camden@test.com'});
+        expect(response).toEqual({success: true});
+    });
+});
+
+describe('update password event handler', () => {});
+
+describe('updatePasswordViaAxios', () => {});
+
+describe('cancel button event handler', () => {});
+
+describe('close button event handler', () => {});
+
+describe('forgot link event handler', () => {});
