@@ -5,11 +5,12 @@ let $loginUsername = $('#login_username');
 let $loginPassword = $('#login_password');
 let $signupEmail = $('#signup_email');
 let $email = $('#email');
-let $password = $('#password');
+let $updatePassword = $('#update_password');
+let $updatePassword2 = $('#update_password2');
 let $userImage = $('#user_image');
 let $signupButton = $('#signup_button');
 let $loginButton = $('#login_button');
-let $updatePassword = $('.update-password');
+let $updatePasswordButton = $('.update-password');
 let $forgotLink = $('.forgot-link')
 let $sendreminderButton = $('#send_reminder_button');
 let $sendResetButton = $('#send_reset_button');
@@ -184,30 +185,43 @@ async function passwordResetViaAxios(){
 }
 
 //update password event handler
-$updatePassword.on('click', async function(event){
+$updatePasswordButton.on('click', async function(event){
+    console.log('update password button clicked')
     event.preventDefault();
     $modalBody.find('.error-div').remove();
-    let response = await updatePasswordViaAxios();
-    console.log(response);
-    if (response['error']){
-        console.log('entering error if')
-        let $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
+    const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    if ($updatePassword.val() !== $updatePassword2.val()){
+        console.log('passwords not matching if');
+        let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
-    if (response['success']){
-        console.log('entering success if')
-        let $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
+    else if  (!passwordRegex.test($updatePassword.val())){
+        console.log('passwords not secure if')
+        let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
-})
+    else {
+        let response = await updatePasswordViaAxios();
+        if (response['error']){
+            console.log('entering error if')
+            let $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
+            $modalBody.append($errorDiv);
+        }
+        if (response['success']){
+            console.log('entering success if')
+            let $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
+            $modalBody.append($errorDiv);
+        }
+    }
+});
 
 //send updated password via axios
 async function updatePasswordViaAxios(){
-    const password = $password.val()
+    const password = $updatePassword.val()
     const data = {password: password};
     const response = await axios.post('/updatepassword', data);
     return response.data;
-}
+};
 
 //clear forms and errors when cancel button is pressed
 $cancelButton.on('click', function(event){
@@ -218,9 +232,12 @@ $cancelButton.on('click', function(event){
     $signupUsername.val('');
     $loginUsername.val('');
     $loginPassword.val('');
+    $updatePassword.val('');
+    $updatePassword2.val('');
+    $signupEmail.val('');
     $email.val('');
     $userImage.val('');
-})
+});
 
 //clear forms and errors when close button is pressed
 $closeButton.on('click', function(event){
@@ -231,12 +248,15 @@ $closeButton.on('click', function(event){
     $signupUsername.val('');
     $loginUsername.val('');
     $loginPassword.val('');
+    $updatePassword.val('');
+    $updatePassword2.val('');
+    $signupEmail.val('');
     $email.val('');
     $userImage.val('');
-})
+});
 
 
 $forgotLink.on('click', function(event){
     event.preventDefault();
     $modalBody.find('.error-div').remove();
-})
+});

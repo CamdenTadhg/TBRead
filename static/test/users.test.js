@@ -449,9 +449,9 @@ describe('send reminder event handler', () => {
         const event = $.Event('click')
         await $sendreminderButton.trigger(event);
 
+        expect(event.isDefaultPrevented()).toBe(true);
         expect(usernameReminderViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email not in database. Please signup.');
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
     });
 
@@ -462,6 +462,7 @@ describe('send reminder event handler', () => {
         const event = $.Event('click');
         await $sendreminderButton.trigger(event);
 
+        expect(event.isDefaultPrevented()).toBe(true);
         expect(usernameReminderViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
         console.log($modalBody.find('.error-div'));
@@ -532,6 +533,7 @@ describe('send reset event handler', () => {
         const event = $.Event('click')
         await $sendResetButton.trigger(event);
 
+        expect(event.isDefaultPrevented()).toBe(true);
         expect(passwordResetViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email not in database. Please signup.');
         expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
@@ -544,6 +546,7 @@ describe('send reset event handler', () => {
         const event = $.Event('click');
         await $sendResetButton.trigger(event);
 
+        expect(event.isDefaultPrevented()).toBe(true);
         expect(passwordResetViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
         console.log($modalBody.find('.error-div'));
@@ -575,11 +578,181 @@ describe('passwordResetViaAxios', () => {
     });
 });
 
-describe('update password event handler', () => {});
+//NOT YET WORKING
+describe('update password event handler', () => {
+    let updatePasswordViaAxiosSpy;
+    beforeEach(() => {
+        //create spy
+        updatePasswordViaAxiosSpy = jasmine.createSpy('updatePasswordViaAxios');
+        window.updatePasswordViaAxios = updatePasswordViaAxiosSpy;
 
-describe('updatePasswordViaAxios', () => {});
+        //set up DOM
+        $modalBody = $('<div class="modal-body"></div>').appendTo('body');
+        $updatePasswordButton = $('<button class="update-password">Update Password</button>').appendTo('body');
+        $updatePassword = $('<input type="text" id="update_password">').appendTo('body');
+        $updatePassword2 = $('<input type="text" id="update_password2">').appendTo('body');
 
-describe('cancel button event handler', () => {});
+        //attach event handler to button
+        $updatePasswordButton.on('click', async function(event){
+            console.log('update password button clicked')
+            event.preventDefault();
+            $modalBody.find('.error-div').remove();
+            const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+            if ($updatePassword.val() !== $updatePassword2.val()){
+                console.log('passwords not matching if');
+                let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
+                $modalBody.append($errorDiv);
+            }
+            else if  (!passwordRegex.test($updatePassword.val())){
+                console.log('passwords not secure if')
+                let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
+                $modalBody.append($errorDiv);
+            }
+            else {
+                let response = await updatePasswordViaAxios();
+                if (response['error']){
+                    console.log('entering error if')
+                    let $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
+                    $modalBody.append($errorDiv);
+                }
+                if (response['success']){
+                    console.log('entering success if')
+                    let $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
+                    $modalBody.append($errorDiv);
+                }
+            }
+        });
+    });
+
+    afterEach(() => {
+        window.updatePasswordViaAxios = updatePasswordViaAxios;
+
+        //clean up DOM
+        $modalBody.remove();
+        $updatePasswordButton.remove();
+        $updatePassword.remove();
+        $updatePassword2.remove();
+    });
+
+    it('rejects non-matching passwords', async () => {
+        $updatePassword.val('Password1!!');
+        $updatePassword2.val('Password1!');
+
+        const event = $.Event('click');
+        $updatePasswordButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(updatePasswordViaAxiosSpy).not.toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Passwords do not match.');
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
+    });
+
+    it('rejects insecure passwords', () => {
+        $updatePassword.val('password');
+        $updatePassword2.val('password');
+
+        const event = $.Event('click');
+        $updatePasswordButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(updatePasswordViaAxiosSpy).not.toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character');
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
+    });
+
+    it('returns correct response if password is successfully updated', async () => {
+        $updatePassword.val('Password1!');
+        $updatePassword2.val('Password1!');
+        updatePasswordViaAxiosSpy.and.returnValue(Promise.resolve({success: true}));
+
+        const event = $.Event('click');
+        await $updatePasswordButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(updatePasswordViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div')[0].innerText).toEqual('Password updated');
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-success');
+    });
+
+    it('returns correct response if error is returned', async () => {
+        $updatePassword.val('Password1!');
+        $updatePassword2.val('Password1!');
+        updatePasswordViaAxiosSpy.and.returnValue(Promise.resolve({error: true}));
+
+        const event = $.Event('click');
+        await $updatePasswordButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(updatePasswordViaAxiosSpy).toHaveBeenCalled();
+        expect($modalBody.find('.error-div').text()).toEqual('Something went wrong. Please try again');
+        expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
+    });
+});
+
+describe('updatePasswordViaAxios', () => {
+    let axiosPostSpy;
+    beforeEach(() => {
+        //create spy
+        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({data: {success: true}}));
+        //set up DOM
+        $updatePassword = $('<input type="text" id="update_password">').appendTo('body');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $updatePassword.remove();
+    })
+
+    it('sends data via axios and returns correct result', async () => {
+        $updatePassword.val('Password1!');
+        const response = await updatePasswordViaAxios();
+
+        expect(axiosPostSpy).toHaveBeenCalledWith('/updatepassword', {password: 'Password1!'});
+        expect(response).toEqual({success: true});
+    })
+});
+
+describe('cancel button event handler', () => {
+    beforeEach(() => {
+        //set up DOM
+        $cancelButton = $('<button class="cancel-button">Cancel</button>').appendTo('body');
+        $modalBody = $('<div class="modal-body><div class="alert alert-danger error-div">Something went wrong. Please try again</div></div>').appendTo('body');
+        $signupPassword = $('<input type="text" id="signup_password" value="Password1!">').appendTo('body');
+        $signupPassword2 = $('<input type="text" id="password2" value="Password1!">').appendTo('body');
+        $signupUsername = $('<input type="text" id="signup_username" value="testuser">').appendTo('body');
+        $loginUsername = $('<input type="text" id="login_username" value="testuser">').appendTo('body');
+        $loginPassword = $('<input type="text" id="login_password" value="Password1!">').appendTo('body');
+        $email = $('<input type="email" id="email" value="test@test.com">').appendTo('body');
+        $userImage = $('<input type="text" id="user_image" value="image link">').appendTo('body');
+        $updatePassword = $('<input type="text" id="update_password" value="Password1!">').appendTo('body');
+        $updatePassword2 = $('<input type="text" id="update_password2 value="Password1!">').appendTo('body');
+        $signupEmail = $('<input type="text" id="signup_email" value="test@test.com">')
+    });
+
+    afterEach(() => {
+        //Clean up DOM
+        $cancelButton.remove();
+        $modalBody.remove();
+        $signupPassword.remove();
+        $signupPassword2.remove();
+        $signupUsername.remove();
+        $loginUsername.remove();
+        $loginPassword.remove();
+        $email.remove();
+        $userImage.remove();
+        $updatePassword.remove();
+        $updatePassword2.remove();
+        $signupEmail.remove();
+    });
+
+    it('clears all fields and errors when cancel button is pressed', () => {        
+        const event = $.Event('click');
+        $cancelButton.trigger(event);
+
+        expect($modalBody.find('.error-div').length).toBe(0);
+        expect($signupPassword.val()).toEqual('');
+    })
+});
 
 describe('close button event handler', () => {});
 

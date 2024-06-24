@@ -49,8 +49,8 @@ class EmailForm(FlaskForm):
     email = EmailField('Please enter your email', validators=[InputRequired(message="Please enter your email."), Email(message="Your email appears invalid. Please try again.")])
 
 class UpdatePasswordForm(FlaskForm):
-    password = PasswordField("Password", validators=[InputRequired(message='Please enter a password'), password_requirements, matching_passwords])
-    password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
+    update_password = PasswordField("Password", validators=[InputRequired(message='Please enter a password'), password_requirements, matching_passwords])
+    update_password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
 
 class BookSearchForm(FlaskForm):
     field = SelectField('Search Field', choices=[('title', 'Title'), ('author', 'Author'), ('isbn', 'ISBN')])
