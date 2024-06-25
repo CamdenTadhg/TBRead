@@ -1,11 +1,11 @@
 TO DO LIST: 
-## 20 Styling
+## 21 Styling
     ## make it so books without covers will not display on home page
     ## fix sidebar    
     ## fix tabs to be visible
     ## fix it so that on login, you get the appropriate flash message
     ## go over site with Augustin for design considerations (maybe try to keep it to a page of changes, I want to be done with this eventually)
-## 19 Documentation
+## 20 Documentation
     ## create ReadMe
 
 
@@ -15,8 +15,9 @@ TO DO LIST:
     ## figure out how to run tests on render
         ## python tests
         ## javascript tests
-## 18 Refactor based on feedback from mentor and hatchways and Augustin
+## 19 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
+## 18 Transfer database to new service
 ## 17 Fix delete and transfer book function
     ## move it to javascript so that the page doesn't have to reload
         ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points

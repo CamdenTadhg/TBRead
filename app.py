@@ -1100,5 +1100,5 @@ def homepage():
         form = UserAddForm()
         form2 = LoginForm()
         form3 = EmailForm()
-        display_books = db.session.query(Book).where(Book.thumbnail != None).order_by(Book.added.desc()).limit(12).all()
+        display_books = db.session.query(Book).where(Book.thumbnail != None).where(Book.thumbnail != '').order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
