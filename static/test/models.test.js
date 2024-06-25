@@ -2,17 +2,12 @@ describe('UserBook', () => {
     it('should correctly assign properties from the constructor', () => {
         const bookData = {
             id: 1,
-            user_id: 1,
-            book_id: 3,
             title: 'A Night of Wings and Starlight',
             authors: ['Alexis L. Menard'],
             publisher: 'CITY OWL Press', 
             pub_date: 2022,
             pages: 258,
-            age_category: "Adult", 
-            thumbnail: 'http://books.google.com/books/content?id=9nPrzgEACAAJ',
-            notes: '',
-            script: ''
+            cover: 'http://books.google.com/books/content?id=9nPrzgEACAAJ',
         }
 
         const userBook = new UserBook(bookData);

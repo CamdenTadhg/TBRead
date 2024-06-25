@@ -2,8 +2,6 @@ class UserBook{
 
     constructor({id, user_id, book_id, title, authors, publisher, pub_date, pages, cover}){
         this.id = id
-        this.user_id = user_id
-        this.book_id = book_id
         this.title = title
         this.authors = authors
         this.publisher = publisher
