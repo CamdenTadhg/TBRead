@@ -1,15 +1,5 @@
 TO DO LIST: 
-## 20 Write tests for python & javascript
-    ## javascript tests
-        ## lists.js
-            ## write tests (3)
-            ## run tests locally
-        ## challenges.js
-            ## write tests (3)
-            ## run tests locally
-
-
-## 19 Styling
+## 20 Styling
     ## favicon.ico
     ## logo
     ## make it so books without covers will not display on home page
@@ -17,7 +7,7 @@ TO DO LIST:
     ## fix tabs to be visible
     ## fix sidebar
     ## go over site with Augustin for design considerations
-## 18 Documentation
+## 19 Documentation
     ## create ReadMe
 
 
@@ -27,10 +17,11 @@ TO DO LIST:
     ## figure out how to run tests on render
         ## python tests
         ## javascrip tests
-## 17 Fix delete and transfer book function
+## 18 Fix delete and transfer book function
     ## move it to javascript so that the page doesn't have to reload
         ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points
     ## but have javascript re-request the table so that it gets updated
+## 17 fix buttons on challenge list, to show leave or join depending on status
 ## 16 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule

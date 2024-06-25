@@ -58,7 +58,7 @@ describe('userBooksOnStart', () => {
     let getUserBooksSpy, displayUserBooksSpy
     beforeEach(() => {
         //create spies
-        getUserBooksSpy = spyOn(UserBookList, 'getUserBooks');
+        getUserBooksSpy = spyOn(UserBookList, 'getUserBooks').and.returnValue(Promise.resolve([{title: 'Harry Potter'}, {title: 'Harry Potter 2'}]));
         displayUserBooksSpy = jasmine.createSpy('displayUserBooks');
         window.displayUserBooks = displayUserBooksSpy;
     });
@@ -72,7 +72,7 @@ describe('userBooksOnStart', () => {
         await userBooksOnStart();
 
         expect(getUserBooksSpy).toHaveBeenCalledWith(1, 'dnf');
-        expect(displayUserBooksSpy).toHaveBeenCalled();
+        expect(displayUserBooksSpy).toHaveBeenCalledWith([{title: 'Harry Potter'}, {title: 'Harry Potter 2'}]);
     });
 });
 

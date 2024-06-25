@@ -128,12 +128,14 @@ describe('ChallengeList', () => {
         const mockChallengeData = [
             {
                 id: 1,
+                creator_id: 1,
                 name: 'Marginalized Authors', 
                 num_books: 100,
                 description: 'test description'
             },
             {
                 id: 2,
+                creator_id: 2,
                 name: '50 Books', 
                 num_books: 50,
                 description: 'test description 2'
@@ -151,12 +153,14 @@ describe('ChallengeList', () => {
         const mockUserChallengeData = [
             {
                 id: 3,
+                creator_id: 1,
                 name: 'Award Winners', 
                 num_books: 12,
                 description: 'test description 3'
             },
             {
                 id: 4,
+                creator_id: 2,
                 name: '100 Books', 
                 num_books: 100,
                 description: 'test description 4'

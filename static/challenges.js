@@ -1,16 +1,14 @@
-const $challengesList = $('.challenge-list');
-const $table = $('.challenges-table');
+let $challengesList = $('.challenge-list');
+let $table = $('.challenges-table');
 
 
 //on page load, display all challenges
 $(document).ready(function(){
-    console.log('event handler started')
     challengesOnStart();
 });
 
 //initial function to show challenge list on site load
 async function challengesOnStart(){
-    console.log('begin challengesOnStart')
     currentURL = window.location.href
     if (currentURL.includes('user')){
         mainChallengesList = await ChallengeList.getYourChallenges();
@@ -18,18 +16,14 @@ async function challengesOnStart(){
     else {
         mainChallengesList = await ChallengeList.getChallenges();
     }
-    console.log(mainChallengesList);
     displayChallenges(mainChallengesList);
 }
 
 //display an instance of ChallengeList on the page
 function displayChallenges(array){
-    console.log('begin displayChallenges')
-    console.log(array);
     $challengesList.empty();
     currentURL = window.location.href
     for (let item of array){
-        console.log(item);
         let $challengeTr = $('<tr></tr>');
         if (!currentURL.includes('user') && user_id == item.creator_id){
             let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
@@ -52,7 +46,7 @@ function displayChallenges(array){
             $challengeTr.append($joinButton);
         }
         if (currentURL.includes('user')){
-            if (item.start_date === null){
+            if (item.start_date === undefined){
                 var $start_date = $('<td></td>')
             }
             else {
