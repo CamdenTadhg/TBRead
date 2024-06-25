@@ -1,6 +1,6 @@
 class UserBook{
 
-    constructor({id, user_id, book_id, title, authors, publisher, pub_date, description, isbn, page_count, age_category, thumbnail, notes, script}){
+    constructor({id, user_id, book_id, title, authors, publisher, pub_date, page_count, thumbnail}){
         this.id = id
         this.user_id = user_id
         this.book_id = book_id
