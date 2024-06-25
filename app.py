@@ -697,6 +697,8 @@ def assign_book(userbook_id):
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
     data = request.json
     challenge_id = data.get('challenge_id')
+    print('*****************')
+    print('challenge_id = ', challenge_id)
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     if userbook:
         userbook.challenges.append(challenge)

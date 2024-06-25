@@ -91,7 +91,7 @@ describe('displaySearchResults', () => {
     it('correctly displays search results', () => {
         const response = [
             {
-                id: 1234,
+                id: "1234",
                 volumeInfo: {
                     imageLinks: {smallThumbnail: "http://www.google.com"},
                     title: 'A Night of Wings and Starlight',
@@ -100,7 +100,7 @@ describe('displaySearchResults', () => {
                 }
             },
             {
-                id: 5678,
+                id: "5678",
                 volumeInfo: {
                     title: 'Black AF History', 
                     subtitle: 'The Un-Whitewashed Story of America', 
@@ -110,9 +110,9 @@ describe('displaySearchResults', () => {
                 }
             },
             {
-                id: 91011, 
+                id: "91011", 
                 volumeInfo: {
-                    imageLinks: {smallThumbnail: "http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ&printsec=frontcover&img=1&zoom=5&imgtk=AFLRE71oovDeOSaZbYqyDqpoIoIHe_7JM1DiAdYmhir0oA3nKz9fFtxY66HpmQ8MX63s8RRkXuM-pSptg8C5ufqVd3_Y0KvEZJL02OCUWd8cvR4LeAMj2iKqPbgOCwmil_uMWO91Vrfr&source=gbs_api" },
+                    imageLinks: {smallThumbnail: "http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ"},
                     title: 'Stolen', 
                     authors: ['Ann-Helen Laestadius'],
                     publisher: 'Bloomsbury'
@@ -120,14 +120,79 @@ describe('displaySearchResults', () => {
             }
         ];
 
-        const html = displaySearchResults(response);
-        console.log(displaySearchResults('html is ', html));
-        console.log('testing = ', response[0].volumeInfo.imageLinks);
-
-        expect(html).toEqual('<div class="row border"><div class="col-4"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div></div><div class="row border"><div class="col-4"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div><div class="row border"><div class="col-4"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ&printsec=frontcover&img=1&zoom=5&imgtk=AFLRE71oovDeOSaZbYqyDqpoIoIHe_7JM1DiAdYmhir0oA3nKz9fFtxY66HpmQ8MX63s8RRkXuM-pSptg8C5ufqVd3_Y0KvEZJL02OCUWd8cvR4LeAMj2iKqPbgOCwmil_uMWO91Vrfr&source=gbs_api"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>');
+        displaySearchResults(response);
+        console.log($apiSearchResults);
+        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div>`);
+        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div>`);
+        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>`);
     });
 });
 
-describe('assign to challenge event handler', () => {});
+describe('assign to challenge event handler', () => {
+    let axiosPostSpy;
+    beforeEach(() => {
+        //create spy
+        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({success: true}));
+
+        //set up DOM
+        $assignToChallengeForm = $('<form class="assign-to-challenge-form"><span class="error-span">Error Message Here</span></form>');
+        $challengesField = $('<select name="challenges" id="challenges"><option value=1></option></select>');
+        $assignChallengeButton = $('<button class="assign-challenge-button">Assign to Challenge</button>');
+
+        //attach event handler
+        $assignChallengeButton.on('click', async function(event){
+            event.preventDefault();
+            $assignToChallengeForm.find('.error-span').remove();
+            //get the challenge being assigned to
+            const challenge_id = $challengesField.val();
+            //get the userbook_id
+            currentURL = "http://127.0.0.1:5000/users_books/64";
+            const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
+            //send the data
+            const data = {'challenge_id': challenge_id};
+            const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
+            if (response.data['success']){
+                $errorSpan = $('<span class="text-sm text-success error-span">Book assigned to challenge</span>');
+                $assignToChallengeForm.append($errorSpan);
+            }
+            if (response.data['error']){
+                $errorSpan = $('<span class="text-sm text-danger error-span">This book is already assigned to this challenge.</span>');
+                $assignToChallengeForm.append($errorSpan);
+            }
+        });
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $assignToChallengeForm.remove();
+        $challengesField.remove();
+        $assignChallengeButton.remove();
+    });
+
+    it('collects the correct data and sends it via axios', async () => {
+        $challengesField.val(1);
+
+        const event = $.Event('click');
+        await $assignChallengeButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/assign', {'challenge_id': 1});
+        expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
+        expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book assigned to challenge')
+    });
+
+    it('returns the correct message if error is returned', async () => {
+        $challengesField.val(1);
+        axiosPostSpy.and.returnValue(Promise.resolve({error: true}));
+
+        const event = $.Event('click');
+        await $assignChallengeButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(axiosPostSpy).toHaveBeenCalled();
+        expect($assignToChallengeForm.find('error-span').length).toEqual(1);
+        expect($assignToChallengeForm.find('.error-span').text()).toEqual('This book is already assigned to this challenge.')
+    });
+});
 
 describe('remove from book challenge event handler', () => {});

@@ -36,7 +36,9 @@ async function searchGoogleBooks(field, term){
 
 //display book search results
 function displaySearchResults(response){
-    for (let i = 0; i <= 9; i++){
+    const index = Math.min(response.length - 1, 9);
+    console.log(index);
+    for (let i = 0; i <= index; i++){
         let $bookDiv = $(`<div class="row border"></div>`);
         if (response[i].volumeInfo.imageLinks){
             var $cover = $(`<div class="col-4"><img src="${response[i].volumeInfo.imageLinks.smallThumbnail}"></div>`);
@@ -74,6 +76,7 @@ $assignChallengeButton.on('click', async function(event){
     $assignToChallengeForm.find('.error-span').remove();
     //get the challenge being assigned to
     const challenge_id = $challengesField.val();
+    console.log('challenge_id = ', challenge_id);
     //get the userbook_id
     currentURL = window.location.href;
     const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
@@ -88,7 +91,7 @@ $assignChallengeButton.on('click', async function(event){
         $errorSpan = $('<span class="text-sm text-danger error-span">This book is already assigned to this challenge.</span>');
         $assignToChallengeForm.append($errorSpan);
     }
-})
+});
 
 //remove a book as part of a challenge
 $removeChallengeButton.on('click', async function(event){
