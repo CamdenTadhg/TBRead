@@ -8,13 +8,8 @@ class UserBook{
         this.authors = authors
         this.publisher = publisher
         this.pub_date = pub_date
-        this.description = description
-        this.isbn = isbn
-        this.page_count = page_count
-        this.age_category = age_category
-        this.thumbnail = thumbnail
-        this.notes = notes
-        this.script = script
+        this.pages = page_count
+        this.cover = thumbnail
     }
 }
 

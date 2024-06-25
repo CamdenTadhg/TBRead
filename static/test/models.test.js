@@ -37,7 +37,36 @@ describe('UserBook', () => {
 });
 
 describe('UserBookList', () => {
-    it('should correctly assign properties from the constructor', () => {});
+    it('should correctly assign properties from the constructor', () => {
+        const bookListData = [
+            {
+                id: 1,
+                user_id: 1,
+                book_id: 3,
+                title: 'A Night of Wings and Starlight',
+                authors: ['Alexis L. Menard'],
+                publisher: 'CITY OWL Press', 
+                pub_date: 2022,
+                description: 'Breaking the curse will risk her heart',
+                isbn: 9781648981708,
+                page_count: 258,
+                age_category: "Adult", 
+                thumbnail: 'http://books.google.com/books/content?id=9nPrzgEACAAJ',
+                notes: '',
+                script: ''
+            },
+            {
+                id: 2,
+                user_id: 1,
+                book_id: 5,
+                title: 'Archangels of Funk', 
+                authors: ['Andrea Hairston'],
+                publisher: 'Tor Publishing Group', 
+                pub_date: '2024',
+                thumbnail: 'http://books.google.com/books/publisher/content?id=YszREAAAQBAJ'
+            }
+        ]
+    });
     it('should pull full list of books and return them as a UserBookList', () => {});
 });
 
