@@ -110,4 +110,4 @@ $removeChallengeButton.on('click', async function(event){
         $errorSpan = $('<span class="text-sm text-danger error-span">This book is not assigned to this challenge</span>')
         $assignToChallengeForm.append($errorSpan);
     }
-})
+});

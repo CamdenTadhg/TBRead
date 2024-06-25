@@ -174,30 +174,93 @@ describe('assign to challenge event handler', () => {
     it('collects the correct data and sends it via axios', async () => {
         $challengesField.val(1);
         console.log(typeof $challengesField.val());
-        axiosPostSpy.and.returnValue(Promise.resolve({success: true}));
+        axiosPostSpy.and.returnValue(Promise.resolve({data: {success: true}}));
 
         const event = $.Event('click');
         await $assignChallengeButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
-        expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/assign', {'challenge_id': 1});
+        expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/assign', {'challenge_id': '1'});
         console.log($assignToChallengeForm);
         expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
-        expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book assigned to challenge')
+        expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book assigned to challenge');
     });
 
     it('returns the correct message if error is returned', async () => {
         $challengesField.val(1);
-        axiosPostSpy.and.returnValue(Promise.resolve({error: true}));
+        axiosPostSpy.and.returnValue(Promise.resolve({data: {error: true}}));
 
         const event = $.Event('click');
         await $assignChallengeButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
         expect(axiosPostSpy).toHaveBeenCalled();
-        expect($assignToChallengeForm.find('error-span').length).toEqual(1);
+        expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
         expect($assignToChallengeForm.find('.error-span').text()).toEqual('This book is already assigned to this challenge.')
     });
 });
 
-describe('remove from book challenge event handler', () => {});
+describe('remove from book challenge event handler', () => {
+    let axiosPostSpy;
+    beforeEach(() => {
+        //create spy
+        axiosPostSpy = spyOn(axios, 'post');
+
+        //set up DOM
+        $assignToChallengeForm = $('<form class="assign-to-challenge-form"><span class="error-span">Error Message Here</span></form>');
+        $challengesField = $('<select name="challenges" id="challenges"><option value=1>50 Books</option><option value=2>Award Winners</option><option value=3>Marginalized Authors</option></select>');
+        $removeChallengeButton = $('<button class="remove-challenge-button">Remove from Challenge</button>');
+
+        //attach event handler
+        $removeChallengeButton.on('click', async function(event){
+            event.preventDefault();
+            $assignToChallengeForm.find('.error-span').remove();
+            const challenge_id = $challengesField.val();
+            currentURL = "http://127.0.0.1:5000/users_books/64";
+            const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
+            const data = {'challenge_id': challenge_id};
+            const response = await axios.post(`/api/users_books/${userbook_id}/remove`, data);
+            if (response.data['success']){
+                $errorSpan = $('<span class="text-sm text-success error-span">Book removed from challenge</span>');
+                $assignToChallengeForm.append($errorSpan);
+            }
+            if (response.data['error']){
+                $errorSpan = $('<span class="text-sm text-danger error-span">This book is not assigned to this challenge</span>')
+                $assignToChallengeForm.append($errorSpan);
+            }
+        });
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $assignToChallengeForm.remove();
+        $challengesField.remove();
+        $removeChallengeButton.remove();
+    });
+
+    it('collects the correct data and sends it via axios', async () => {
+        $challengesField.val(1);
+        axiosPostSpy.and.returnValue(Promise.resolve({data: {success: true}}));
+
+        const event = $.Event('click');
+        await $removeChallengeButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/remove', {'challenge_id': '1'});
+        expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
+        expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book removed from challenge');
+    });
+
+    it('returns the correct message if error is returned', async () => {
+        $challengesField.val(1);
+        axiosPostSpy.and.returnValue(Promise.resolve({data: {error: true}}));
+
+        const event = $.Event('click');
+        await $removeChallengeButton.trigger(event);
+
+        expect(event.isDefaultPrevented()).toBe(true);
+        expect(axiosPostSpy).toHaveBeenCalled();
+        expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
+        expect($assignToChallengeForm.find('.error-span').text()).toEqual('This book is not assigned to this challenge')
+    });
+});
