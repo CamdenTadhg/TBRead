@@ -21,7 +21,6 @@ class UserBook{
 class UserBookList {
 
     constructor(userBooks){
-        this.user_id = user_id
         this.userBooks = userBooks
     }
 
