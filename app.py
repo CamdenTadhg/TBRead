@@ -23,8 +23,8 @@ CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24fir
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
-app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
+app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
+# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -1100,5 +1100,5 @@ def homepage():
         form = UserAddForm()
         form2 = LoginForm()
         form3 = EmailForm()
-        display_books = db.session.query(Book).order_by(Book.added.desc()).limit(12).all()
+        display_books = db.session.query(Book).where(Book.thumbnail != None).order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
