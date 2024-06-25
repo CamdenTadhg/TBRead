@@ -98,6 +98,7 @@ $loginButton.on('click', async function(event){
     }
     else {
         let response = await loginViaAxios();
+        console.log(response);
         if(response['error']){
             loginReturnedErrorHandler(response);
         }

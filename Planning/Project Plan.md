@@ -1,6 +1,5 @@
 TO DO LIST: 
 ## 21 Styling
-    ## make it so books without covers will not display on home page
     ## fix sidebar    
     ## fix tabs to be visible
     ## fix it so that on login, you get the appropriate flash message

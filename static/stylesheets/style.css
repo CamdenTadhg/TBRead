@@ -46,3 +46,17 @@ textarea{
 .logo {
     width: 100px;
 }
+
+.main-content {
+    display:grid;
+    grid-template-columns: [sidebar] 10% [main-content] 90%;
+}
+
+.sidebar {
+    grid-column-start: sidebar;
+    grid-column-end: main-content;
+}
+
+.container {
+    grid-column-start: main-content;
+}

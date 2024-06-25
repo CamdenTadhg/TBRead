@@ -36,20 +36,22 @@
             </ul>
         </div>
     </nav>
-    {% if g.user %}
-    <ul class="nav flex-column">
-        <li class="nav-item"><a href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a></li>
-        <li class="nav-item"><a href='/users/{{g.user.user_id}}/calendar'>Calendar</a></li>
-        <li class="nav-item"><a href='/challenges'>Challenges</a></li>
-        <li class="nav-item">Support</li>
-    </ul>
-    {% endif %}
-    <div class="container">
-        {% for category, message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{category}}">{{message}}</div>
-        {% endfor %}
-        {% block content %}
-        {% endblock %}
+    <div class="main-content">
+        {% if g.user %}
+        <ul class="sidebar">
+            <li class="nav-item"><a href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a></li>
+            <li class="nav-item"><a href='/users/{{g.user.user_id}}/calendar'>Calendar</a></li>
+            <li class="nav-item"><a href='/challenges'>Challenges</a></li>
+            <li class="nav-item">Support</li>
+        </ul>
+        {% endif %}
+        <div class="container">
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{category}}">{{message}}</div>
+            {% endfor %}
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
     <script
     src="https://code.jquery.com/jquery-3.7.1.js"
