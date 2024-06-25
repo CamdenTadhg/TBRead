@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/jasmine-core@4.1.0/lib/jasmine-core/jasmine.css" /> -->
+    <link rel="stylesheet" href="https://unpkg.com/jasmine-core@4.1.0/lib/jasmine-core/jasmine.css" />
     <link rel="stylesheet" href="/static/stylesheets/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/stylesheets/style.css">
@@ -62,12 +62,24 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="/static/users.js"></script>
-    <!-- <script src="/static/test/users.test.js"></script> -->
+    <script src="/static/test/users.test.js"></script>
     <script src="/static/books.js"></script>
-    <!-- <script src="/static/test/books.test.js"></script> -->
+    <script src="/static/test/books.test.js"></script>
     <script src="/static/models.js"></script>
-    <!-- <script src="/static/test/models.test.js"></script> -->
+    <script src="/static/test/models.test.js"></script>
     <script src="/static/moment-with-locales.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery.fancytable/dist/fancyTable.min.js"></script> -->
+    <!-- <script>
+        let g_user_id = "{{g.user.user_id}}";
+        let type = 'tbr';
+    </script>
+    <script src="/static/lists.js"></script>
+    <script src="/static/test/lists.test.js"></script>
+    <script>
+        const user_id = '{{g.user.user_id}}'
+    </script>
+    <script src="/static/challenges.js"></script>
+    <script src="/static/test/challenges.test.js"></script> -->
     {% block scripts %}
     {% endblock %}
 </body>

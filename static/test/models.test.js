@@ -3,7 +3,7 @@ describe('UserBook', () => {
         const bookData = {
             id: 1,
             title: 'A Night of Wings and Starlight',
-            authors: ['Alexis L. Menard'],
+            authors: 'Alexis L. Menard',
             publisher: 'CITY OWL Press', 
             pub_date: 2022,
             pages: 258,
@@ -14,7 +14,7 @@ describe('UserBook', () => {
 
         expect(userBook.id).toEqual(1);
         expect(userBook.title).toEqual('A Night of Wings and Starlight');
-        expect(userBook.authors).toEqual(['Alexis L. Menard']);
+        expect(userBook.authors).toEqual('Alexis L. Menard');
         expect(userBook.publisher).toEqual('CITY OWL Press');
         expect(userBook.pub_date).toEqual(2022);
         expect(userBook.pages).toEqual(258);
@@ -28,7 +28,7 @@ describe('UserBookList', () => {
             {
                 id: 1,
                 title: 'A Night of Wings and Starlight',
-                authors: ['Alexis L. Menard'],
+                authors: 'Alexis L. Menard',
                 publisher: 'CITY OWL Press', 
                 pub_date: 2022,
                 pages: 258,
@@ -37,7 +37,7 @@ describe('UserBookList', () => {
             {
                 id: 2,
                 title: 'Archangels of Funk', 
-                authors: ['Andrea Hairston'], 
+                authors: 'Andrea Hairston', 
                 publisher: 'Tor Publishing Group',
                 pub_date: 2024,
                 pages: 524,
@@ -56,7 +56,7 @@ describe('UserBookList', () => {
             {
                 id: 5,
                 title: 'Chlorine: A Novel',
-                authors: ['Jade Song'],
+                authors: 'Jade Song',
                 publisher: 'HarperCollins',
                 pub_date: '2023',
                 pages: 256,
@@ -65,7 +65,7 @@ describe('UserBookList', () => {
             {
                 id: 24,
                 title: 'Chain Gang All Stars: A Novel', 
-                authors: ['Nana Kwame Adjei-Brenyah'],
+                authors: 'Nana Kwame Adjei-Brenyah',
                 publisher: 'Knopf Doubleday Publishing Group', 
                 pub_date: '2024', 
                 pages: 432,

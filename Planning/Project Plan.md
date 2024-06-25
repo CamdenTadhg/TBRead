@@ -1,18 +1,13 @@
 TO DO LIST: 
 ## 20 Write tests for python & javascript
     ## javascript tests
-        ## books.js 
-            ## write tests (5)
+        ## lists.js
+            ## write tests (3)
             ## run tests locally
         ## challenges.js
-            ## write tests (4)
+            ## write tests (3)
             ## run tests locally
-        ## lists.js
-            ## write tests (4)
-            ## run tests locally
-        ## models.js
-            ## write tests(3)
-            ## run tests locally
+
 
 ## 19 Styling
     ## favicon.ico

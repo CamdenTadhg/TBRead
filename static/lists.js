@@ -3,31 +3,24 @@ $table = $('.book-list-table');
 
 //on page load, display contents of list
 $(document).ready(function(){
-    console.log('event handler started')
     userBooksOnStart();
 });
 
 //initial function to show book list on site load
 async function userBooksOnStart(){
-    console.log('begin userBooksOnStart')
-    console.log(type);
     mainUserBooksList = await UserBookList.getUserBooks(g_user_id, type);
-    console.log(mainUserBooksList);
     displayUserBooks(mainUserBooksList);
 }
 
 //display an instance of UserBookList on the page
 function displayUserBooks(array){
-    console.log('begin displayUserBooks')
-    console.log(array);
     $userBookList.empty();
     currentURL = window.location.href;
-    console.log(currentURL);
     for (let book of array){
         let $bookTr = $('<tr></tr>');
         let $cover = $(`<td><img class="list-cover" src=${book.cover}></td>`);
         let $title = $(`<td data-sortvalue="${book.title}"><a href="/users_books/${book.id}">${book.title}</a></td>`);
-        let $author = $(`<td>${book.author}</td>`);
+        let $author = $(`<td>${book.authors}</td>`);
         let $publisher = $(`<td>${book.publisher}</td>`);
         let $pub_date = $(`<td>${book.pub_date}</td>`)
         let $pages = $(`<td>${book.pages}</td>`)
@@ -67,7 +60,7 @@ function displayUserBooks(array){
         globalSearch: true,
         globalSearchExcludeColumns: [0],
         exactMatch: "auto"
-    })
+    });
 }
 
 
