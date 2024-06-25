@@ -88,7 +88,44 @@ describe('displaySearchResults', () => {
         $apiSearchResults.remove();
     });
 
-    it('correctly displays search results', () => {})
+    it('correctly displays search results', () => {
+        const response = [
+            {
+                id: 1234,
+                volumeInfo: {
+                    imageLinks: {smallThumbnail: "http://www.google.com"},
+                    title: 'A Night of Wings and Starlight',
+                    authors: ['Alexis L. Menard'],
+                    publishedDate: '2022'
+                }
+            },
+            {
+                id: 5678,
+                volumeInfo: {
+                    title: 'Black AF History', 
+                    subtitle: 'The Un-Whitewashed Story of America', 
+                    authors: ['Michael Harriot', 'China Mieville'],
+                    publisher: 'HarperCollins', 
+                    publishedDate: '2025'
+                }
+            },
+            {
+                id: 91011, 
+                volumeInfo: {
+                    imageLinks: {smallThumbnail: "http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ&printsec=frontcover&img=1&zoom=5&imgtk=AFLRE71oovDeOSaZbYqyDqpoIoIHe_7JM1DiAdYmhir0oA3nKz9fFtxY66HpmQ8MX63s8RRkXuM-pSptg8C5ufqVd3_Y0KvEZJL02OCUWd8cvR4LeAMj2iKqPbgOCwmil_uMWO91Vrfr&source=gbs_api" },
+                    title: 'Stolen', 
+                    authors: ['Ann-Helen Laestadius'],
+                    publisher: 'Bloomsbury'
+                }
+            }
+        ];
+
+        const html = displaySearchResults(response);
+        console.log(displaySearchResults('html is ', html));
+        console.log('testing = ', response[0].volumeInfo.imageLinks);
+
+        expect(html).toEqual('<div class="row border"><div class="col-4"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div></div><div class="row border"><div class="col-4"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div><div class="row border"><div class="col-4"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ&printsec=frontcover&img=1&zoom=5&imgtk=AFLRE71oovDeOSaZbYqyDqpoIoIHe_7JM1DiAdYmhir0oA3nKz9fFtxY66HpmQ8MX63s8RRkXuM-pSptg8C5ufqVd3_Y0KvEZJL02OCUWd8cvR4LeAMj2iKqPbgOCwmil_uMWO91Vrfr&source=gbs_api"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>');
+    });
 });
 
 describe('assign to challenge event handler', () => {});

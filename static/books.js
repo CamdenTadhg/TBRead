@@ -30,6 +30,7 @@ async function searchGoogleBooks(field, term){
         var url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
     }
     let response = await axios.get(url)
+    console.log(response.data.items);
     return response.data.items;
 }
 
@@ -51,8 +52,12 @@ function displaySearchResults(response){
         if (response[i].volumeInfo.authors){
             var $displayAuthor = $(`<div>${response[i].volumeInfo.authors[0]}</div>`);
         }
-        if (response[i].volumeInfo.publisher){
+        if (response[i].volumeInfo.publisher && response[i].volumeInfo.publishedDate){
             var $publication = $(`<div>${response[i].volumeInfo.publisher}, ${response[i].volumeInfo.publishedDate}</div>`);
+        } else if (response[i].volumeInfo.publisher){
+            var $publication = $(`<div>${response[i].volumeInfo.publisher}</div>`);
+        } else if (response[i].volumeInfo.publishedDate) {
+            var $publication = $(`<div>${response[i].volumeInfo.publishedDate}</div>`);
         }
         $textDiv.append($displayTitle);
         $textDiv.append($displayAuthor);
