@@ -6,7 +6,7 @@ TO DO LIST:
     ## fix it so that on login, you get the appropriate flash message
     ## fix tabs to be visible
     ## fix sidebar
-    ## go over site with Augustin for design considerations
+    ## go over site with Augustin for design considerations (maybe try to keep it to a page of changes, I want to be done with this eventually)
 ## 19 Documentation
     ## create ReadMe
 
