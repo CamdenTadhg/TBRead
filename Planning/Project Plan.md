@@ -1,11 +1,10 @@
 TO DO LIST: 
 ## 20 Styling
-    ## favicon.ico
-    ## logo
     ## make it so books without covers will not display on home page
-    ## fix it so that on login, you get the appropriate flash message
+    ## logo
+    ## fix sidebar    
     ## fix tabs to be visible
-    ## fix sidebar
+    ## fix it so that on login, you get the appropriate flash message
     ## go over site with Augustin for design considerations (maybe try to keep it to a page of changes, I want to be done with this eventually)
 ## 19 Documentation
     ## create ReadMe
@@ -16,13 +15,15 @@ TO DO LIST:
         ## create documentation for creating challenges
     ## figure out how to run tests on render
         ## python tests
-        ## javascrip tests
-## 18 Fix delete and transfer book function
+        ## javascript tests
+## 18 Refactor based on feedback from mentor and hatchways and Augustin
+    ## better response to axios errors than stupid little alerts
+## 17 Fix delete and transfer book function
     ## move it to javascript so that the page doesn't have to reload
         ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points
     ## but have javascript re-request the table so that it gets updated
-## 17 fix buttons on challenge list, to show leave or join depending on status
-## 16 Implement schedule books functionality
+## 16 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
+## 15 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
@@ -42,16 +43,13 @@ TO DO LIST:
     ## display book cover on calendar on start date
     ## write tests for all calendar views
     ## write tests for all calendar javascript
-## 15 Implement email reminders functionality 
+## 14 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
     ## write tests
-# 14 Create an architecture diagram
-## 13 Refactor based on feedback from mentor and hatchways and Augustin
-    ## better response to axios errors than stupid little alerts
-    ## fix signup bug (giving you the password error when your password is good if other field are blank)
+## 13 Create an architecture diagram
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
     ## write tests

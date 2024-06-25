@@ -172,7 +172,7 @@ class User_Book(db.Model):
         return {
             "id": self.userbook_id,
             "title": self.title,
-            "author": self.authors, 
+            "authors": self.authors, 
             "publisher": self.publisher, 
             "pub_date": self.pub_date,
             "cover": self.thumbnail,
