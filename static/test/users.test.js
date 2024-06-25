@@ -230,20 +230,14 @@ describe('signupReturnedErrorHandler', () => {
     })
 
     it('returns correct error message for duplicate email error', () => {
-        console.log('running returns correct error message for duplicate email error');
         const response = {error: 'Email already taken'};
-        console.log(response['error'] === 'Email already taken');
         signupReturnedErrorHandler(response);
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div').text()).toBe('Email already registered. Please try logging in.');
     });
 
     it('returns correct error message for duplicate username error', () => {
-        console.log('running returns correct error message for duplicate username error');
         const response = {error: 'Username already taken'};
-        console.log(response['error'] === 'Username already taken');
         signupReturnedErrorHandler(response);
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div').text()).toBe('Username already registered. Please try logging in.');
     });
 });
@@ -392,16 +386,13 @@ describe('loginReturnedErrorHandler', () => {
     });
 
     it('returns correct error message for invalid username', () => {
-        console.log('running returns correct error message for invalid username');
         const response = {error: 'Invalid username'};
         loginReturnedErrorHandler(response);
 
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Invalid username');
     });
 
     it('returns correct error message for invalid password', () => {
-        console.log('running returns correct error message for invalid password');
         const response = {error: 'Invalid password'};
         loginReturnedErrorHandler(response);
 
@@ -421,7 +412,6 @@ describe('send reminder event handler', () => {
 
         //attach event handler to button
         $sendreminderButton.on('click', async function(event){
-            console.log('send reminder button clicked')
             event.preventDefault();
             $modalBody.find('.error-div').remove();
             let response = await usernameReminderViaAxios();
@@ -443,7 +433,6 @@ describe('send reminder event handler', () => {
     });
 
     it('returns correct message for invalid email', async () => {
-        console.log('running returns correct message for invalid email');
         usernameReminderViaAxiosSpy.and.returnValue(Promise.resolve({error: 'yes'}));
 
         const event = $.Event('click')
@@ -456,7 +445,6 @@ describe('send reminder event handler', () => {
     });
 
     it('returns correct message for valid email', async () => {
-        console.log('running returns correct message for valid email');
         usernameReminderViaAxiosSpy.and.returnValue(Promise.resolve({success: true}));
         
         const event = $.Event('click');
@@ -465,7 +453,6 @@ describe('send reminder event handler', () => {
         expect(event.isDefaultPrevented()).toBe(true);
         expect(usernameReminderViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div')[0].classList).toContain('alert-success');
     })
 });
@@ -527,7 +514,6 @@ describe('send reset event handler', () => {
     });
 
     it('returns correct message for invalid email', async () => {
-        console.log('running returns correct message for invalid email');
         passwordResetViaAxiosSpy.and.returnValue(Promise.resolve({error: 'yes'}));
 
         const event = $.Event('click')
@@ -540,7 +526,6 @@ describe('send reset event handler', () => {
     });
 
     it('returns correct message for valid email', async () => {
-        console.log('running returns correct message for valid email');
         passwordResetViaAxiosSpy.and.returnValue(Promise.resolve({success: true}));
         
         const event = $.Event('click');
@@ -549,7 +534,6 @@ describe('send reset event handler', () => {
         expect(event.isDefaultPrevented()).toBe(true);
         expect(passwordResetViaAxiosSpy).toHaveBeenCalled();
         expect($modalBody.find('.error-div')[0].innerText).toEqual('Email sent');
-        console.log($modalBody.find('.error-div'));
         expect($modalBody.find('.error-div')[0].classList).toContain('alert-success');
     })
 });
@@ -594,29 +578,24 @@ describe('update password event handler', () => {
 
         //attach event handler to button
         $updatePasswordButton.on('click', async function(event){
-            console.log('update password button clicked')
             event.preventDefault();
             $modalBody.find('.error-div').remove();
             const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
             if ($updatePassword.val() !== $updatePassword2.val()){
-                console.log('passwords not matching if');
                 let $errorDiv = $('<div class="alert alert-danger error-div">Passwords do not match.</div>');
                 $modalBody.append($errorDiv);
             }
             else if  (!passwordRegex.test($updatePassword.val())){
-                console.log('passwords not secure if')
                 let $errorDiv = $('<div class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
                 $modalBody.append($errorDiv);
             }
             else {
                 let response = await updatePasswordViaAxios();
                 if (response['error']){
-                    console.log('entering error if')
                     let $errorDiv = $('<div class="alert alert-danger error-div">Something went wrong. Please try again</div>')
                     $modalBody.append($errorDiv);
                 }
                 if (response['success']){
-                    console.log('entering success if')
                     let $errorDiv = $('<div class="alert alert-success error-div">Password updated</div>');
                     $modalBody.append($errorDiv);
                 }
@@ -717,16 +696,31 @@ describe('cancel button event handler', () => {
         //set up DOM
         $cancelButton = $('<button class="cancel-button">Cancel</button>').appendTo('body');
         $modalBody = $('<div class="modal-body><div class="alert alert-danger error-div">Something went wrong. Please try again</div></div>').appendTo('body');
-        $signupPassword = $('<input type="text" id="signup_password" value="Password1!">').appendTo('body');
-        $signupPassword2 = $('<input type="text" id="password2" value="Password1!">').appendTo('body');
-        $signupUsername = $('<input type="text" id="signup_username" value="testuser">').appendTo('body');
-        $loginUsername = $('<input type="text" id="login_username" value="testuser">').appendTo('body');
-        $loginPassword = $('<input type="text" id="login_password" value="Password1!">').appendTo('body');
-        $email = $('<input type="email" id="email" value="test@test.com">').appendTo('body');
-        $userImage = $('<input type="text" id="user_image" value="image link">').appendTo('body');
-        $updatePassword = $('<input type="text" id="update_password" value="Password1!">').appendTo('body');
-        $updatePassword2 = $('<input type="text" id="update_password2 value="Password1!">').appendTo('body');
-        $signupEmail = $('<input type="text" id="signup_email" value="test@test.com">')
+        $signupPassword = $('<input type="text" id="signup_password">').appendTo('body');
+        $signupPassword2 = $('<input type="text" id="password2">').appendTo('body');
+        $signupUsername = $('<input type="text" id="signup_username">').appendTo('body');
+        $loginUsername = $('<input type="text" id="login_username">').appendTo('body');
+        $loginPassword = $('<input type="text" id="login_password">').appendTo('body');
+        $email = $('<input type="email" id="email">').appendTo('body');
+        $userImage = $('<input type="text" id="user_image">').appendTo('body');
+        $updatePassword = $('<input type="text" id="update_password">').appendTo('body');
+        $updatePassword2 = $('<input type="text" id="update_password2">').appendTo('body');
+        $signupEmail = $('<input type="text" id="signup_email">').appendTo('body');
+
+        //attach the event handler
+        $cancelButton.on('click', function(event){
+            $modalBody.find('.error-div').remove();
+            $signupPassword.val('');
+            $signupPassword2.val('');
+            $signupUsername.val('');
+            $loginUsername.val('');
+            $loginPassword.val('');
+            $updatePassword.val('');
+            $updatePassword2.val('');
+            $signupEmail.val('');
+            $email.val('');
+            $userImage.val('');
+        });
     });
 
     afterEach(() => {
@@ -745,15 +739,129 @@ describe('cancel button event handler', () => {
         $signupEmail.remove();
     });
 
-    it('clears all fields and errors when cancel button is pressed', () => {        
+    it('clears all fields and errors when cancel button is pressed', () => {  
+        $signupPassword.val('Password1!');
+        $signupPassword2.val('Password1!');
+        $signupUsername.val('testuser');
+        $loginUsername.val('testuser');
+        $loginPassword.val('Password1!');
+        $updatePassword.val('Password1!');
+        $updatePassword2.val('Password1!');
+        $signupEmail.val('test@test.com');
+        $email.val('test@test.com');
+        $userImage.val('image url');
+
         const event = $.Event('click');
         $cancelButton.trigger(event);
 
         expect($modalBody.find('.error-div').length).toBe(0);
         expect($signupPassword.val()).toEqual('');
-    })
+        expect($signupPassword2.val()).toEqual('');
+        expect($signupUsername.val()).toEqual('');
+        expect($loginUsername.val()).toEqual('');
+        expect($loginPassword.val()).toEqual('');
+        expect($updatePassword.val()).toEqual('');
+        expect($updatePassword2.val()).toEqual('');
+        expect($signupEmail.val()).toEqual('');
+        expect($email.val()).toEqual('');
+        expect($userImage.val()).toEqual('');
+    });
 });
 
-describe('close button event handler', () => {});
+describe('close button event handler', () => {
+    beforeEach(() => {
+        //set up DOM
+        $closeButton = $('<button class="close-button">X</button>').appendTo('body');
+        $modalBody = $('<div class="modal-body><div class="alert alert-danger error-div">Something went wrong. Please try again</div></div>').appendTo('body');
+        $signupPassword = $('<input type="text" id="signup_password">').appendTo('body');
+        $signupPassword2 = $('<input type="text" id="password2">').appendTo('body');
+        $signupUsername = $('<input type="text" id="signup_username">').appendTo('body');
+        $loginUsername = $('<input type="text" id="login_username">').appendTo('body');
+        $loginPassword = $('<input type="text" id="login_password">').appendTo('body');
+        $email = $('<input type="email" id="email">').appendTo('body');
+        $userImage = $('<input type="text" id="user_image">').appendTo('body');
+        $updatePassword = $('<input type="text" id="update_password">').appendTo('body');
+        $updatePassword2 = $('<input type="text" id="update_password2">').appendTo('body');
+        $signupEmail = $('<input type="text" id="signup_email">').appendTo('body');
 
-describe('forgot link event handler', () => {});
+        //attach the event handler
+        $closeButton.on('click', function(event){
+            $modalBody.find('.error-div').remove();
+            $signupPassword.val('');
+            $signupPassword2.val('');
+            $signupUsername.val('');
+            $loginUsername.val('');
+            $loginPassword.val('');
+            $updatePassword.val('');
+            $updatePassword2.val('');
+            $signupEmail.val('');
+            $email.val('');
+            $userImage.val('');
+        });
+    });
+
+    afterEach(() => {
+        //Clean up DOM
+        $closeButton.remove();
+        $modalBody.remove();
+        $signupPassword.remove();
+        $signupPassword2.remove();
+        $signupUsername.remove();
+        $loginUsername.remove();
+        $loginPassword.remove();
+        $email.remove();
+        $userImage.remove();
+        $updatePassword.remove();
+        $updatePassword2.remove();
+        $signupEmail.remove();
+    });
+
+    it('clears all fields and errors when cancel button is pressed', () => {  
+        $signupPassword.val('Password1!');
+        $signupPassword2.val('Password1!');
+        $signupUsername.val('testuser');
+        $loginUsername.val('testuser');
+        $loginPassword.val('Password1!');
+        $updatePassword.val('Password1!');
+        $updatePassword2.val('Password1!');
+        $signupEmail.val('test@test.com');
+        $email.val('test@test.com');
+        $userImage.val('image url');
+
+        const event = $.Event('click');
+        $closeButton.trigger(event);
+
+        expect($modalBody.find('.error-div').length).toBe(0);
+        expect($signupPassword.val()).toEqual('');
+        expect($signupPassword2.val()).toEqual('');
+        expect($signupUsername.val()).toEqual('');
+        expect($loginUsername.val()).toEqual('');
+        expect($loginPassword.val()).toEqual('');
+        expect($updatePassword.val()).toEqual('');
+        expect($updatePassword2.val()).toEqual('');
+        expect($signupEmail.val()).toEqual('');
+        expect($email.val()).toEqual('');
+        expect($userImage.val()).toEqual('');
+    });
+});
+
+describe('forgot link event handler', () => {
+    beforeEach(() => {
+        //set up DOM
+        $modalBody = $('<div class="modal-body><div class="alert alert-danger error-div">Something went wrong. Please try again</div></div>').appendTo('body');
+        $forgotLink = $('<button class="forgot-link">Forgot Username/Password?</button>')
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $modalBody.remove();
+        $forgotLink.remove();
+    });
+
+    it('should remove all error messages when forgot link is clicked', () => {
+        const event = $.Event('click');
+        $forgotLink.trigger(event);
+
+        expect($modalBody.find('.error-div').length).toBe(0);
+    });
+});

@@ -1,9 +1,6 @@
 TO DO LIST: 
 ## 20 Write tests for python & javascript
     ## javascript tests
-        ## users.js
-            ## write tests (12)
-            ## run tests locally
         ## books.js 
             ## write tests (5)
             ## run tests locally

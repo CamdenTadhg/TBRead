@@ -225,7 +225,6 @@ async function updatePasswordViaAxios(){
 
 //clear forms and errors when cancel button is pressed
 $cancelButton.on('click', function(event){
-    event.preventDefault();
     $modalBody.find('.error-div').remove();
     $signupPassword.val('');
     $signupPassword2.val('');
@@ -241,7 +240,6 @@ $cancelButton.on('click', function(event){
 
 //clear forms and errors when close button is pressed
 $closeButton.on('click', function(event){
-    event.preventDefault();
     $modalBody.find('.error-div').remove();
     $signupPassword.val('');
     $signupPassword2.val('');
@@ -257,6 +255,5 @@ $closeButton.on('click', function(event){
 
 
 $forgotLink.on('click', function(event){
-    event.preventDefault();
     $modalBody.find('.error-div').remove();
 });

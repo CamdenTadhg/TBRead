@@ -1,11 +1,11 @@
-const $bookSearchButton = $('.book-search-button');
-const $field = $('#field');
-const $term = $('#term');
-const $apiSearchResults = $('.api-search-results');
-const $assignChallengeButton = $('.assign-challenge-button');
-const $challengesField = $('#challenges');
-const $assignToChallengeForm = $('.assign-to-challenge-form');
-const $removeChallengeButton = $('.remove-challenge-button');
+let $bookSearchButton = $('.book-search-button');
+let $field = $('#field');
+let $term = $('#term');
+let $apiSearchResults = $('.api-search-results');
+let $assignChallengeButton = $('.assign-challenge-button');
+let $challengesField = $('#challenges');
+let $assignToChallengeForm = $('.assign-to-challenge-form');
+let $removeChallengeButton = $('.remove-challenge-button');
 
 //book search click event handler
 $bookSearchButton.on('click', async function(event) {
@@ -15,7 +15,7 @@ $bookSearchButton.on('click', async function(event) {
     let term = $term.val();
     let response = await searchGoogleBooks(field, term);
     displaySearchResults(response);
-})
+});
 
 //send book search query to GoogleBooks
 async function searchGoogleBooks(field, term){
