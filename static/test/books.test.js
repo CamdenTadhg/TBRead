@@ -132,11 +132,11 @@ describe('assign to challenge event handler', () => {
     let axiosPostSpy;
     beforeEach(() => {
         //create spy
-        axiosPostSpy = spyOn(axios, 'post').and.returnValue(Promise.resolve({success: true}));
+        axiosPostSpy = spyOn(axios, 'post');
 
         //set up DOM
         $assignToChallengeForm = $('<form class="assign-to-challenge-form"><span class="error-span">Error Message Here</span></form>');
-        $challengesField = $('<select name="challenges" id="challenges"><option value=1></option></select>');
+        $challengesField = $('<select name="challenges" id="challenges"><option value=1>50 Books</option><option value=2>Award Winners</option><option value=3>Marginalized Authors</option></select>');
         $assignChallengeButton = $('<button class="assign-challenge-button">Assign to Challenge</button>');
 
         //attach event handler
@@ -145,6 +145,8 @@ describe('assign to challenge event handler', () => {
             $assignToChallengeForm.find('.error-span').remove();
             //get the challenge being assigned to
             const challenge_id = $challengesField.val();
+            console.log('challenge id test = ', challenge_id);
+            console.log(typeof challenge_id);
             //get the userbook_id
             currentURL = "http://127.0.0.1:5000/users_books/64";
             const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
@@ -171,12 +173,15 @@ describe('assign to challenge event handler', () => {
 
     it('collects the correct data and sends it via axios', async () => {
         $challengesField.val(1);
+        console.log(typeof $challengesField.val());
+        axiosPostSpy.and.returnValue(Promise.resolve({success: true}));
 
         const event = $.Event('click');
         await $assignChallengeButton.trigger(event);
 
         expect(event.isDefaultPrevented()).toBe(true);
         expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/assign', {'challenge_id': 1});
+        console.log($assignToChallengeForm);
         expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
         expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book assigned to challenge')
     });

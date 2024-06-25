@@ -699,6 +699,7 @@ def assign_book(userbook_id):
     challenge_id = data.get('challenge_id')
     print('*****************')
     print('challenge_id = ', challenge_id)
+    print(type(challenge_id))
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
     if userbook:
         userbook.challenges.append(challenge)
