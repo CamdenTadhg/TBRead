@@ -55,8 +55,17 @@ textarea{
 .sidebar {
     grid-column-start: sidebar;
     grid-column-end: main-content;
+    justify-self: stretch;
+    align-self: stretch;
 }
 
 .container {
     grid-column-start: main-content;
+}
+
+.sidebar-item {
+    background-color: tan;
+    list-style-type: none;
+    height: 5vh;
+    border: 1px solid black;
 }
