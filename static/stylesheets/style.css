@@ -43,26 +43,35 @@ textarea{
 }
 
 .sidebar {
+    height: 100%;
+    width: 10%;
     position: fixed;
-    grid-column-start: first;
-    grid-column-end: sidebar;
-    justify-self: stretch;
-    border: 1px solid #423841;
-    height: 100vh;
-}
-
-.container {
-    grid-column-start: sidebar;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #c8bfc7;
+    overflow-x: hidden;
+    padding-top: 20px
 }
 
 .sidebar-item {
-    background-color: #c8bfc7;
-    list-style-type: none;
-    justify-self: stretch;
-    align-self: stretch;
-    height: 5vh;
-    padding-left: 1%;
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
 }
+
+.sidebar-item:hover{
+    color: #423841;
+}
+
+.container {
+    margin-left: 10%;
+    padding: 0px 10px;
+}
+
+
 
 
 /* LIST PAGES */

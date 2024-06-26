@@ -39,11 +39,10 @@
     <div class="main-content">
         {% if g.user %}
         <div class="sidebar">
-            <div class="sidebar-item" id="lists"><a href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a></div>
-            <div class="sidebar-item" id="calendar"><a href='/users/{{g.user.user_id}}/calendar'>Calendar</a></div>
-            <div class="sidebar-item" id="challenges"><a href='/challenges'>Challenges</a></div>
-            <div class="sidebar-item" id="support">Support</div>
-            <div class="sidebar-item" id="blank-space"></div>
+            <a class="sidebar-item" href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a>
+            <a class="sidebar-item" href='/users/{{g.user.user_id}}/calendar'>Calendar</a>
+            <a class="sidebar-item" href='/challenges'>Challenges</a>
+            <div class="sidebar-item">Support</div>
         </div>
         {% endif %}
         <div class="container">
