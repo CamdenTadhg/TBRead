@@ -1,7 +1,12 @@
 TO DO LIST: 
 ## 21 Styling
+    ## get a color palette figured out
+        need a green, a red, your purple, 1 neutral, and 1 other color
     ## fix sidebar    
+        ## make rows and divs instead of li's so the sidebar can go all the way down? 
+        ## 
     ## fix tabs to be visible
+        ## fit them in the top row in the grid
     ## fix it so that on login, you get the appropriate flash message
     ## go over site with Augustin for design considerations (maybe try to keep it to a page of changes, I want to be done with this eventually)
 ## 20 Documentation
