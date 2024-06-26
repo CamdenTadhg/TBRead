@@ -15,7 +15,7 @@
     --bs-nav-tabs-border-radius:var(--bs-border-radius);
     --bs-nav-tabs-link-hover-border-color:#420e74;
     --bs-nav-tabs-link-active-color:#000000;
-    --bs-nav-tabs-link-active-bg:#c8bfc7;
+    --bs-nav-tabs-link-active-bg:#ffffff;
     --bs-nav-tabs-link-active-border-color:var(--bs-border-color) var(--bs-border-color) var(--bs-body-bg);
     border-top:var(--bs-nav-tabs-border-width) solid var(--bs-nav-tabs-border-color)}.nav-tabs .nav-link{margin-bottom:calc(-1 * var(--bs-nav-tabs-border-width));
     border-left:var(--bs-nav-tabs-border-width) solid var(--bs-nav-tabs-border-color)}.nav-tabs .nav-link{margin-bottom:calc(-1 * var(--bs-nav-tabs-border-width));

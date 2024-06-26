@@ -29,7 +29,6 @@
     width: 50px;
 }
 
-
 textarea{
     overflow-y: scroll;
 }
@@ -41,15 +40,13 @@ textarea{
 .main-content {
     display:grid;
     grid-template-columns: [first] 10% [sidebar] 90% [end];
-    grid-template-rows: [top] 5% [one] 5% [two] 5% [three] 5% [four] 80% [bottom]
 }
 
 .sidebar {
-    position: sticky;
+    position: fixed;
     grid-column-start: first;
     grid-column-end: sidebar;
     justify-self: stretch;
-    align-self: stretch;
     border: 1px solid #423841;
     height: 100vh;
 }
@@ -64,7 +61,6 @@ textarea{
     justify-self: stretch;
     align-self: stretch;
     height: 5vh;
-    border: 1px solid #423841;
     padding-left: 1%;
 }
 
@@ -74,7 +70,6 @@ textarea{
 th {
     cursor: pointer;
 }
-
 
 .list-cover{
     width:50px;
