@@ -1,8 +1,8 @@
 TO DO LIST: 
 ## 21 Styling
     ## fix sidebar    
-        ## make rows and divs instead of li's so the sidebar can go all the way down? 
-        ## 
+        ## figure out how to make the top navbar scroll with the side navbar
+        ## figure out how to put the main content in the right place relative to the sidebar
     ## fix tabs to be visible
         ## fit them in the top row in the grid
     ## fix it so that on login, you get the appropriate flash message

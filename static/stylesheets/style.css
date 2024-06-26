@@ -58,16 +58,24 @@ textarea{
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
-    color: black;
+    color: #423841;
     display: block;
 }
 
 .sidebar-item:hover{
-    color: #423841;
+    color: black;
 }
 
 .container {
     grid-column-start: sidebar;
+}
+
+.navbar {
+    height: 10%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
 }
 
 
