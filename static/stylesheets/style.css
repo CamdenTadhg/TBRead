@@ -46,6 +46,7 @@ textarea{
 
 .sidebar {
     position: sticky;
+    top: 0;
     grid-column-start: first;
     grid-column-end: sidebar;
     justify-self: stretch;
