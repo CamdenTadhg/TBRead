@@ -50,7 +50,7 @@ textarea{
     grid-column-end: sidebar;
     justify-self: stretch;
     align-self: stretch;
-    border: 1px solid #423841;
+    border: 0.5px solid #423841;
 }
 
 .container {
@@ -67,7 +67,7 @@ textarea{
     padding-left: 1%;
 }
 
-#lists {
+/* #lists {
     grid-row-start: top;
     grid-row-end: one;
 }
@@ -85,7 +85,7 @@ textarea{
 #support {
     grid-row-start: three;
     grid-row-end: four;
-}
+} */
 
 #blank-space{
     grid-row-start: four;
