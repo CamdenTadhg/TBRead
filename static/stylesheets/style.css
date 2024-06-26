@@ -46,12 +46,12 @@ textarea{
 
 .sidebar {
     position: sticky;
-    top: 0;
     grid-column-start: first;
     grid-column-end: sidebar;
     justify-self: stretch;
     align-self: stretch;
-    border: 0.5px solid #423841;
+    border: 0.25px solid #423841;
+    height: 100%;
 }
 
 .container {
@@ -64,35 +64,10 @@ textarea{
     justify-self: stretch;
     align-self: stretch;
     height: 5vh;
-    border: 0.5px solid #423841;
+    border: 0.25px solid #423841;
     padding-left: 1%;
 }
 
-/* #lists {
-    grid-row-start: top;
-    grid-row-end: one;
-}
-
-#calendar {
-    grid-row-start: one;
-    grid-row-end: two;
-}
-
-#challenges {
-    grid-row-start: two;
-    grid-row-end: three;
-}
-
-#support {
-    grid-row-start: three;
-    grid-row-end: four;
-} */
-
-#blank-space{
-    grid-row-start: four;
-    grid-row-end: bottom;
-    height: 80vh;
-}
 
 /* LIST PAGES */
 
