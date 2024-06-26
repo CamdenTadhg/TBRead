@@ -45,11 +45,12 @@ textarea{
 }
 
 .sidebar {
+    position: sticky;
     grid-column-start: first;
     grid-column-end: sidebar;
     justify-self: stretch;
     align-self: stretch;
-    border: 1px solid black;
+    border: 1px solid #423841;
 }
 
 .container {
@@ -89,7 +90,7 @@ textarea{
 #blank-space{
     grid-row-start: four;
     grid-row-end: bottom;
-    height: 80%;
+    height: 80vh;
 }
 
 /* LIST PAGES */
