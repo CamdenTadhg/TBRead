@@ -1,7 +1,5 @@
 TO DO LIST: 
 ## 21 Styling
-    ## get a color palette figured out
-        need a green, a red, your purple, 1 neutral, and 1 other color
     ## fix sidebar    
         ## make rows and divs instead of li's so the sidebar can go all the way down? 
         ## 

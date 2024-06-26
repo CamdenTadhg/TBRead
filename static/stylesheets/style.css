@@ -1,3 +1,5 @@
+/* MAIN STRUCTURE */
+
 .homepage {
     width: 200px;
 }
@@ -27,20 +29,9 @@
     width: 50px;
 }
 
-.list-cover{
-    width:50px;
-}
-
-th {
-    cursor: pointer;
-}
 
 textarea{
     overflow-y: scroll;
-}
-
-.challenge-cover {
-    width: 100px;
 }
 
 .logo {
@@ -68,6 +59,50 @@ textarea{
 .sidebar-item {
     background-color: #c8bfc7;
     list-style-type: none;
+    justify-self: stretch;
+    align-self: stretch;
     height: 5vh;
     border: 1px solid black;
+}
+
+#lists {
+    grid-row-start: top;
+    grid-row-end: one;
+}
+
+#calendar {
+    grid-row-start: one;
+    grid-row-end: two;
+}
+
+#challenges {
+    grid-row-start: two;
+    grid-row-end: three;
+}
+
+#support {
+    grid-row-start: three;
+    grid-row-end: four;
+}
+
+#blank-space{
+    grid-row-start: four;
+    grid-row-end: bottom;
+}
+
+/* LIST PAGES */
+
+th {
+    cursor: pointer;
+}
+
+
+.list-cover{
+    width:50px;
+}
+
+/* CHALLENGE PAGES */
+
+.challenge-cover {
+    width: 100px;
 }
