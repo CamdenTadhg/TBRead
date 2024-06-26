@@ -50,8 +50,8 @@ textarea{
     grid-column-end: sidebar;
     justify-self: stretch;
     align-self: stretch;
-    border: 0.25px solid #423841;
-    height: 100%;
+    border: 1px solid #423841;
+    height: 100vh;
 }
 
 .container {
@@ -64,7 +64,7 @@ textarea{
     justify-self: stretch;
     align-self: stretch;
     height: 5vh;
-    border: 0.25px solid #423841;
+    border: 1px solid #423841;
     padding-left: 1%;
 }
 
