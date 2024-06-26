@@ -54,8 +54,8 @@ textarea{
 }
 
 .sidebar {
-    grid-column-start: sidebar;
-    grid-column-end: main-content;
+    grid-column-start: first;
+    grid-column-end: sidebar;
     justify-self: stretch;
     align-self: stretch;
     border: 1px solid black;
