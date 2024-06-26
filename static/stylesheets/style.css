@@ -62,7 +62,7 @@ textarea{
 }
 
 .container {
-    grid-column-start: main-content;
+    grid-column-start: sidebar;
 }
 
 .sidebar-item {
