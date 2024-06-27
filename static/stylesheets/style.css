@@ -39,7 +39,7 @@ textarea{
 
 .logged-in-content {
     display:grid;
-    grid-template-columns: [first] 12vw [sidebar] 85vw [end];
+    grid-template-columns: [first] 14vw [sidebar] 83vw [end];
     grid-template-rows: [top] 15vh [content] 75vh [bottom]
 }
 
