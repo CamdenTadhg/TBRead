@@ -1,7 +1,6 @@
 TO DO LIST: 
 ## 22 Styling Basics
-    ## about page (where does this link go?)
-        ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
+    ## logos should be links to main page
 ## 21 Write readme and submit here
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
