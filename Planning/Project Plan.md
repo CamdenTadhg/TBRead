@@ -18,22 +18,26 @@ TO DO LIST:
         ## search bar should go across the top and search results appear below
         ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
         ## no lines in the search results
-    ## lists and challenges   
+    ## lists and challenges part 1
         ## take away the table lines
         ## turn off sorting for the cover image
+        ## fix it so tables and columns are the same size on all booklist pages and the same size on all challenge pages
         ## make table header words a little bit bigger and choose a different font for them
-        ## spread out empty table so you can actually read the columns
         ## have arrow show up in every column of the table so you know you can sort by that
         ## short description of what the page does for you
-        ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
         ## tab should say did not finish
-        ## tabs should look like the add books. 
+        ## tabs should look like the add books.
+    ## edit books page
+    ## edit challenge page
+    ## edit your challenge page
+    ## lists and challenges part 2
         ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
             ## where do you end up? 
+        ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
 ## 18 Transfer database to new service
 ## 17 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
 ## 16 Documentation
-    ## create help section
+    ## flesh out documentation section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## figure out how to run tests on render
