@@ -1,5 +1,7 @@
 TO DO LIST: 
 ## 22 Styling
+    ## figure out sidebar, navbar, and main content
+        ## your challenges still isn't showing up correctly
     ## Color palette
         ## two contrasting colors (purple and teal)
             ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
