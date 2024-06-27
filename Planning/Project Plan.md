@@ -1,8 +1,7 @@
 TO DO LIST: 
-## 22 Styling
-    ## Color palette
-            ## pick a font to use throughout 
+## 22 Styling 
     ## homepage
+        ## change cover images so they will appear correctly on all screens
         ## Logo change to To Be Read so we know what they stand for
         ## one line pitch below the navbar. why do I want to be on this website in the first place? 
     ## about page
