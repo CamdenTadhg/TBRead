@@ -12,10 +12,9 @@ TO DO LIST:
     ## homepage
         ## make covers display correctly on all size screens
         ## Logo change to To Be Read so we know what they stand for
-        ## obviously fix the navbar screwup. 
         ## one line pitch below the navbar. why do I want to be on this website in the first place? 
     ## about page
-        ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am
+        ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
 ## 21 Write readme and submit here
 ## 20 Styling
     ## fix it so that on login, you get the appropriate flash message

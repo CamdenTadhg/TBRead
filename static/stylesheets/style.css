@@ -1,7 +1,7 @@
 /* MAIN STRUCTURE */
 
-.homepage {
-    width: 200px;
+.homepage-image {
+    width: 14vw;
 }
 
 .dark {
@@ -39,7 +39,7 @@ textarea{
 
 .logged-in-content {
     display:grid;
-    grid-template-columns: [first] 10vw [sidebar] 90vw [end];
+    grid-template-columns: [first] 13vw [sidebar] 90vw [end];
     grid-template-rows: [top] 15vh [content] 80vh [bottom]
 }
 
