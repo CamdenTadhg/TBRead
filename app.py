@@ -82,9 +82,10 @@ def signup():
     if user_image == '':
         user_image = '/static/images/image.png'
 
+    username=request.json['username'],
     try: 
         user = User.signup(
-            username=request.json['username'],
+            username,
             password=request.json['password'], 
             email=request.json['email'],
             user_image = user_image
@@ -100,6 +101,7 @@ def signup():
     do_login(user)
     create_lists(user)
 
+    flash(f'Welcome {username}', 'success')
     return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     
 @app.route('/login', methods=['POST'])
@@ -109,12 +111,14 @@ def login():
     if g.user: 
         flash('You are already logged in.', 'danger')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')    
-      
-    user = User.authenticate(request.json['username'],
-                                 request.json['password'])
+
+    username = request.json['username']
+    user = User.authenticate(username,
+                            request.json['password'])
         
     if user: 
         do_login(user)
+        flash(f'Welcome {username}', 'success')
         return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     elif not db.session.execute(db.select(User).where(User.username == request.json['username'])).scalar():
         return jsonify({'error': 'Invalid username'})
