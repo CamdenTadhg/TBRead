@@ -1,7 +1,6 @@
 TO DO LIST: 
 ## 22 Styling Basics
     ## about page (where does this link go?)
-        ## make sidebar appear on all pages, including anonymous home page, but only About should appear for not logged in users. 
         ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
 ## 21 Write readme and submit here
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
@@ -72,6 +71,7 @@ TO DO LIST:
     ## write tests
 ## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## increase the number of book covers displayed? 
+    ## Do I make it its own home page once logged in, because you need to be logged in to do that
     ## write tests
 ## 9 Implement importation functionality
     ## write tests
