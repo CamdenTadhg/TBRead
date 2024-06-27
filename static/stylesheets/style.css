@@ -42,7 +42,7 @@ textarea{
 }
 
 .sidebar {
-    height: 89%;
+    height: 90vh;
     width: 11%;
     position: fixed;
     z-index: 1;
