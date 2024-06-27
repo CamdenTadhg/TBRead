@@ -84,13 +84,13 @@ textarea{
 
 /* USER MODALS */
 
-.css-edit .alert-success {
+#edit-css .alert-success {
     background-color: #D7B6F6;
     border: #420E74;
     color: #1F0736;
 }
 
-.css-edit .alert-danger {
+#edit-css .alert-danger {
     background-color: #F7CCCA;
     border:#DE342B;
     color: #58110E;

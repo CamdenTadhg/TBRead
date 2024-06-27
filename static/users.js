@@ -27,22 +27,22 @@ $signupButton.on('click', async function(event){
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     //validate all data is present
     if ($signupUsername.val() === '' || $signupPassword.val()=== '' || $signupPassword2.val() === '' || $signupEmail.val() === ''){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">All fields are required.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">All fields are required.</div>');
         $modalBody.append($errorDiv);
     }
     //validate matching passwords
     else if ($signupPassword.val() !== $signupPassword2.val()){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Passwords do not match.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
     //validate secure password
     else if (!passwordRegex.test($signupPassword.val())){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
     //validate valid email
     else if (!emailRegex.test($signupEmail.val())){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Email does not appear valid</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Email does not appear valid</div>');
         $modalBody.append($errorDiv);
     }
     //validate username & email are unique
@@ -77,12 +77,12 @@ async function signupViaAxios(){
 function signupReturnedErrorHandler(response){
     if (response['error'] === 'Email already taken'){
         console.log('email already taken if');
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Email already registered. Please try logging in.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Email already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Username already taken'){
         console.log('username already taken if');
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Username already registered. Please try logging in.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Username already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
 }
@@ -93,7 +93,7 @@ $loginButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     //validate all data is present
     if ($loginUsername.val() === '' || $loginPassword.val()=== ''){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">All fields are required.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">All fields are required.</div>');
         $modalBody.append($errorDiv);
     }
     else {
@@ -124,12 +124,12 @@ function loginReturnedErrorHandler(response){
     console.log('running loginReturnedErrorHandler function');
     if (response['error'] === 'Invalid username'){
         console.log('invalid username if');
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Invalid username</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Invalid username</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Invalid password'){
         console.log('invalid password if');
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Invalid password</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Invalid password</div>');
         $modalBody.append($errorDiv);
     }
 }
@@ -141,11 +141,11 @@ $sendreminderButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     let response = await usernameReminderViaAxios();
     if (response['error']) {
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Email not in database. Please signup.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Email not in database. Please signup.</div>');
         $modalBody.append($errorDiv);
     }
     if (response['success']){
-        let $errorDiv = $('<div class="alert css-edit alert-success error-div">Email sent</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-success error-div">Email sent</div>');
         $modalBody.append($errorDiv)
     }
 });
@@ -166,11 +166,11 @@ $sendResetButton.on('click', async function(event){
     $modalBody.find('.error-div').remove();
     let response = await passwordResetViaAxios();
     if (response['error']){
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Email not in database. Please signup.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Email not in database. Please signup.</div>');
         $modalBody.append($errorDiv);
     }
     if (response['success']){
-        let $errorDiv = $('<div class="alert css-edit alert-success error-div">Email sent</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-success error-div">Email sent</div>');
         $modalBody.append($errorDiv);
     }
 });
@@ -193,24 +193,24 @@ $updatePasswordButton.on('click', async function(event){
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
     if ($updatePassword.val() !== $updatePassword2.val()){
         console.log('passwords not matching if');
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Passwords do not match.</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
     else if  (!passwordRegex.test($updatePassword.val())){
         console.log('passwords not secure if')
-        let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
+        let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
     else {
         let response = await updatePasswordViaAxios();
         if (response['error']){
             console.log('entering error if')
-            let $errorDiv = $('<div class="alert css-edit alert-danger error-div">Something went wrong. Please try again</div>')
+            let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Something went wrong. Please try again</div>')
             $modalBody.append($errorDiv);
         }
         if (response['success']){
             console.log('entering success if')
-            let $errorDiv = $('<div class="alert css-edit alert-success error-div">Password updated</div>');
+            let $errorDiv = $('<div id="edit-css" class="alert alert-success error-div">Password updated</div>');
             $modalBody.append($errorDiv);
         }
     }

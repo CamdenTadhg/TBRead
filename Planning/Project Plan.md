@@ -1,16 +1,12 @@
 TO DO LIST: 
 ## 22 Styling
-    ## figure out sidebar, navbar, and main content
-        ## your challenges still isn't showing up correctly
     ## Color palette
         ## two contrasting colors (purple and teal)
-            ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
             ## change green to purple
                 ## add edit class tag to all alert classes
                 ## in css use those selectors [.edit-css .alert-success and .edit-css .alert-danger] to change background color, border color, and color
             ## pick a font to use throughout 
     ## homepage
-        ## make covers display correctly on all size screens
         ## Logo change to To Be Read so we know what they stand for
         ## one line pitch below the navbar. why do I want to be on this website in the first place? 
     ## about page
