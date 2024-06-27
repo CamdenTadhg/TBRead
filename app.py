@@ -1106,13 +1106,8 @@ def homepage():
 @app.route('/about')
 def about():
     """Show about page"""
-
-    if g.user: 
-        return redirect(f'/users/{g.user.user_id}/lists/tbr')
-
-    else: 
-        form = UserAddForm()
-        form2 = LoginForm()
-        form3 = EmailForm()
+    form = UserAddForm()
+    form2 = LoginForm()
+    form3 = EmailForm()
 
     return render_template('about.html', form=form, form2=form2, form3=form3)
