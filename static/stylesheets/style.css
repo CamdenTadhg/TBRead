@@ -39,13 +39,13 @@ textarea{
 
 .logged-in-content {
     display:grid;
-    grid-template-columns: [first] 14vw [sidebar] 83vw [end];
+    grid-template-columns: [first] 12vw [sidebar] 85vw [end];
     grid-template-rows: [top] 15vh [content] 75vh [bottom]
 }
 
 .sidebar {
     height: 85%;
-    width: 10%;
+    width: 13%;
     position: fixed;
     z-index: 1;
     top: 15%;
@@ -81,20 +81,6 @@ textarea{
     top: 0;
     left: 0;
 }
-
-/* USER MODALS
-
-#edit-css .alert-success {
-    background-color: #D7B6F6;
-    border: #420E74;
-    color: #1F0736;
-}
-
-#edit-css .alert-danger {
-    background-color: #F7CCCA;
-    border:#DE342B;
-    color: #58110E;
-} */
 
 /* LIST PAGES */
 
