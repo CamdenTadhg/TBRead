@@ -40,7 +40,7 @@ textarea{
 .logged-in-content {
     display:grid;
     grid-template-columns: [first] 10vw [sidebar] 90vw [end];
-    grid-template-rows: [top] 5vh [content] 95vh [bottom]
+    grid-template-rows: [top] 15vh [content] 80vh [bottom]
 }
 
 .sidebar {
