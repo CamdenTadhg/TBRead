@@ -2,33 +2,31 @@ TO DO LIST:
 ## 22 Styling 
     ## homepage
         ## change cover images so they will appear correctly on all screens
-        ## Logo change to To Be Read so we know what they stand for
         ## one line pitch below the navbar. why do I want to be on this website in the first place? 
-    ## about page
+    ## about page (where does this link go?)
         ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
 ## 21 Write readme and submit here
-## 20 Styling
+## 20 Refactor based on feedback from mentor and hatchways and Augustin
+    ## better response to axios errors than stupid little alerts
+## 19 Styling
     ## fix it so that on login, you get the appropriate flash message
-    ## lists
-        ## see if arrow can show up in every column of the table so you know you can sort by that
-        ## see if you can turn off sorting for the cover image
+    ## add books page
+        ## make the field and term in a line, like the HCLIB search bar. 
+        ## search bar should go across the top and search results appear below
+        ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
+        ## no lines in the search results
+    ## lists and challenges   
+        ## take away the table lines
+        ## turn off sorting for the cover image
+        ## make table header words a little bit bigger and choose a different font for them
+        ## spread out empty table so you can actually read the columns
+        ## have arrow show up in every column of the table so you know you can sort by that
         ## short description of what the page does for you
         ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
         ## tab should say did not finish
         ## tabs should look like the add books. 
         ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
             ## where do you end up? 
-        ## take away the table lines
-        ## make table header words a little bit bigger and choose a different font for them
-        ## spread out empty table so you can actually read the columns
-    ## add books page
-        ## make the field and term in a line, like the HCLIB search bar. 
-        ## search bar should go across the top and search results appear below
-        ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
-        ## no lines in the search results
-    ## same things on the challenge page as on the lists page
-## 19 Refactor based on feedback from mentor and hatchways and Augustin
-    ## better response to axios errors than stupid little alerts
 ## 18 Transfer database to new service
 ## 17 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
 ## 16 Documentation
