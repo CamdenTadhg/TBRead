@@ -3,8 +3,6 @@ TO DO LIST:
     ## top navbar
         ## make it smaller
         ## adjust everything else accordingly
-    ## homepage
-        ## one line pitch below the navbar. why do I want to be on this website in the first place? 
     ## about page (where does this link go?)
         ## make sidebar appear on all pages, including anonymous home page, but only About should appear for not logged in users. 
         ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
@@ -27,6 +25,7 @@ TO DO LIST:
         ## short description of what the page does for you
         ## tab should say did not finish
         ## tabs should look like the add books.
+    ## alerts (success & error)
     ## edit books page
     ## edit challenge page
     ## edit your challenge page
