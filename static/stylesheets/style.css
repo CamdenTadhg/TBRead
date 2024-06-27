@@ -64,7 +64,7 @@ textarea{
 }
 
 .sidebar-item:hover{
-    color: black;
+    background-color: #6DC5BC
 }
 
 .main-content {
@@ -82,7 +82,7 @@ textarea{
     left: 0;
 }
 
-/* USER MODALS */
+/* USER MODALS
 
 #edit-css .alert-success {
     background-color: #D7B6F6;
@@ -94,7 +94,7 @@ textarea{
     background-color: #F7CCCA;
     border:#DE342B;
     color: #58110E;
-}
+} */
 
 /* LIST PAGES */
 
