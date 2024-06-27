@@ -1,8 +1,6 @@
 /* MAIN STRUCTURE */
 
-.homepage-image {
-    width: 11.5vw;
-}
+
 
 .dark {
     background-color: black;
@@ -82,6 +80,15 @@ textarea{
     left: 0;
 }
 
+/* HOMEPAGE */
+
+.homepage-image {
+    width: 11.5vw;
+}
+
+.tag-line {
+    margin-top: 1vh;
+}
 /* LIST PAGES */
 
 th {
