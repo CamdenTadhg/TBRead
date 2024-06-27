@@ -29,7 +29,9 @@ TO DO LIST:
     ## lists and challenges part 2
         ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
             ## where do you end up? 
+            ## write tests for new code
         ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
+            ## write tests for new code
 ## 18 Transfer database to new service
 ## 17 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
 ## 16 Documentation
@@ -56,6 +58,7 @@ TO DO LIST:
         ## recommend post date (but let them change it)
     ## schedule 1 - 12 months of books randomly
     ## oops I deleted my calendar button
+        ## is this necessary or is there a way to get the calendar back? 
     ## display book cover on calendar on start date
     ## write tests for all calendar views
     ## write tests for all calendar javascript
