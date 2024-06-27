@@ -89,6 +89,29 @@ textarea{
 .tag-line {
     margin-top: 3vh;
 }
+
+.opening-paragraph {
+    margin-top: 10vh;
+}
+
+.about-content {
+    font-size: 2rem;
+    width: 75%;
+}
+
+.logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: baseline;
+    align-content: space-around;
+    gap: 3vw;
+}
+
+.tech-logo {
+    width: 5vw;
+}
+
 /* LIST PAGES */
 
 th {
