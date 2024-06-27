@@ -1,7 +1,5 @@
 TO DO LIST: 
 ## 22 Styling
-    ## figure out sidebar and navbar
-        ## get remaining pages to show the content in the right place
     ## Color palette
         ## two contrasting colors (purple and teal)
             ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar

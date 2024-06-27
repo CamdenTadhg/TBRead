@@ -87,7 +87,13 @@ textarea{
 .css-edit .alert-success {
     background-color: #D7B6F6;
     border: #420E74;
-    color: #420E74;
+    color: #1F0736;
+}
+
+.css-edit .alert-danger {
+    background-color: #F7CCCA;
+    border:#DE342B;
+    color: #58110E;
 }
 
 /* LIST PAGES */
