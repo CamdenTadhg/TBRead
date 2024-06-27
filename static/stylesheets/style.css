@@ -38,7 +38,7 @@ textarea{
 .logged-in-content {
     display:grid;
     grid-template-columns: [first] 12vw [sidebar] 85vw [end];
-    grid-template-rows: [top] 10.25vh [content] 79.5vh [bottom]
+    grid-template-rows: [top] 10vh [content] 79.5vh [bottom]
 }
 
 .sidebar {
@@ -62,7 +62,7 @@ textarea{
 }
 
 .sidebar-item:hover{
-    background-color: #6DC5BC
+    background-color: #6DC5BC;
 }
 
 .main-content {
