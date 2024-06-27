@@ -37,10 +37,10 @@ textarea{
     width: 100px;
 }
 
-.main-content {
+.logged-in-content {
     display:grid;
-    grid-template-columns: [first] 10% [sidebar] 90% [end];
-    grid-template-rows: [top] 5% [content] 95% [bottom]
+    grid-template-columns: [first] 10vw [sidebar] 90vw [end];
+    grid-template-rows: [top] 5vh [content] 95vh [bottom]
 }
 
 .sidebar {
@@ -67,7 +67,7 @@ textarea{
     color: black;
 }
 
-.container {
+.main-content {
     grid-column-start: sidebar;
     grid-row-start: content;
 }

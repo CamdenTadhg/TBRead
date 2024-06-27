@@ -36,7 +36,7 @@
             </ul>
         </div>
     </nav>
-    <div class="main-content">
+    <div class="logged-in-content">
         {% if g.user %}
         <div class="sidebar">
             <a class="sidebar-item" href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a>
@@ -45,7 +45,7 @@
             <div class="sidebar-item">Support</div>
         </div>
         {% endif %}
-        <div class="container">
+        <div class="main-content">
             {% for category, message in get_flashed_messages(with_categories=True) %}
             <div class="alert alert-{{category}}">{{message}}</div>
             {% endfor %}

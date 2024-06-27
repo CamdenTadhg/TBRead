@@ -1,11 +1,14 @@
 TO DO LIST: 
 ## 22 Styling
+    ## figure out sidebar and navbar
+        ## get remaining pages to show the content in the right place
     ## Color palette
         ## two contrasting colors (purple and teal)
-            ## download bootstrap css so I can edit it. 
-            ## change green to purple
             ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
-            ## chose a second font for the sidebar and other font uses. 
+            ## change green to purple
+                ## add edit class tag to all alert-success classes
+                ## in css use those selectors to change background color, border color, and color
+            ## pick a font to use throughout 
     ## homepage
         ## make covers display correctly on all size screens
         ## Logo change to To Be Read so we know what they stand for
