@@ -95,8 +95,9 @@ textarea{
 }
 
 .about-content {
-    font-size: 2rem;
-    width: 75%;
+    font-size: 1.75rem;
+    width: 80%;
+    text-align: justify;
 }
 
 .logos {
@@ -108,8 +109,12 @@ textarea{
     gap: 3vw;
 }
 
-.tech-logo {
-    width: 5vw;
+.tech-logo-wide {
+    width: 10vw;
+}
+
+.tech-logo-high {
+    height: 10vh;
 }
 
 /* LIST PAGES */
