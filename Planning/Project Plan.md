@@ -1,9 +1,12 @@
 TO DO LIST: 
 ## 22 Styling 
+    ## top navbar
+        ## make it smaller
+        ## adjust everything else accordingly
     ## homepage
-        ## change cover images so they will appear correctly on all screens
         ## one line pitch below the navbar. why do I want to be on this website in the first place? 
     ## about page (where does this link go?)
+        ## make sidebar appear on all pages, including anonymous home page, but only About should appear for not logged in users. 
         ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)
 ## 21 Write readme and submit here
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin

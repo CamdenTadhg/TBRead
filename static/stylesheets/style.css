@@ -38,7 +38,7 @@ textarea{
 .logged-in-content {
     display:grid;
     grid-template-columns: [first] 12vw [sidebar] 85vw [end];
-    grid-template-rows: [top] 14.5vh [content] 75vh [bottom]
+    grid-template-rows: [top] 10.5vh [content] 79.5vh [bottom]
 }
 
 .sidebar {
@@ -46,7 +46,7 @@ textarea{
     width: 11%;
     position: fixed;
     z-index: 1;
-    top: 15%;
+    top: 10vh;
     left: 0;
     background-color: #81CDC6;
     overflow-x: hidden;
@@ -72,7 +72,7 @@ textarea{
 }
 
 .navbar {
-    height: 15%;
+    height: 10vh;
     width: 100%;
     position: fixed;
     z-index: 1;
