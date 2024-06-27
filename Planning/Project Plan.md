@@ -1,10 +1,6 @@
 TO DO LIST: 
 ## 22 Styling
     ## Color palette
-        ## two contrasting colors (purple and teal)
-            ## change green to purple
-                ## add edit class tag to all alert classes
-                ## in css use those selectors [.edit-css .alert-success and .edit-css .alert-danger] to change background color, border color, and color
             ## pick a font to use throughout 
     ## homepage
         ## Logo change to To Be Read so we know what they stand for
