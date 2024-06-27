@@ -1087,7 +1087,7 @@ def edit_user_challenge(user_id, challenge_id):
 
 
 #########################################################################################
-# Homepage
+# Homepage and About
 
 @app.route('/')
 def homepage():
@@ -1102,3 +1102,9 @@ def homepage():
         form3 = EmailForm()
         display_books = db.session.query(Book).where(Book.thumbnail != None).where(Book.thumbnail != '').order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
+
+@app.route('/about')
+def about():
+    """Show about page"""
+
+    return render_template('about.html')

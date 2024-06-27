@@ -1,7 +1,5 @@
 TO DO LIST: 
 ## 22 Styling Basics
-    ## top navbar
-        ## adjust everything else accordingly
     ## about page (where does this link go?)
         ## make sidebar appear on all pages, including anonymous home page, but only About should appear for not logged in users. 
         ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am  (match this up with readme)

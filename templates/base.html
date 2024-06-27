@@ -40,14 +40,14 @@
         </div>
     </nav>
     <div class="logged-in-content">
-        {% if g.user %}
         <div class="sidebar">
+            {% if g.user %}
             <a class="sidebar-item" href='/users/{{g.user.user_id}}/lists/tbr'>Lists</a>
             <a class="sidebar-item" href='/users/{{g.user.user_id}}/calendar'>Calendar</a>
             <a class="sidebar-item" href='/challenges'>Challenges</a>
-            <div class="sidebar-item">Support</div>
+            {% endif %}
+            <a class="sidebar-item" href="/about">About</a>
         </div>
-        {% endif %}
         <div class="main-content">
             {% for category, message in get_flashed_messages(with_categories=True) %}
             <div id = "edit-css" class="alert alert-{{category}}">{{message}}</div>
