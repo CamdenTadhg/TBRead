@@ -6,8 +6,8 @@ TO DO LIST:
         ## two contrasting colors (purple and teal)
             ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
             ## change green to purple
-                ## add edit class tag to all alert-success classes
-                ## in css use those selectors to change background color, border color, and color
+                ## add edit class tag to all alert classes
+                ## in css use those selectors [.edit-css .alert-success and .edit-css .alert-danger] to change background color, border color, and color
             ## pick a font to use throughout 
     ## homepage
         ## make covers display correctly on all size screens
