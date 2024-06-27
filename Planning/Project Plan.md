@@ -1,7 +1,6 @@
 TO DO LIST: 
-## 22 Styling 
+## 22 Styling Basics
     ## top navbar
-        ## make it smaller
         ## adjust everything else accordingly
     ## about page (where does this link go?)
         ## make sidebar appear on all pages, including anonymous home page, but only About should appear for not logged in users. 
@@ -9,7 +8,7 @@ TO DO LIST:
 ## 21 Write readme and submit here
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
-## 19 Styling
+## 19 Styling Well
     ## fix it so that on login, you get the appropriate flash message
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
@@ -18,10 +17,11 @@ TO DO LIST:
         ## no lines in the search results
     ## lists and challenges part 1
         ## take away the table lines
-        ## turn off sorting for the cover image
+        ## turn off sorting for the cover image and change cursor
+        ## change buttons to say Move to DNF, Move to Complete, Move to TBR
         ## fix it so tables and columns are the same size on all booklist pages and the same size on all challenge pages
         ## make table header words a little bit bigger and choose a different font for them
-        ## have arrow show up in every column of the table so you know you can sort by that
+        ## have arrow show up in every column of the table that you can sort by
         ## short description of what the page does for you
         ## tab should say did not finish
         ## tabs should look like the add books.

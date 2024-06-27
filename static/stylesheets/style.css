@@ -37,12 +37,12 @@ textarea{
 
 .logged-in-content {
     display:grid;
-    grid-template-columns: [first] 11.5vw [sidebar] 85vw [end];
-    grid-template-rows: [top] 10vh [content] 79.5vh [bottom]
+    grid-template-columns: [first] 12vw [sidebar] 85vw [end];
+    grid-template-rows: [top] 9.75vh [content] 79.5vh [bottom]
 }
 
 .sidebar {
-    height: 90vh;
+    height: 90%;
     width: 11%;
     position: fixed;
     z-index: 1;
