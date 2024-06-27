@@ -1,15 +1,14 @@
 TO DO LIST: 
 ## 22 Styling
+    ## fix sidebar   
+        ## figure out how to make the top navbar scroll with the side navbar
+        ## figure out how to put the main content in the right place relative to the sidebar
     ## Color palette
         ## two contrasting colors (purple and teal)
             ## download bootstrap css so I can edit it. 
             ## change green to purple
             ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
             ## chose a second font for the sidebar and other font uses. 
-    ## fix sidebar   
-        ## you just tried fixing your navbar screwup. Try updating git and rebuilding the site.  
-        ## figure out how to make the top navbar scroll with the side navbar
-        ## figure out how to put the main content in the right place relative to the sidebar
     ## homepage
         ## make covers display correctly on all size screens
         ## Logo change to To Be Read so we know what they stand for

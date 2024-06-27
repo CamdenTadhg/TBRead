@@ -40,15 +40,15 @@ textarea{
 .main-content {
     display:grid;
     grid-template-columns: [first] 10% [sidebar] 90% [end];
-    grid-template-rows: [top] 10% [content] 90% [bottom]
+    grid-template-rows: [top] 5% [content] 95% [bottom]
 }
 
 .sidebar {
-    height: 90%;
+    height: 87%;
     width: 10%;
     position: fixed;
     z-index: 1;
-    top: 10%;
+    top: 13%;
     left: 0;
     background-color: #c8bfc7;
     overflow-x: hidden;
