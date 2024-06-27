@@ -1,30 +1,54 @@
 TO DO LIST: 
-## 21 Styling
-    ## fix sidebar    
+## 22 Styling
+    ## Color palette
+        ## two contrasting colors (purple and teal)
+            ## download bootstrap css so I can edit it. 
+            ## change green to purple
+            ## teal is too bright, make a lighter teal and change buttons to lighter teal as well as sidebar
+            ## chose a second font for the sidebar and other font uses. 
+    ## fix sidebar   
+        ## you just tried fixing your navbar screwup. Try updating git and rebuilding the site.  
         ## figure out how to make the top navbar scroll with the side navbar
         ## figure out how to put the main content in the right place relative to the sidebar
-    ## fix tabs to be visible
-        ## fit them in the top row in the grid
+    ## homepage
+        ## make covers display correctly on all size screens
+        ## Logo change to To Be Read so we know what they stand for
+        ## obviously fix the navbar screwup. 
+        ## one line pitch below the navbar. why do I want to be on this website in the first place? 
+    ## about page
+        ## accessible when you aren't signed in. why this tool? who it's for in more detail? what it does? Snippet about who I am
+## 21 Write readme and submit here
+## 20 Styling
     ## fix it so that on login, you get the appropriate flash message
-    ## go over site with Augustin for design considerations (maybe try to keep it to a page of changes, I want to be done with this eventually)
-## 20 Documentation
-    ## create ReadMe
-
-
+    ## lists
+        ## see if arrow can show up in every column of the table so you know you can sort by that
+        ## see if you can turn off sorting for the cover image
+        ## short description of what the page does for you
+        ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
+        ## tab should say did not finish
+        ## tabs should look like the add books. 
+        ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
+            ## where do you end up? 
+        ## take away the table lines
+        ## make table header words a little bit bigger and choose a different font for them
+        ## spread out empty table so you can actually read the columns
+    ## add books page
+        ## make the field and term in a line, like the HCLIB search bar. 
+        ## search bar should go across the top and search results appear below
+        ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
+        ## no lines in the search results
+    ## same things on the challenge page as on the lists page
+## 19 Refactor based on feedback from mentor and hatchways and Augustin
+    ## better response to axios errors than stupid little alerts
+## 18 Transfer database to new service
+## 17 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
+## 16 Documentation
     ## create help section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## figure out how to run tests on render
         ## python tests
         ## javascript tests
-## 19 Refactor based on feedback from mentor and hatchways and Augustin
-    ## better response to axios errors than stupid little alerts
-## 18 Transfer database to new service
-## 17 Fix delete and transfer book function
-    ## move it to javascript so that the page doesn't have to reload
-        ## you'll need the userbook_id on the page somewhere, probably in the buttons as data points
-    ## but have javascript re-request the table so that it gets updated
-## 16 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
 ## 15 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule
