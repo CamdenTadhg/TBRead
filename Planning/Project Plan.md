@@ -1,8 +1,5 @@
 TO DO LIST: 
 ## 22 Styling
-    ## fix sidebar   
-        ## figure out how to make the top navbar scroll with the side navbar
-        ## figure out how to put the main content in the right place relative to the sidebar
     ## Color palette
         ## two contrasting colors (purple and teal)
             ## download bootstrap css so I can edit it. 
