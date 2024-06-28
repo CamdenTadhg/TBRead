@@ -237,7 +237,7 @@ class UserViewTestCase(TestCase):
             resp = c.get(f'/api/{self.testuser.user_id}/lists/tbr')
             
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, [{'author': 'Mr. Testy Test', 'cover': 'https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE', 'id': self.ub1.userbook_id, 'pages': 100, 'pub_date': '2024', 'publisher': 'PenguinRandomHouse', 'title': 'test book'}])
+            self.assertEqual(resp.json, [{'authors': 'Mr. Testy Test', 'cover': 'https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE', 'id': self.ub1.userbook_id, 'pages': 100, 'pub_date': '2024', 'publisher': 'PenguinRandomHouse', 'title': 'test book'}])
 
     def test_display_dnf_list_loggedout(self):
         """Does the site respond correctly when an anonymous user tries to access a dnf list?"""
@@ -301,7 +301,7 @@ class UserViewTestCase(TestCase):
             resp = c.get(f'/api/{self.testuser.user_id}/lists/dnf')
             
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, [{'author': 'Mr. Testy Test', 'cover': 
+            self.assertEqual(resp.json, [{'authors': 'Mr. Testy Test', 'cover': 
                                           'https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE', 'id': self.ub1.userbook_id, 'pages': 100, 'pub_date': '2024', 'publisher': 'PenguinRandomHouse', 'title': 'test book'}])
 
     def test_display_complete_list_loggedout(self):
@@ -366,7 +366,7 @@ class UserViewTestCase(TestCase):
             resp = c.get(f'/api/{self.testuser.user_id}/lists/complete')
             
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, [{'author': 'Mr. Testy Test', 'cover': 
+            self.assertEqual(resp.json, [{'authors': 'Mr. Testy Test', 'cover': 
                                           'https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE', 'id': self.ub1.userbook_id, 'pages': 100, 'pub_date': '2024', 'publisher': 'PenguinRandomHouse', 'title': 'test book'}])
     
     def test_delete_user_loggedout(self):

@@ -193,7 +193,7 @@ def password_reset():
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
 
     if form.validate_on_submit():
-        password = form.password.data
+        password = form.update_password.data
         stmt = user.update_password(pwd=password, email=email)
         db.session.execute(stmt)
         try:

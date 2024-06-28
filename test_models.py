@@ -320,7 +320,7 @@ class User_BookModelTestCase(TestCase):
         db.session.add(ub)
         db.session.commit()
 
-        self.assertEqual(ub.serialize_user_book(), {"id": ub.userbook_id, "title": "test book", "author": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": '2024', "cover":"https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE", "pages": 100} )
+        self.assertEqual(ub.serialize_user_book(), {"id": ub.userbook_id, "title": "test book", "authors": "Mr. Testy Test", "publisher": "PenguinRandomHouse", "pub_date": '2024', "cover":"https://books.google.com/books?id=wrOQLV6xB-wC&printsec=frontcover&dq=harry+potter&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwiZ44Obka-GAxVBMzQIHfH9DVUQ6wF6BAgJEAE", "pages": 100} )
 
 class ListModelTestCase(TestCase):
     """Test methods for list model"""
