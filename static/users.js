@@ -17,6 +17,7 @@ let $sendResetButton = $('#send_reset_button');
 let $modalBody = $('.modal-body')
 let $cancelButton = $('.cancel-button');
 let $closeButton = $('.close-button');
+let $mainContent = $('.main-content');
 
 // validation of signup form
 $signupButton.on('click', async function(event){
@@ -53,6 +54,8 @@ $signupButton.on('click', async function(event){
         }
         else {
             pageReload();
+            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
+            $mainContent.prepend($welcomeDiv);
         }
     }
 });
@@ -98,12 +101,13 @@ $loginButton.on('click', async function(event){
     }
     else {
         let response = await loginViaAxios();
-        console.log(response);
         if(response['error']){
             loginReturnedErrorHandler(response);
         }
         else {
             pageReload();
+            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
+            $mainContent.prepend($welcomeDiv);
         }
     }
 });

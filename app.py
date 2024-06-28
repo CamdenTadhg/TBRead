@@ -101,8 +101,7 @@ def signup():
     do_login(user)
     create_lists(user)
 
-    flash(f'Welcome {username}', 'success')
-    return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
+    return jsonify({'success': 'true'})
     
 @app.route('/login', methods=['POST'])
 def login():
@@ -118,8 +117,7 @@ def login():
         
     if user: 
         do_login(user)
-        flash(f'Welcome {username}', 'success')
-        return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
+        return jsonify({'success': 'true'})
     elif not db.session.execute(db.select(User).where(User.username == request.json['username'])).scalar():
         return jsonify({'error': 'Invalid username'})
     else:

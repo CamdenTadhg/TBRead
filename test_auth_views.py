@@ -451,7 +451,7 @@ class AuthViewTestCase(TestCase):
             db.session.execute(stmt)
             db.session.commit()
             oldpassword = db.session.execute(db.select(User.password).where(User.email == 'testuser@test.com')).scalar()
-            resp = c.post('/passwordreset?prt=prt&email=testuser@test.com', data={'password': 'kJeP7!9!wYGou%WD', 'password2': 'kJeP7!9!wYGou%WD'})
+            resp = c.post('/passwordreset?prt=prt&email=testuser@test.com', data={'update_password': 'kJeP7!9!wYGou%WD', 'update_password2': 'kJeP7!9!wYGou%WD'})
             prt = db.session.execute(db.select(User.password_reset_token).where(User.email == 'testuser@test.com')).scalar()
             newpassword = db.session.execute(db.select(User.password).where(User.email == 'testuser@test.com')).scalar()
 
@@ -469,7 +469,7 @@ class AuthViewTestCase(TestCase):
             db.session.execute(stmt)
             db.session.commit()
             oldpassword = db.session.execute(db.select(User.password).where(User.email == 'testuser@test.com')).scalar()
-            resp = c.post('/passwordreset?prt=prt&email=testuser@test.com', data={'password': 'kJeP7!9!wYGou%WD', 'password2': 'kJeP7!9!wYGou%WD'}, follow_redirects=True)
+            resp = c.post('/passwordreset?prt=prt&email=testuser@test.com', data={'update_password': 'kJeP7!9!wYGou%WD', 'update_password2': 'kJeP7!9!wYGou%WD'}, follow_redirects=True)
             html = resp.get_data(as_text=True)
             prt = db.session.execute(db.select(User.password_reset_token).where(User.email == 'testuser@test.com')).scalar()
             newpassword = db.session.execute(db.select(User.password).where(User.email == 'testuser@test.com')).scalar()

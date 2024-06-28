@@ -3,11 +3,10 @@ TO DO LIST:
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
-    ## fix failing reset password test
-        ## not sure why this is still failing. The actual issue seems to be resolved
-    ## fix failing homepage test
     ## fix it so that on login, you get the appropriate flash message
+        ## is it working locally?
         ## this is happening because of javascript. But how do I fix it? 
+        ## update javascript tests to include this change
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
         ## search bar should go across the top and search results appear below
