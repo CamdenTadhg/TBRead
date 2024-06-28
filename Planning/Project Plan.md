@@ -1,11 +1,10 @@
 TO DO LIST: 
-## 22 Styling Basics
-    ## logos should be links to main page
 ## 21 Write readme and submit here
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
     ## fix it so that on login, you get the appropriate flash message
+        ## add appropriate expectation to test file
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
         ## search bar should go across the top and search results appear below
