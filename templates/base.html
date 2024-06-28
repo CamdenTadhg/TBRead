@@ -49,9 +49,16 @@
             <a class="sidebar-item" href="/about">About</a>
         </div>
         <div class="main-content">
-            {% for category, message in get_flashed_messages(with_categories=True) %}
+            <!-- {% for category, message in get_flashed_messages(with_categories=True) %}
             <div class="alert alert-{{category}}">{{message}}</div>
-            {% endfor %}
+            {% endfor %} -->
+            {% with messages=get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{category}}">{{message}}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
             {% block content %}
             {% endblock %}
         </div>
