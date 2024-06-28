@@ -431,7 +431,9 @@ describe('validation of signup form', () => {
                     signupReturnedErrorHandler(response);
                 } else {
                     pageReload();
-                }
+                    let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
+                    $mainContent.prepend($welcomeDiv);
+                    }
             }
         });
     });
@@ -531,6 +533,7 @@ describe('validation of signup form', () => {
         expect(signupViaAxiosSpy).toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
         expect(pageReloadSpy).toHaveBeenCalled();
+        expect($mainContent.find('.welcome-div').text()).toContain('Welcome');
     });
 
     it('calls signupReturnedErrorHandler when signupViaAxios returns an error', async () => {
@@ -588,6 +591,8 @@ describe('validation of login form', () => {
                 }
                 else {
                     pageReload();
+                    let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
+                    $mainContent.prepend($welcomeDiv);
                 }
             }
         });
@@ -620,6 +625,8 @@ describe('validation of login form', () => {
         expect(loginViaAxiosSpy).toHaveBeenCalled();
         expect(loginReturnedErrorHandlerSpy).not.toHaveBeenCalled();
         expect(pageReloadSpy).toHaveBeenCalled();
+        expect($mainContent.find('.welcome-div').text()).toContain('Welcome');
+
     });
 
     it('rejects missing data', async () => {

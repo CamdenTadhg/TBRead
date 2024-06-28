@@ -54,7 +54,7 @@ $signupButton.on('click', async function(event){
         }
         else {
             pageReload();
-            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
+            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$signupUsername.val()}</div>`);
             $mainContent.prepend($welcomeDiv);
         }
     }
@@ -105,9 +105,10 @@ $loginButton.on('click', async function(event){
             loginReturnedErrorHandler(response);
         }
         else {
-            pageReload();
             let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
-            $mainContent.prepend($welcomeDiv);
+            console.log($welcomeDiv);
+            $mainContent.prepend($welcomeDiv);\
+            pageReload();
         }
     }
 });

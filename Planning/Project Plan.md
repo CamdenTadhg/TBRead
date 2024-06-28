@@ -4,9 +4,7 @@ TO DO LIST:
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
     ## fix it so that on login, you get the appropriate flash message
-        ## is it working locally?
-        ## this is happening because of javascript. But how do I fix it? 
-        ## update javascript tests to include this change
+        ## It's happening because of javascript but my solution isn't currently working
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
         ## search bar should go across the top and search results appear below
