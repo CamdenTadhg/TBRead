@@ -23,8 +23,8 @@ CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24fir
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
-# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
+# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
+app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -118,7 +118,7 @@ def login():
         
     if user: 
         do_login(user)
-        flash(f'Welcome!', 'success')
+        flash(f'Welcome {username}', 'success')
         return redirect(f'/users/{session[CURR_USER_KEY]}/lists/tbr')
     elif not db.session.execute(db.select(User).where(User.username == request.json['username'])).scalar():
         return jsonify({'error': 'Invalid username'})

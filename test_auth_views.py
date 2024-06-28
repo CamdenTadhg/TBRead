@@ -129,6 +129,7 @@ class AuthViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Add Books', html)
             self.assertIn('Log out', html)
+            self.assertIn('Welcome', html)
             self.assertEqual(user_id, session[CURR_USER_KEY])
             self.assertEqual(user_image, '/static/images/image.png')
     
@@ -197,6 +198,7 @@ class AuthViewTestCase(TestCase):
             self.assertEqual(self.testuser.user_id, session[CURR_USER_KEY])
             self.assertEqual(self.testuser, g.user)
             self.assertIn('Add Books', html)
+            self.assertIn('Welcome', html)
 
     def test_login_incorrect_username(self):
         """Does the site send the appropriate json error message if the wrong username is given?"""
