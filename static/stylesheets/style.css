@@ -115,6 +115,7 @@ textarea{
 
 .tech-logo-tall {
     height: 10vh;
+    align-self: flex-end;
 }
 
 /* LIST PAGES */
