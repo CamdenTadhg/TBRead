@@ -5,6 +5,7 @@ TO DO LIST:
 ## 19 Styling Well
     ## fix it so that on login, you get the appropriate flash message
         ## It's happening because of javascript but my solution isn't currently working
+        ## how do you keep something going between javascript page loads. Is there a session something that does this? You could put something in there, and then make a new function for when the page loads, which prints the welcome div and removes the thing from the session. 
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
         ## search bar should go across the top and search results appear below

@@ -107,7 +107,7 @@ $loginButton.on('click', async function(event){
         else {
             let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
             console.log($welcomeDiv);
-            $mainContent.prepend($welcomeDiv);\
+            $mainContent.prepend($welcomeDiv);
             pageReload();
         }
     }
