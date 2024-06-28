@@ -36,7 +36,7 @@ class HomepageTestCase(TestCase):
                                      user_image=None)
         db.session.commit()
 
-        self.test_book = Book(google_id="lasowndo", title="The Testy Test Book", authors = "Mr. Testy Test", publisher="PenguinRandomHouse")
+        self.test_book = Book(google_id="lasowndo", title="The Testy Test Book", authors = "Mr. Testy Test", publisher="PenguinRandomHouse", thumbnail="http://books.google.com/books/content?id=9kpgvRjMlNMC&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE72KAj9GL9khNzzad6vXIXySl0kqr0IG4AWnnXw0O7ZSnTwhx-_-uBuQ7nP-hULL0MnVwXoKZN9-dtEjO5fC3mk1roEwlxOBMbj5vmvBClPP4AKD-8VUbLZzEiOiJgRFHs4YUnwG&source=gbs_api")
         db.session.add(self.test_book)
         db.session.commit()
 
@@ -64,3 +64,23 @@ class HomepageTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 302)
             self.assertEqual(resp.location, f'/users/{user_id}/lists/tbr')
+    
+    def test_about_loggedout(self):
+        """Does the about page display correctly for an anonymous user?"""
+        with self.client as c:
+            resp = c.get('/about')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('You are a busy', html)
+    
+    def test_about_loggedin(self):
+        """Does the about page display correctly for a logged in user?"""
+        with self.client as c:
+            with c. session_transaction() as change_session:
+                change_session[CURR_USER_KEY] = self.test_user.user_id
+            resp = c.get('/about')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('You are a busy', html)

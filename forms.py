@@ -7,11 +7,11 @@ import re
 
 def password_requirements(form, field):
     password_regex = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
-    if not password_regex.match(form.password.data):
+    if not password_regex.match(form.update_password.data):
         raise ValidationError('Password must include one capital letter, one lowercase letter, one number, and one special character')
     
 def matching_passwords(form, field):
-    if form.password.data != form.password2.data:
+    if form.update_password.data != form.update_password2.data:
         raise ValidationError('Passwords do not match. Please try again.')
     
 class UserAddForm(FlaskForm):
