@@ -19,6 +19,17 @@ let $cancelButton = $('.cancel-button');
 let $closeButton = $('.close-button');
 let $mainContent = $('.main-content');
 
+
+//on page load, display welcome message if they have just logged in
+$(document).ready(function(){
+    if (localStorage.getItem('welcome')){
+        let username = localStorage.getItem('welcome');
+        let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${username}</div>`);
+        $mainContent.prepend($welcomeDiv);
+        localStorage.removeItem('welcome');
+    }
+});
+
 // validation of signup form
 $signupButton.on('click', async function(event){
     console.log('signup button clicked');
@@ -53,9 +64,8 @@ $signupButton.on('click', async function(event){
             signupReturnedErrorHandler(response);
         }
         else {
+            localStorage.setItem('welcome', $signupUsername);
             pageReload();
-            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$signupUsername.val()}</div>`);
-            $mainContent.prepend($welcomeDiv);
         }
     }
 });
@@ -105,9 +115,7 @@ $loginButton.on('click', async function(event){
             loginReturnedErrorHandler(response);
         }
         else {
-            let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
-            console.log($welcomeDiv);
-            $mainContent.prepend($welcomeDiv);
+            localStorage.setItem('welcome', $loginUsername);
             pageReload();
         }
     }

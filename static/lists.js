@@ -1,7 +1,7 @@
-$userBookList = $('.user-book-list');
-$table = $('.book-list-table');
+let $userBookList = $('.user-book-list');
+let $table = $('.book-list-table');
 
-//on page load, display contents of list
+//on page load, display welcome message and contents of list
 $(document).ready(function(){
     userBooksOnStart();
 });

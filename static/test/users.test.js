@@ -430,9 +430,8 @@ describe('validation of signup form', () => {
                 if (response['error']) {
                     signupReturnedErrorHandler(response);
                 } else {
+                    localStorage.setItem('welcome', $signupUsername);
                     pageReload();
-                    let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
-                    $mainContent.prepend($welcomeDiv);
                     }
             }
         });
@@ -590,9 +589,8 @@ describe('validation of login form', () => {
                     loginReturnedErrorHandler(response);
                 }
                 else {
+                    localStorage.setItem('welcome', 'true');
                     pageReload();
-                    let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${$loginUsername.val()}</div>`);
-                    $mainContent.prepend($welcomeDiv);
                 }
             }
         });
