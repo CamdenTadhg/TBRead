@@ -877,3 +877,20 @@ describe('update password event handler', () => {
         expect($modalBody.find('.error-div')[0].classList).toContain('alert-danger');
     });
 });
+
+describe('page load handler', () => {
+    localStorage.setItem('welcome', 'testuser15');
+
+    it('should print a welcome message if the user has just logged in', function(done) {
+        // Mock DOMContentLoaded event
+        $(document).ready(function() {
+            expect($mainContent.find('.welcome-div').text()).toEqual('Welcome testuser15');
+            expect(localStorage.getItem('welcome')).toBeFalse();
+            done();
+        });
+
+        // Trigger the DOMContentLoaded event
+        const event = new Event('DOMContentLoaded');
+        document.dispatchEvent(event);
+    });
+});

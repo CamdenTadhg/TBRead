@@ -4,7 +4,6 @@ TO DO LIST:
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
     ## fix it so that on login, you get the appropriate flash message
-        ## does it work? 
         ## test that the local storage is happening
         ## test that the welcome is being printed. 
         ## run the javascript tests to make sure they are still working
