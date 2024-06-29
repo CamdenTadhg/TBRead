@@ -1,12 +1,16 @@
 TO DO LIST: 
-## 21 Write readme and submit here
-## 20 Refactor based on feedback from mentor and hatchways and Augustin
+## 22 Write readme and submit here
+    ## write README (try chat gpt)
+## 21 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
-## 19 Styling Well
+## 20 Styling Well
     ## alerts (success & error)
-    ## edit books page
+    ## edit books (and manual add page) page
     ## edit challenge page
     ## edit your challenge page
+    ## add new books page
+    ## anonymous home page
+    ## about page
     ## lists and challenges part 1
         ## take away the table lines
         ## turn off sorting for the cover image and change cursor
@@ -23,16 +27,10 @@ TO DO LIST:
             ## write tests for new code
         ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
             ## write tests for new code
-## 18 Transfer database to new service
-## 17 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
-## 16 Documentation
-    ## flesh out documentation section
-        ## create documentation for sending in emails
-        ## create documentation for creating challenges
-    ## figure out how to run tests on render
-        ## python tests
-        ## javascript tests
-## 15 Implement schedule books functionality
+## 19 Transfer database to new service
+## 18 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
+## 17 Allow user to add book to any list
+## 16 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
@@ -53,12 +51,19 @@ TO DO LIST:
     ## display book cover on calendar on start date
     ## write tests for all calendar views
     ## write tests for all calendar javascript
-## 14 Implement email reminders functionality 
+## 15 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
     ## write tests
+## 14 FAQ/Documentation
+    ## flesh out documentation section
+        ## create documentation for sending in emails
+        ## create documentation for creating challenges
+    ## figure out how to run tests on render
+        ## python tests
+        ## javascript tests
 ## 13 Create an architecture diagram
 ## 12 Small Screen Styling
 ## 11 Implement upload user image and book cover image
