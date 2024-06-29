@@ -12,7 +12,6 @@ TO DO LIST:
     ## lists and challenges part 1
         ## fix it so tables and columns are the same size on all booklist pages and the same size on all challenge pages
         ## make heading text larger
-        ## change padding on table cells
         ## change search box color to a lighter gray
         ## turn off sorting for the cover image and change cursor
         ## have arrow show up in every column of the table that you can sort by

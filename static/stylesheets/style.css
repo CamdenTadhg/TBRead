@@ -133,12 +133,12 @@ td {
 /* LIST PAGES */
 
 .transfer {
-    height: 10vh;
+    height: 50px;
     padding: 0px;
 }
 
 .delete {
-    height: 10vh;
+    height: 50px;
 }
 
 .list-cover{
