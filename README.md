@@ -38,12 +38,12 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
 - **Challenge Tracking**: More robust challenge tracking with books assigned to specific categories to meet challenge requirements and checklists of completion. 
 
 ## User Flow: 
-1. **Authorization**
+1. **Authorization**\
 **Sign Up**
-  1. Visit the [TB-Read website](https://tb-read.com).
-  2. Click on the Sign up link in the upper right.
-  3. Fill out the registration form. 
-  4. Click Submit to create your account.
+    1. Visit the [TB-Read website](https://tb-read.com).
+    2. Click on the Sign up link in the upper right.
+    3. Fill out the registration form. 
+    4. Click Submit to create your account.
 **Log In**
 1. Visit the [TB-Read website](https://tb-read.com).
 2. Click on the Log in link in the upper right. 
@@ -55,7 +55,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
 3. Enter your email. 
 4. Click Send username reminder to receive an email with your username or click Reset password to receive an email with a reset password link. 
 
-2. **Manage Reading Lists**
+2. **Manage Reading Lists**\
 **Add Books to Reading Lists**
 1. After login, you will see your lists page, including three tabs: TBR (To Be Read), DNF (Did Not Finish), and Completed. 
 2. Click the Add Books button to start adding books.
@@ -82,7 +82,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
 4. Add your notes to the body of the email. 
 5. Once sent, your notes will be appended to the end of any existing notes in the book's record. 
 
-3. **Manage Challenges**
+3. **Manage Challenges**\
 **Create a New Challenge**
 1. Click on Challenges on the sidebar to open the challenges section. 
 2. Click the Add a Challenge button. 
