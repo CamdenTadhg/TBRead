@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="search-form-container">
     <form id="search-books" method="POST">
         <select id="field" name="field" class="search-form field-search">
             <option value="title">Title<span class="caret"></span></option>
@@ -12,7 +12,7 @@
         <input type="text" id="term" name="term" class="search-form term-search">
         <button class="btn btn-primary book-search-button">Search</button>
     </form>
-    <div class="col-sm api-search-results">
+    <div class="api-search-results">
     </div>
     <p class="manual-book-add">
         <span class="mt-5 manual-book-text">Can't find your book?</span>

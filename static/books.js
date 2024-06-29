@@ -36,7 +36,7 @@ async function searchGoogleBooks(field, term){
 
 //display book search results
 function displaySearchResults(response){
-    const index = Math.min(response.length - 1, 9);
+    const index = Math.min(response.length - 1, 14);
     console.log(index);
     for (let i = 0; i <= index; i++){
         let $bookDiv = $(`<div class="row border"></div>`);

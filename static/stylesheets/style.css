@@ -142,13 +142,13 @@ th {
 
 .book-search-button{
     display: inline;
-    height: 5vh;
+    font-size: 1.5rem;
 }
 
 .search-form{
     display: inline;
     padding: .375rem .75rem;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 400;
     line-height: 1.5;
     border: 1px solid #EDEDED;
@@ -160,11 +160,12 @@ th {
 }
 
 #search-books{
-    border-bottom: 1vh solid #420E74;
+    border-bottom: 2px solid #420E74;
     padding-top: 3vh;
     padding-bottom: 3vh;
-    height: 7vh;
-    margin: auto;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
 }
 
 .field-search{
@@ -172,11 +173,15 @@ th {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .term-search{
     width: 40vw;
+    -webkit-appearance: none;
+    -moz-appearance: non;
+    appearance: none;
+    font-size: 1.5rem;
 }
 
 .manual-book-add{
@@ -184,5 +189,5 @@ th {
 }
 
 .manual-book-text{
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
