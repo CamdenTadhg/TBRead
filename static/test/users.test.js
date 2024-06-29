@@ -532,7 +532,7 @@ describe('validation of signup form', () => {
         expect(signupViaAxiosSpy).toHaveBeenCalled();
         expect(signupReturnedErrorHandlerSpy).not.toHaveBeenCalled();
         expect(pageReloadSpy).toHaveBeenCalled();
-        expect($mainContent.find('.welcome-div').text()).toContain('Welcome');
+        expect(localStorage.getItem('welcome')).toBe('testuser15');
     });
 
     it('calls signupReturnedErrorHandler when signupViaAxios returns an error', async () => {
@@ -589,7 +589,7 @@ describe('validation of login form', () => {
                     loginReturnedErrorHandler(response);
                 }
                 else {
-                    localStorage.setItem('welcome', 'true');
+                    localStorage.setItem('welcome', $loginUsername);
                     pageReload();
                 }
             }
@@ -623,7 +623,7 @@ describe('validation of login form', () => {
         expect(loginViaAxiosSpy).toHaveBeenCalled();
         expect(loginReturnedErrorHandlerSpy).not.toHaveBeenCalled();
         expect(pageReloadSpy).toHaveBeenCalled();
-        expect($mainContent.find('.welcome-div').text()).toContain('Welcome');
+        expect(localStorage.getItem('welcome')).toBe('camdentadhg');
 
     });
 

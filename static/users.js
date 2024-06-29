@@ -23,7 +23,7 @@ let $mainContent = $('.main-content');
 //on page load, display welcome message if they have just logged in
 $(document).ready(function(){
     if (localStorage.getItem('welcome')){
-        console.log(localStorage.getItem('welcome'));
+        console.log(localStorage['welcome']);
         let username = localStorage.getItem('welcome');
         let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${username}</div>`);
         $mainContent.prepend($welcomeDiv);
