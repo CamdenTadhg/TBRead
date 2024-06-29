@@ -137,3 +137,13 @@ th {
 .your-challenges-table {
     margin-top: 5%;
 }
+
+/* BOOK PAGES */
+
+.book-search-button{
+    display: inline;
+}
+
+#search-books{
+    margin-top: 3vh;
+}

@@ -3,30 +3,17 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm">
-            <form id="search-books" method="POST">
-                {% for field in form if field.widget.input_type !='hidden' %}
-                <p>
-                    {{field.label}}
-                    {{field}}
-
-                    {% for error in field.errors %}
-                        <div class="text-sm text-danger">
-                            {{error}}
-                        </div>
-                    {% endfor %}
-                </p>
-                {% endfor %}
-                <a href="/users/{{g.user.user_id}}/lists/tbr" class="btn btn-secondary">Cancel</a>
-                <button class="btn btn-primary book-search-button">Search</button>
-            </form>
-            <p class="mt-5">Can't find your book?</p>
-            <a class="btn btn-info" href="/books/manual">Add a book manually</a>
-        </div>
-        <div class="col-sm api-search-results">
-            
-        </div>
+    <form id="search-books" method="POST">
+        <span>{{form.field(class_="form-control")}}</span>
+        <span>{{form.term(class_="form-control")}}</span>
+        <button class="btn btn-primary book-search-button">Search</button>
+    </form>
+    <div class="col-sm api-search-results">
     </div>
+    <p>
+        <span class="mt-5">Can't find your book?</span>
+        <a class="btn btn-info" href="/books/manual">Add a book manually</a>
+    </p>
 </div>
+
 {% endblock %}

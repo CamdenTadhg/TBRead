@@ -3,10 +3,6 @@ TO DO LIST:
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
-    ## fix it so that on login, you get the appropriate flash message
-        ## test that the local storage is happening
-        ## test that the welcome is being printed. 
-        ## run the javascript tests to make sure they are still working
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
         ## search bar should go across the top and search results appear below
