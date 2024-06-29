@@ -40,10 +40,10 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
 ## User Flow: 
 1. **Authorization**
 **Sign Up**
-    1. Visit the [TB-Read website](https://tb-read.com).
-    2. Click on the Sign up link in the upper right.
-    3. Fill out the registration form. 
-    4. Click Submit to create your account.
+  1. Visit the [TB-Read website](https://tb-read.com).
+  2. Click on the Sign up link in the upper right.
+  3. Fill out the registration form. 
+  4. Click Submit to create your account.
 **Log In**
 1. Visit the [TB-Read website](https://tb-read.com).
 2. Click on the Log in link in the upper right. 
