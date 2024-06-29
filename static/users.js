@@ -27,7 +27,7 @@ $(document).ready(function(){
         let username = localStorage.getItem('welcome');
         let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${username}</div>`);
         $mainContent.prepend($welcomeDiv);
-        localStorage.removeItem('welcome');
+        localStorage.clear();
     }
 });
 

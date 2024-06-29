@@ -879,18 +879,40 @@ describe('update password event handler', () => {
 });
 
 describe('page load handler', () => {
-    localStorage.setItem('welcome', 'testuser15');
+    beforeEach(() => {
+        //set up DOM
+        $mainContent = $('<div class="main-content"></div>').appendTo('body');
+
+        //attach event handler
+        $(document).ready(function(){
+            if (localStorage.getItem('welcome')){
+                console.log(localStorage['welcome']);
+                let username = localStorage.getItem('welcome');
+                let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${username}</div>`);
+                $mainContent.prepend($welcomeDiv);
+                localStorage.clear();
+            }
+        });
+    });
+
+    afterEach(() => {
+        $mainContent.remove();
+    })
 
     it('should print a welcome message if the user has just logged in', function(done) {
+        localStorage.setItem('welcome', 'testuser15');
+        
         // Mock DOMContentLoaded event
         $(document).ready(function() {
             expect($mainContent.find('.welcome-div').text()).toEqual('Welcome testuser15');
-            expect(localStorage.getItem('welcome')).toBeFalse();
+            expect(localStorage.getItem('welcome')).toBeNull();
             done();
         });
 
         // Trigger the DOMContentLoaded event
         const event = new Event('DOMContentLoaded');
         document.dispatchEvent(event);
+
+
     });
 });
