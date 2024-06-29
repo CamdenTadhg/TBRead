@@ -1,7 +1,5 @@
 TO DO LIST: 
-## 22 Write readme and submit here
-    ## write README (try chat gpt)
-## 21 Refactor based on feedback from mentor and hatchways and Augustin
+## 21 Refactor based on feedback from mentor and hatchways
     ## better response to axios errors than stupid little alerts
 ## 20 Styling Well
     ## alerts (success & error)
@@ -12,11 +10,11 @@ TO DO LIST:
     ## anonymous home page
     ## about page
     ## lists and challenges part 1
-        ## take away the table lines
-        ## turn off sorting for the cover image and change cursor
-        ## change buttons to say Move to DNF, Move to Complete, Move to TBR
         ## fix it so tables and columns are the same size on all booklist pages and the same size on all challenge pages
-        ## make table header words a little bit bigger and choose a different font for them
+        ## make heading text larger
+        ## change padding on table cells
+        ## change search box color to a lighter gray
+        ## turn off sorting for the cover image and change cursor
         ## have arrow show up in every column of the table that you can sort by
         ## short description of what the page does for you
         ## tab should say did not finish

@@ -118,10 +118,27 @@ textarea{
     align-self: flex-end;
 }
 
-/* LIST PAGES */
+/* LIST & CHALLENGE TABLES */
 
 th {
     cursor: pointer;
+    padding: 3px;
+}
+
+td {
+    padding: 3px;
+}
+
+
+/* LIST PAGES */
+
+.transfer {
+    height: 10vh;
+    padding: 0px;
+}
+
+.delete {
+    height: 10vh;
 }
 
 .list-cover{
