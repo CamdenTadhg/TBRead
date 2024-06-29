@@ -466,10 +466,8 @@ def add_books():
     if not g.user:
         flash('Please log in', 'danger')
         return redirect('/')
-    
-    form = BookSearchForm()
 
-    return render_template('books/addbooks.html', form=form)
+    return render_template('books/addbooks.html')
 
 @app.route('/books/<google_id>', methods=['GET', 'POST'])
 def edit_new_book(google_id):
