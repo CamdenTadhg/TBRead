@@ -65,7 +65,7 @@ $signupButton.on('click', async function(event){
             signupReturnedErrorHandler(response);
         }
         else {
-            localStorage.setItem('welcome', $signupUsername);
+            localStorage.setItem('welcome', $signupUsername.val());
             pageReload();
         }
     }
@@ -116,7 +116,7 @@ $loginButton.on('click', async function(event){
             loginReturnedErrorHandler(response);
         }
         else {
-            localStorage.setItem('welcome', $loginUsername);
+            localStorage.setItem('welcome', $loginUsername.val());
             pageReload();
         }
     }

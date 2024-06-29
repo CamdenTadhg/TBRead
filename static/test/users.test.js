@@ -430,7 +430,7 @@ describe('validation of signup form', () => {
                 if (response['error']) {
                     signupReturnedErrorHandler(response);
                 } else {
-                    localStorage.setItem('welcome', $signupUsername);
+                    localStorage.setItem('welcome', $signupUsername.val());
                     pageReload();
                     }
             }
@@ -589,7 +589,7 @@ describe('validation of login form', () => {
                     loginReturnedErrorHandler(response);
                 }
                 else {
-                    localStorage.setItem('welcome', $loginUsername);
+                    localStorage.setItem('welcome', $loginUsername.val());
                     pageReload();
                 }
             }
