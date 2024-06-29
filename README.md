@@ -53,7 +53,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
     1. Click on the Log in link in the upper right.\
     2. Click the Forgot Username/Password? link. \
     3. Enter your email. \
-    4. Click Send username reminder to receive an email with your username or click Reset password to receive an email with a reset password link. \
+    4. Click Send username reminder to receive an email with your username or click Reset password to receive an email with a reset password link.
 
 **Manage Reading Lists**\
 **Add Books to Reading Lists**\
@@ -80,7 +80,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
     2. Address the email to notes@tb-read.com.\
     3. Add the exact title of the appropriate book as the subject line of the email.\
     4. Add your notes to the body of the email. \
-    5. Once sent, your notes will be appended to the end of any existing notes in the book's record. \
+    5. Once sent, your notes will be appended to the end of any existing notes in the book's record.
 
 **Manage Challenges**\
 **Create a New Challenge**\
@@ -103,7 +103,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
     2. Find the appropriate book by scrolling or searching. \
     3. Scroll to the bottom of the page. \
     4. Select the challenge from the drop-down menu. \
-    5. Click the Assign to challenge button to assign the book to the challenge. \
+    5. Click the Assign to challenge button to assign the book to the challenge.
 
 ## API:  
 TB-Read utilizes the [Google Books API](https://developers.google.com/books) to search for and add books to your reading list. This API provides comprehensive book metadata, ensuring you have all the information you need for your content creation.  
