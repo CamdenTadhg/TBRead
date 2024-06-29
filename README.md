@@ -71,14 +71,14 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
     1. On your list page, locate the appropriate book, either by scrolling or searching. \
     2. Click the button labeled with the list you would like to transfer to.\
 **Edit Book Information**\
-    1. On your list page, locate the appropriate book, either by scrolling or searching.\ 
+    1. On your list page, locate the appropriate book, either by scrolling or searching. \ 
     2. Click the book's title to open the edit book form. \
     3. Change any metadata you would like to change, or add notes or a script. \
     4. Click the Save changes button to save your changes. \
 **Email in Notes**\
     1. Using the email registered on the site, create a new email. \
-    2. Address the email to notes@tb-read.com.\
-    3. Add the exact title of the appropriate book as the subject line of the email.\
+    2. Address the email to notes@tb-read.com. \
+    3. Add the exact title of the appropriate book as the subject line of the email. \
     4. Add your notes to the body of the email. \
     5. Once sent, your notes will be appended to the end of any existing notes in the book's record.
 
@@ -99,7 +99,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
     3. To see your progress on a challenge, click the challenge name to open the edit challenge page. \
     4. All the books which you have assigned to the challenge and completed reading will be visible at the bottom of the page. \
 **Assign a Book to a Challenge**\
-    1. Click on Lists on the sidebar to open your reading list.\ 
+    1. Click on Lists on the sidebar to open your reading list. \ 
     2. Find the appropriate book by scrolling or searching. \
     3. Scroll to the bottom of the page. \
     4. Select the challenge from the drop-down menu. \
