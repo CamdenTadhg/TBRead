@@ -160,21 +160,23 @@ th {
 }
 
 #search-books{
-    margin-top: 3vh;
-    margin-bottom: 3vh;
     border-bottom: 1vh solid #420E74;
+    padding-top: 3vh;
     padding-bottom: 3vh;
-    margin: 0;
+    height: 7vh;
+    margin: auto;
 }
 
 .field-search{
     width: 15vw;
-    height: 5vh;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 2rem;
 }
 
 .term-search{
     width: 40vw;
-    height: 5vh;
 }
 
 .manual-book-add{
