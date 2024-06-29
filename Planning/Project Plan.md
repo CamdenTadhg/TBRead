@@ -5,7 +5,7 @@ TO DO LIST:
 ## 19 Styling Well
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
-        ## search bar should go across the top and search results appear below
+            ## fix javascript to pick up the new values correctly
         ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
         ## no lines in the search results
     ## lists and challenges part 1

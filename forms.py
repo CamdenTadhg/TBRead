@@ -52,10 +52,6 @@ class UpdatePasswordForm(FlaskForm):
     update_password = PasswordField("Password", validators=[InputRequired(message='Please enter a password'), password_requirements, matching_passwords])
     update_password2 = PasswordField('Confirm Password', validators=[InputRequired(message='Please confirm your password')])
 
-class BookSearchForm(FlaskForm):
-    field = SelectField('Search Field', choices=[('title', 'Title'), ('author', 'Author'), ('isbn', 'ISBN')])
-    term = StringField('Search Term')
-
 class BookEditForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(message="Please enter a title.")])
     authors = StringField('Authors', validators=[DataRequired(message="Please enter an author.")])

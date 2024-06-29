@@ -4,14 +4,18 @@
 
 <div class="container">
     <form id="search-books" method="POST">
-        <span class="book-search-form">{{form.field(class_="form-control")}}</span>
-        <span class="book-search-form">{{form.term(class_="form-control")}}</span>
+        <select id="field" name="field" class="search-form">
+            <option value="title">Title<span class="caret"></span></option>
+            <option value="author">Author</option>
+            <option value="ISBN">ISBN</option>
+        </select>
+        <input type="text" id="term" name="term" class="search-form">
         <button class="btn btn-primary book-search-button">Search</button>
     </form>
     <div class="col-sm api-search-results">
     </div>
-    <p>
-        <span class="mt-5">Can't find your book?</span>
+    <p class="manual-book-add">
+        <span class="mt-5 manual-book-text">Can't find your book?</span>
         <a class="btn btn-info" href="/books/manual">Add a book manually</a>
     </p>
 </div>
