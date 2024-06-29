@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, insert
 from models import db, connect_db, User, Book, List, User_Book, Challenge, User_Challenge, User_Book_Challenge, AgeCategory, Event
-from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookSearchForm, BookEditForm, ChallengeForm, UserChallengeForm, PostDaysForm
+from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookEditForm, ChallengeForm, UserChallengeForm, PostDaysForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
 from local_settings import MAIL_PASSWORD, SECRET_KEY
