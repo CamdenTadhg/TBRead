@@ -6,7 +6,6 @@ TO DO LIST:
     ## add books page
         ## make the field and term in a line, like the HCLIB search bar. 
             ## fix javascript to pick up the new values correctly
-        ## add book manually shows up at the bottom below any search results. All on one line. Increase font size. 
         ## no lines in the search results
     ## lists and challenges part 1
         ## take away the table lines

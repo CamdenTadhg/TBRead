@@ -142,6 +142,7 @@ th {
 
 .book-search-button{
     display: inline;
+    height: 5vh;
 }
 
 .search-form{
@@ -161,7 +162,19 @@ th {
 #search-books{
     margin-top: 3vh;
     margin-bottom: 3vh;
-    border-bottom: 1vh solid #420E74
+    border-bottom: 1vh solid #420E74;
+    padding-bottom: 3vh;
+    margin: 0;
+}
+
+.field-search{
+    width: 15vw;
+    height: 5vh;
+}
+
+.term-search{
+    width: 40vw;
+    height: 5vh;
 }
 
 .manual-book-add{
