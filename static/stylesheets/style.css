@@ -155,6 +155,16 @@ td {
     margin-top: 5%;
 }
 
+.join{
+    padding: 0px;
+    height: 50px;
+}
+
+.leave{
+    padding: 0px;
+    height: 50px;
+}
+
 /* BOOK PAGES */
 
 .book-search-button{

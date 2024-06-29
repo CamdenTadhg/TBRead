@@ -42,7 +42,7 @@ function displayChallenges(array){
         $challengeTr.append($num_books);
         $challengeTr.append($description);
         if (!currentURL.includes('user')){
-            let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary">Join Challenge</button></form></td>`);
+            let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary join">Join Challenge</button></form></td>`);
             $challengeTr.append($joinButton);
         }
         if (currentURL.includes('user')){
@@ -58,7 +58,7 @@ function displayChallenges(array){
             else{
                 var $end_date = $(`<td>${item.end_date}</td>`);
             }
-            let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger">Leave Challenge</button></form></td>`);
+            let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger leave ">Leave Challenge</button></form></td>`);
             $challengeTr.append($start_date);
             $challengeTr.append($end_date);
             $challengeTr.append($leaveButton);
