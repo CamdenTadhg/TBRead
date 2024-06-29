@@ -144,6 +144,11 @@ th {
     display: inline;
 }
 
+.book-search-form{
+    display: inline;
+}
+
 #search-books{
     margin-top: 3vh;
+    border-bottom: 1vh solid #420E74
 }
