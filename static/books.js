@@ -39,11 +39,11 @@ function displaySearchResults(response){
     const index = Math.min(response.length - 1, 14);
     console.log(index);
     for (let i = 0; i <= index; i++){
-        let $bookDiv = $(`<div class="row border"></div>`);
+        let $bookDiv = $(`<div class="row my-1"></div>`);
         if (response[i].volumeInfo.imageLinks){
-            var $cover = $(`<div class="col-4"><img src="${response[i].volumeInfo.imageLinks.smallThumbnail}"></div>`);
+            var $cover = $(`<div class="col-2"><img src="${response[i].volumeInfo.imageLinks.smallThumbnail}"></div>`);
         } else {
-            var $cover = $('<div class="col-4"></div>');
+            var $cover = $('<div class="col-2"></div>');
         }
         $textDiv = $('<div class="col"></div>');
         if (response[i].volumeInfo.subtitle){

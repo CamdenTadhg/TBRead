@@ -3,12 +3,10 @@ TO DO LIST:
 ## 20 Refactor based on feedback from mentor and hatchways and Augustin
     ## better response to axios errors than stupid little alerts
 ## 19 Styling Well
-    ## add books page
-        ## make the field and term in a line, like the HCLIB search bar. 
-            ## fix javascript to pick up the new values correctly
-        ## search results
-            ## no lines in the search results
-            ## bring the content closer to the cover
+    ## alerts (success & error)
+    ## edit books page
+    ## edit challenge page
+    ## edit your challenge page
     ## lists and challenges part 1
         ## take away the table lines
         ## turn off sorting for the cover image and change cursor
@@ -19,10 +17,6 @@ TO DO LIST:
         ## short description of what the page does for you
         ## tab should say did not finish
         ## tabs should look like the add books.
-    ## alerts (success & error)
-    ## edit books page
-    ## edit challenge page
-    ## edit your challenge page
     ## lists and challenges part 2
         ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
             ## where do you end up? 

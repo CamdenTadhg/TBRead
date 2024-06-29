@@ -148,7 +148,6 @@ th {
 .search-form{
     display: inline;
     padding: .375rem .75rem;
-    font-size: 1.5rem;
     font-weight: 400;
     line-height: 1.5;
     border: 1px solid #EDEDED;
@@ -163,24 +162,18 @@ th {
     border-bottom: 2px solid #420E74;
     padding-top: 3vh;
     padding-bottom: 3vh;
-    font-size: 1.5rem;
     display: flex;
     justify-content: center;
 }
 
 .field-search{
     width: 15vw;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
     font-size: 1.5rem;
+    background-color: white;
 }
 
 .term-search{
     width: 40vw;
-    -webkit-appearance: none;
-    -moz-appearance: non;
-    appearance: none;
     font-size: 1.5rem;
 }
 
