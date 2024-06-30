@@ -151,8 +151,13 @@ td {
     width: 100px;
 }
 
+.challenges-table {
+    table-layout: fixed;
+}
+
 .your-challenges-table {
     margin-top: 5%;
+    table-layout: fixed;
 }
 
 .join{
@@ -164,6 +169,39 @@ td {
     padding: 0px;
     height: 50px;
 }
+
+#challenge-name{
+    width:20%;
+}
+
+#challenge-books{
+    width: 5%;
+}
+
+#challenge-desc{
+    width: 60%;
+}
+
+#challenge-buttons{
+    width: 15%;
+}
+
+#your-challenge-name{
+    width: 20%;
+}
+
+#your-challenge-books, #your-challenge-start, #your-challenge-end{
+    width: 7%;
+}
+
+#your-challenge-desc{
+    width: 45%;
+}
+
+#your-challenge-buttons{
+    width:15%;
+}
+
 
 /* BOOK PAGES */
 
