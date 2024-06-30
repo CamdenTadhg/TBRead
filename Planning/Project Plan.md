@@ -10,16 +10,12 @@ TO DO LIST:
     ## anonymous home page
     ## about page
     ## lists and challenges part 1
-        ## fix it so tables and columns are the same size on all booklist pages and the same size on all challenge pages
-        ## make heading text larger
-        ## change search box border color to a lighter gray
-        ## turn off sorting for the cover image and change cursor
-        ## have arrow show up in every column of the table that you can sort by
-        ## short description of what the page does for you
         ## tab should say did not finish
         ## tabs should look like the add books.
+        ## have arrow show up in every column of the table that you can sort by
+        ## short description of what the page does for you
     ## lists and challenges part 2
-        ## check boxes to the left of the titles and button to click to move them to the list so you can move a bunch at one time
+        ## check boxes to the left of the titles and buttons to click to move them to the list so you can move a bunch at one time
             ## where do you end up? 
             ## write tests for new code
         ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)

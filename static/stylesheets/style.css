@@ -121,9 +121,9 @@ textarea{
 /* LIST & CHALLENGE TABLES */
 
 th {
-    cursor: pointer;
     padding: 5px;
     word-wrap: break-word;
+    font-size: 1.25rem;
 }
 
 td {
@@ -146,8 +146,13 @@ td {
     width:50px;
 }
 
+.title, .author, .publisher, .pub-date, .pages{
+    cursor: pointer;
+}
+
 .cover{
-    width: 5%
+    width: 5%;
+    cursor: default;
 }
 
 .title{

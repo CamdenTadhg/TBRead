@@ -48,14 +48,14 @@ function displayUserBooks(array){
     }
     //table sorting and searching plugin
     $table.fancyTable({
-        sortColumn: 1,
+        sortColumn: 0,
         sortOrder: 'asc',
         sortable: true,
         localeCompare: true,
         pagination: true, 
         paginationClass: 'btn btn-primary',
         perPage: 25,
-        inputStyle: '',
+        inputStyle: 'border: 1px solid silver',
         inputPlaceholder: "Search...",
         globalSearch: true,
         globalSearchExcludeColumns: [0],
