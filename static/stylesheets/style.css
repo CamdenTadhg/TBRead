@@ -122,7 +122,7 @@ textarea{
 
 th {
     cursor: pointer;
-    padding: 3px;
+    padding: 5px;
     word-wrap: break-word;
 }
 
@@ -144,6 +144,26 @@ td {
 
 .list-cover{
     width:50px;
+}
+
+.cover{
+    width: 5%
+}
+
+.title{
+    width: 30%
+}
+
+.buttons{
+    width: 20%
+}
+
+.author, .publisher{
+    width: 15%
+}
+
+.pub-date, .pages{
+    width: 5%
 }
 
 /* CHALLENGE PAGES */
