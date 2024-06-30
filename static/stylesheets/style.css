@@ -1,7 +1,5 @@
 /* MAIN STRUCTURE */
 
-
-
 .dark {
     background-color: black;
     color: white;
@@ -142,6 +140,20 @@ td {
     height: 50px;
 }
 
+.add-books-button, .add-challenge-button{
+    float: right;
+}
+
+.tabs-div{
+    border-bottom: 1px solid #420E74;
+    width: 40%;
+    display: inline;
+}
+
+.tab{
+    border-radius: 10px 10px 0px 0px;
+}
+
 .list-cover{
     width:50px;
 }
@@ -182,7 +194,6 @@ td {
 }
 
 .your-challenges-table {
-    margin-top: 5%;
     table-layout: fixed;
 }
 

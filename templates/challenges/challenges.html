@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'challenges/tabs.html' %}
 
-<a href="/challenges/add" class="btn btn-primary mt-5">Add a Challenge</a>
+<a href="/challenges" class="btn btn-primary mt-1 tab all-tab">All Challenges</a>
+<a href="users/{{g.user.user_id}}/challenges" class="btn btn-primary mt-1 tab your-tab">Your Challenges</a>
+<a href="/challenges/add" class="btn btn-primary mt-1 add-challenge-button">Add a Challenge</a>
 
 <table class="table-borderless challenges-table" id="challengesTable">
     <thead>

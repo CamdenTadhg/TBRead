@@ -10,8 +10,10 @@ TO DO LIST:
     ## anonymous home page
     ## about page
     ## lists and challenges part 1
-        ## tab should say did not finish
-        ## tabs should look like the add books.
+        ## tab should show which one you are on
+            ## turn them all white
+            ## hover over them turns them light purple
+            ## active tab is dark purple
         ## have arrow show up in every column of the table that you can sort by
         ## short description of what the page does for you
     ## lists and challenges part 2

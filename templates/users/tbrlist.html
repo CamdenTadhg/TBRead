@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-{% include 'books/lists.html' %}
 
-    <a href="/books" class="btn btn-primary mt-5">Add Books</a>
+        <a href="/users/{{g.user.user_id}}/lists/tbr" class="btn btn-primary mt-1 tab tbr-tab">TBR</a>
+        <a href="/users/{{g.user.user_id}}/lists/dnf" class="btn btn-primary mt-1 tab dnf-tab">Did Not Finish</a>
+        <a href="/users/{{g.user.user_id}}/lists/complete" class="btn btn-primary mt-1 tab complete-tab">Complete</a>
+        <a href="/books" class="btn btn-primary add-books-button mt-1">Add Books</a>
+
     <table class="table-borderless table-striped book-list-table" id="tbrlistTable">
         <thead>
             <tr>

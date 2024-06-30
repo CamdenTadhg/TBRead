@@ -58,7 +58,7 @@ TB-Read is a powerful web app crafted specifically for book influencers on socia
 **Manage Reading Lists**\
 **Add Books to Reading Lists**\
     1. After login, you will see your lists page, including three tabs: TBR (To Be Read), DNF (Did Not Finish), and Completed. \
-    2. Click the Add Books button to start adding books.\
+    2. Click the Add Books button on the right to start adding books.\
     3. Select a search field from the drop down menu. \
     4. Enter a search term. \
     5. Click Search. \
