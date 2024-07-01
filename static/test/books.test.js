@@ -73,9 +73,9 @@ describe('displaySearchResults', () => {
 
         displaySearchResults(response);
         console.log($apiSearchResults);
-        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div>`);
-        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div>`);
-        expect($apiSearchResults.html()).toContain(`<div class="row border"><div class="col-4"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>`);
+        expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div>`);
+        expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div>`);
+        expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>`);
     });
 });
 

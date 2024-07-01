@@ -76,25 +76,67 @@ describe('userBooksOnStart', () => {
     });
 });
 
+describe('activeTab lists', () => {
+    let getCurrentURLSpy;
+    beforeEach(() => {
+        //create spy
+        getCurrentURLSpy = jasmine.createSpy('getCurrentURL').and.returnValue('http://tb-read.com/users/1/lists/complete');
+        window.getCurrentURL = getCurrentURLSpy;
+        //set up DOM
+        $tbrTab = $('<a href="/users/1/lists/tbr" class="btn btn-secondary mt-1 tab tbr-tab>TBR</a>').appendTo('body');
+        $dnfTab = $('<a href="/users/1/lists/dnf" class="btn btn-primary mt-1 tab dnf-tab>Did Not Finish</a>').appendTo('body');
+        $completeTab = $('<a href="/userse/1/lists/complete" class="btn btn-secondary mt-1 tab complete-tab>Complete</a>').appendTo('body');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $tbrTab.remove();
+        $dnfTab.remove();
+        $completeTab.remove();
+
+        window.getCurrentURL = getCurrentURL;
+    });
+
+    it('changes tabs appropriately to signify which tab is live', () => {
+        activeTab();
+        tbrClassList = $tbrTab.attr('class');
+        dnfClassList = $dnfTab.attr('class');
+        completeClassList = $completeTab.attr('class');
+        expect(getCurrentURLSpy).toHaveBeenCalled();
+        expect(tbrClassList).toContain('btn-secondary');
+        newTbrClassList = tbrClassList.replace('btn-secondary', '');
+        expect(tbrClassList).not.toContain('btn-secondary');
+        expect(dnfClassList).toContain('btn-secondary');
+        expect(dnfClassList).not.toContain('btn-primary');
+        expect(completeClassList).toContain('btn-primary');
+        expect(completeClassList).not.toContain('btn-secondary');
+    });
+});
+
 describe('page load handler', () => {
-    let userBooksOnStartSpy;
+    let userBooksOnStartSpy, activeTabSpy;
     beforeEach(() => {
         //create spy
         userBooksOnStartSpy = jasmine.createSpy('userBooksOnStart');
         window.userBooksOnStart = userBooksOnStartSpy;
+        activeTabSpy = jasmine.createSpy('activeTab');
+        window.activeTab = activeTabSpy;
 
         //attach event handler
         $(document).ready(function(){
+            activeTab();
             userBooksOnStart();
         });
     });
     afterEach(() => {
         window.userBooksOnStart = userBooksOnStart;
+        window.activeTab = activeTab;
     });
     it('should call userBooksOnStart on page load', function(done) {
         // Mock DOMContentLoaded event
         $(document).ready(function() {
             expect(window.userBooksOnStart).toHaveBeenCalled();
+            expect(window.activeTab).toHaveBeenCalled();
             done();
         });
 

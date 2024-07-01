@@ -6,8 +6,8 @@ let $completeTab = $('.complete-tab');
 
 //on page load, display welcome message and contents of list
 $(document).ready(function(){
-    userBooksOnStart();
     activeTab();
+    userBooksOnStart();
 });
 
 //initial function to show book list on site load
@@ -19,7 +19,7 @@ async function userBooksOnStart(){
 //display an instance of UserBookList on the page
 function displayUserBooks(array){
     $userBookList.empty();
-    currentURL = window.location.href;
+    currentURL = getCurrentURL();
     for (let book of array){
         let $bookTr = $('<tr></tr>');
         let $cover = $(`<td><img class="list-cover" src=${book.cover}></td>`);
@@ -68,7 +68,7 @@ function displayUserBooks(array){
 }
 
 function activeTab(){
-    currentURL = window.location.href;
+    currentURL = getCurrentURL();
     const currentList = eval(`$${currentURL.substring(currentURL.lastIndexOf('/') + 1)}Tab`);
     listArray = [$tbrTab, $dnfTab, $completeTab]
     tempListArray = listArray.filter((list) => list != currentList);
@@ -84,6 +84,11 @@ function activeTab(){
             list.addClass('btn-secondary');
         }
     }
+}
+
+//allows mocking the url for testing purposes
+function getCurrentURL() {
+    return window.location.href;
 }
 
 

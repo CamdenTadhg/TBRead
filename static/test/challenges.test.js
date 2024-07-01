@@ -60,7 +60,7 @@ describe('displayChallenges', () => {
 
             displayChallenges(challengeListData);
 
-            expect($challengesList.html()).toContain('<tr><td data-sortvalue="Marginalized Authors"><a href="/users/1/challenges/1">Marginalized Authors</a></td><td>100</td><td>test description</td><td>1/1/2024</td><td></td><td><form methods="POST" action="/challenges/leave/1"><button class="btn btn-danger">Leave Challenge</button></form></td></tr>');
+            expect($challengesList.html()).toContain('<tr><td data-sortvalue="Marginalized Authors"><a href="/users/1/challenges/1">Marginalized Authors</a></td><td>100</td><td>test description</td><td>1/1/2024</td><td></td><td><form method="POST" action="/challenges/leave/1"><button class="btn btn-danger leave ">Leave Challenge</button></form></td></tr>');
         });
     }
 });
@@ -95,25 +95,61 @@ describe('challengesOnStart', () => {
     }
 });
 
+describe('activeTab challenges', () => {
+    let getCurrentURLSpy;
+    beforeEach(() => {
+        //create spy
+        getCurrentURLSpy = jasmine.createSpy('getCurrentURL').and.returnValue('http://tb-read/challenges');
+        window.getCurrentURL = getCurrentURLSpy;
+        //set up DOM
+        $allTab = $('<a href="/challenges" class="btn btn-secondary mt-2 tab all-tab">All Challenges</a>').appendTo('body');
+        $yourTab = $('<a href="users/1/challenges" class="btn btn-primary mt-2 tab your-tab">Your Challenges</a>').appendTo('body');
+    });
+
+    afterEach(() => {
+        //clean up DOM
+        $allTab.remove();
+        $yourTab.remove();
+
+        window.getCurrentURL = getCurrentURL
+    });
+
+    it('changes tabs appropriately to signify which tab is live', () => {
+        activeTab();
+        allClassList = $allTab.attr('class');
+        yourClassList = $yourTab.attr('class');
+        expect(getCurrentURLSpy).toHaveBeenCalled();
+        expect(yourClassList).toContain('btn-secondary');
+        expect(yourClassList).not.toContain('btn-primary');
+        expect(allClassList).toContain('btn-primary');
+        expect(allClassList).not.toContain('btn-secondary');
+    });
+});
+
 describe('page load event handler', () => {
-    let challengesOnStartSpy;
+    let challengesOnStartSpy, activeTabSpy;
     beforeEach(() => {
         //create spy
         challengesOnStartSpy = jasmine.createSpy('challengesOnStart');
         window.challengesOnStart = challengesOnStartSpy;
+        activeTabSpy = jasmine.createSpy('activeTab');
+        window.activeTab = activeTabSpy;
 
         //attach event handler
         $(document).ready(function(){
+            activeTab();
             challengesOnStart();
         });
     });
     afterEach(() => {
         window.challengesOnStart = challengesOnStart;
+        window.activeTab = activeTab;
     });
     it('should call challengesOnStart on page load', function(done) {
         // Mock DOMContentLoaded event
         $(document).ready(function() {
             expect(window.challengesOnStart).toHaveBeenCalled();
+            expect(window.activeTab).toHaveBeenCalled();
             done();
         });
 

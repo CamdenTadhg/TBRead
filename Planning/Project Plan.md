@@ -11,9 +11,13 @@ TO DO LIST:
     ## about page
     ## lists and challenges part 1
         ## tab should show which one you are on
-            ## active tab is dark purple
             ## write tests for new javascript
+            ## run jasmine tests
         ## have arrow show up in every column of the table that you can sort by
+            ## have sort arrow appear on every column
+            ## make it disappear when you search by that column and reappear when you search by another column
+            ## write tests for new javascript
+            ## run jasmine tests
         ## short description of what the page does for you
     ## lists and challenges part 2
         ## check boxes to the left of the titles and buttons to click to move them to the list so you can move a bunch at one time
