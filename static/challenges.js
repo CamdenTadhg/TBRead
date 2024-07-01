@@ -1,10 +1,13 @@
 let $challengesList = $('.challenge-list');
 let $table = $('.challenges-table');
+let $allTab = $('.all-tab');
+let $yourTab = $('.your-tab');
 
 
 //on page load, display all challenges
 $(document).ready(function(){
     challengesOnStart();
+    activeTab();
 });
 
 //initial function to show challenge list on site load
@@ -82,3 +85,19 @@ function displayChallenges(array){
     })
 }
 
+function activeTab(){
+    currentURL = window.location.href;
+    let currentList, inactiveList;
+    currentURL.includes('users') ? currentList = $yourTab : currentList = $allTab
+    currentList === $allTab ? inactiveList = $yourTab : inactiveList = $allTab
+    currentListClassList = currentList.attr('class');
+    if (currentListClassList.includes('btn-secondary')){
+        currentList.removeClass('btn-secondary');
+        currentList.addClass('btn-primary');
+    }
+    inactiveListClassList = inactiveList.attr('class');
+    if (inactiveListClassList.includes('btn-primary')){
+        inactiveList.removeClass('btn-primary');
+        inactiveList.addClass('btn-secondary');
+    }
+}

@@ -128,6 +128,10 @@ td {
     padding: 3px;
 }
 
+.btn-secondary {
+    border: 1px solid #420E74;
+}
+
 
 /* LIST PAGES */
 

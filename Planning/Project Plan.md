@@ -11,9 +11,8 @@ TO DO LIST:
     ## about page
     ## lists and challenges part 1
         ## tab should show which one you are on
-            ## turn them all white
-            ## hover over them turns them light purple
             ## active tab is dark purple
+            ## write tests for new javascript
         ## have arrow show up in every column of the table that you can sort by
         ## short description of what the page does for you
     ## lists and challenges part 2
@@ -61,6 +60,7 @@ TO DO LIST:
         ## javascript tests
 ## 13 Create an architecture diagram
 ## 12 Small Screen Styling
+    ## also zoomed screen styling
 ## 11 Implement upload user image and book cover image
     ## write tests
 ## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list

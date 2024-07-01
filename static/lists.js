@@ -1,9 +1,13 @@
 let $userBookList = $('.user-book-list');
 let $table = $('.book-list-table');
+let $tbrTab = $('.tbr-tab');
+let $dnfTab = $('.dnf-tab');
+let $completeTab = $('.complete-tab');
 
 //on page load, display welcome message and contents of list
 $(document).ready(function(){
     userBooksOnStart();
+    activeTab();
 });
 
 //initial function to show book list on site load
@@ -61,6 +65,25 @@ function displayUserBooks(array){
         globalSearchExcludeColumns: [0],
         exactMatch: "auto"
     });
+}
+
+function activeTab(){
+    currentURL = window.location.href;
+    const currentList = eval(`$${currentURL.substring(currentURL.lastIndexOf('/') + 1)}Tab`);
+    listArray = [$tbrTab, $dnfTab, $completeTab]
+    tempListArray = listArray.filter((list) => list != currentList);
+    currentListClassList = currentList.attr('class');
+    if (currentListClassList.includes('btn-secondary')){
+        currentList.removeClass('btn-secondary');
+        currentList.addClass('btn-primary');
+    }
+    for (let list of tempListArray){
+        listClassList = list.attr('class');
+        if (listClassList.includes('btn-primary')){
+            list.removeClass('btn-primary');
+            list.addClass('btn-secondary');
+        }
+    }
 }
 
 
