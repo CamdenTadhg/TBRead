@@ -4,8 +4,6 @@ TO DO LIST:
         - fix sidebar and main content so it doesn't overlap 
         - get logout link back and in the right place
         - get login and signup back
-    - reconsider use of var (books.js, challenges.js)
-        - check display start date and end date
     - fix sort
         - use css to make it not have the right cursor for clicking, as a temporary fix
     - run tests

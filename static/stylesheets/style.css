@@ -60,7 +60,7 @@ textarea{
 
 @media only screen and (max-height: 400px){
     .sidebar {
-        top: 40px;
+        top: 38px;
     }
     .logged-in-content {
         grid-template-rows: [top] 40px [content] 400px [bottom];
