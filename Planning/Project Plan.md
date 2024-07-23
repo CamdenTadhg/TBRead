@@ -4,7 +4,7 @@ TO DO LIST:
         - get logout link back and in the right place
         - get login and signup back
     - fix sort
-        - use css to make it not have the right cursor for clicking, as a temporary fix
+        - try disabling the click with javascript
     - run tests
     - switch let for testing to const
     - commit to regular branch
