@@ -30,7 +30,7 @@ textarea{
 }
 
 .logo {
-    width: 100px;
+    width: 5%;
 }
 
 .logged-in-content {
@@ -54,7 +54,7 @@ textarea{
 .sidebar-item {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 0.75vw;
+    font-size: 1.4vw;
     color: black;
     display: block;
 }
