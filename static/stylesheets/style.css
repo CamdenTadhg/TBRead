@@ -17,7 +17,7 @@
     color: white;
     margin: 0;
     position: absolute;
-    
+
 }
 
 .form-control{
@@ -171,6 +171,10 @@ td {
 
 .title, .author, .publisher, .pub-date, .pages{
     cursor: pointer;
+}
+
+.cover{
+    cursor: default;
 }
 
 .cover{

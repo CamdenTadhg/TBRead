@@ -6,7 +6,6 @@ TO DO LIST:
     - reconsider use of var
         - can I make the variables global somehow without var? 
     - fix sort
-        - undo the removal of cover from the sorting and see if that fixes it
         - use css to make it not have the right cursor for clicking, as a temporary fix
     - increase modularization of app.py
         - move code out of the routes to helper functions
