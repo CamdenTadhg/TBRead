@@ -49,12 +49,10 @@ textarea{
     background-color: #81CDC6;
     overflow-x: hidden;
     padding-top: 1vh;
-    padding-left: 1vw;
-    margin-left: 1vw;
 }
 
 .sidebar-item {
-    padding: 6px 8px 6px 16px;
+    padding: .3vw .5vh .3vw .5vh;
     text-decoration: none;
     font-size: 1.5vw;
     color: black;
