@@ -132,11 +132,11 @@ CLIENT_SECRETS_FILE: The path to your client secrets file from Google.
 You will also need a Client Secrets File from Google. The code will run without this but the calendar feature will not work.   
 
 Step 3: Install the dependencies  
-        `pip3 install -r requirements.txt`  
+`pip3 install -r requirements.txt`  
 All requirements can be seen in the requirements.txt file.   
 
 Step 4: Run the code  
-        `flask run`  
+`flask run`  
  
 ## Who am I?: 
 I'm Camden, a librarian, book enthusiast, and newly minted software engineer. I'm passionate about data, education, and evidence-based decision making. This is my first project that I'm sharing with the world. Feedback always welcome at tbreadlistmanager@gmail.com

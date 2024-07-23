@@ -77,6 +77,7 @@ def signup():
         flash('You are already logged in', 'danger')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')    
 
+    # add default user image to data
     user_image = request.json['userImage']
     if user_image == '':
         user_image = '/static/images/image.png'
@@ -90,6 +91,7 @@ def signup():
             user_image = user_image
         )
         db.session.commit()
+    # handle duplicate email or username errors
     except IntegrityError as e:
         db.session.rollback()
         if "users_email_key" in str(e):
@@ -189,6 +191,7 @@ def password_reset():
     prt = request.args.get('prt')
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
 
+    # handle password update
     if form.validate_on_submit():
         password = form.update_password.data
         stmt = user.update_password(pwd=password, email=email)
@@ -206,15 +209,17 @@ def password_reset():
             flash('Something went wrong. Please try again')
             db.session.rollback()
         return redirect('/')
+    # display password update form
     elif user and user.password_reset_token == prt:
         return render_template('passwordreset.html', form=form)
+    # handle unauthorized password update
     else: 
         flash('Unauthorized password reset attempt', 'danger')
         return redirect('/')
     
 @app.route('/updatepassword', methods=["POST"])
 def update_password():
-    """Updates user's password"""
+    """Updates user's password from the user profile page"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -259,6 +264,7 @@ def display_user_profile(user_id):
         return redirect('/')
     
     form=UserProfileForm(obj=g.user)
+    # update password form appears as a modal upon button click
     form2= UpdatePasswordForm()
 
     if form.validate_on_submit():
