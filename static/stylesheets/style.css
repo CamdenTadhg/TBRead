@@ -22,7 +22,9 @@
 }
 
 .user_image {
-    width: 10%;
+    width: 100%;
+    max-width: 7vw;
+    height: auto;
 }
 
 textarea{
@@ -31,7 +33,7 @@ textarea{
 
 .logo {
     width: 100%;
-    max-width: 5vw;
+    max-width: 7vw;
     height: auto;
 }
 
