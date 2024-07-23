@@ -58,7 +58,7 @@ textarea{
     padding-top: 1vh;
 }
 
-@media only screen and (max-height: 500px){
+@media only screen and (max-height: 400px){
     .sidebar {
         top: 100px;
     }

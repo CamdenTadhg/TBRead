@@ -54,17 +54,18 @@ function displayChallenges(array){
         }
         //if user is on the user challenge page, display data and a button to leave the challenge
         if (currentURL.includes('user')){
+            let $start_date, $end_date;
             if (item.start_date === undefined){
-                var $start_date = $('<td></td>')
+                $start_date = $('<td></td>')
             }
             else {
-                var $start_date = $(`<td>${item.start_date}</td>`);
+                $start_date = $(`<td>${item.start_date}</td>`);
             }
             if (item.end_date === undefined){
-                var $end_date = $('<td></td>')
+                $end_date = $('<td></td>')
             }
             else{
-                var $end_date = $(`<td>${item.end_date}</td>`);
+                $end_date = $(`<td>${item.end_date}</td>`);
             }
             let $leaveButton = $(`<td><form method="POST" action="/challenges/leave/${item.id}"><button class="btn btn-danger leave ">Leave Challenge</button></form></td>`);
             $challengeTr.append($start_date);

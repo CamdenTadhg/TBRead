@@ -2,9 +2,10 @@ TO DO LIST:
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
         - fix sidebar so it doesn't overlap 
+        - get login and signup back
         - get logout link back and in the right place
     - reconsider use of var (books.js, challenges.js)
-        - check google search (both searching and displaying)
+        - check display start date and end date
     - fix sort
         - use css to make it not have the right cursor for clicking, as a temporary fix
     - run tests
