@@ -50,6 +50,7 @@ textarea{
     overflow-x: hidden;
     padding-top: 1vh;
     padding-left: 1vw;
+    margin-left: 1vw;
 }
 
 .sidebar-item {
