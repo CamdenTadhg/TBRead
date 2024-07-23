@@ -94,10 +94,10 @@ textarea{
         grid-template-rows: [top] 40px [content] 400px [bottom];
     }
     .logo {
-        max-width: 50px;
+        max-width: 55px;
     }
     .user_image{
-        max-width: 50px;
+        max-width: 45px;
     }
 }
 
@@ -193,6 +193,7 @@ td {
 #cover a{
     width: 5%;
     cursor: default;
+    pointer-events: none;
 }
 
 .title{
