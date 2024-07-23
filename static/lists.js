@@ -52,7 +52,7 @@ function displayUserBooks(array){
     }
     //table sorting and searching plugin
     $table.fancyTable({
-        sortColumn: 0,
+        sortColumn: 1,
         sortOrder: 'asc',
         sortable: true,
         localeCompare: true,

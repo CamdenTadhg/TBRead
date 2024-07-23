@@ -1,7 +1,25 @@
 TO DO LIST: 
-## 21 Refactor based on feedback from mentor and hatchways
-    ## better response to axios errors than stupid little alerts
-## 20 Styling Well
+## 23 Refactor based on feedback from mentor and hatchways and resubmit
+    - ensure that sensitive information like CLIENT_SECRETS_FILE are handled securely
+    - move commented code into another file
+    - add install directions and prereqs to README
+    - add strategic comments throughout the code to further enhance readability
+    - sidebar font and size responsive
+    - basic small screen styling
+    - reconsider use of var
+    - increase modularization of app.py
+        - move code out of the routes to helper functions. 
+        - identify functionality which can be separated out
+        - make a helpers.py to deal with helpers
+    - better response to axios errors than stupid little alerts
+    - fix sort
+        - undo the removal of cover from the sorting and see if that fixes it
+        - use css to make it not have the right cursor for clicking, as a temporary fix
+    - write any necessary tests
+    - run tests
+    - switch let for testing to const
+    - resubmit
+## 22 Styling Well
     ## alerts (success & error)
     ## edit books (and manual add page) page
     ## edit challenge page
@@ -10,14 +28,14 @@ TO DO LIST:
     ## anonymous home page
     ## about page
     ## lists and challenges part 1
-        ## tab should show which one you are on
-            ## write tests for new javascript
-            ## run jasmine tests
-        ## have arrow show up in every column of the table that you can sort by
-            ## have sort arrow appear on every column
-            ## make it disappear when you search by that column and reappear when you search by another column
-            ## write tests for new javascript
-            ## run jasmine tests
+        ## Rewrite table logic including sort
+            ## no sort on cover field
+            ## have arrow show up in every column of the table that you can sort by
+                ## get actual sorting arrow to appear in the right place
+                ## have sort arrow appear on every column
+                ## make it disappear when you search by that column and reappear when you search by another column
+                ## write tests for new javascript
+                ## run jasmine tests
         ## short description of what the page does for you
     ## lists and challenges part 2
         ## check boxes to the left of the titles and buttons to click to move them to the list so you can move a bunch at one time
@@ -25,10 +43,10 @@ TO DO LIST:
             ## write tests for new code
         ## search in the corner that lets you search for any book you have in the system (that will be standardized across pages)
             ## write tests for new code
-## 19 Transfer database to new service
-## 18 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
-## 17 Allow user to add book to any list
-## 16 Implement schedule books functionality
+## 21 Transfer database to new service
+## 20 fix buttons on challenge list, to show leave or join depending on status and update table based on click. 
+## 19 Allow user to add book to any list
+## 18 Implement schedule books functionality
     ## set post days 
     ## set calendar days as work or off based on a set schedule
         ## set work schedule button
@@ -49,45 +67,50 @@ TO DO LIST:
     ## display book cover on calendar on start date
     ## write tests for all calendar views
     ## write tests for all calendar javascript
-## 15 Implement email reminders functionality 
+## 17 Implement email reminders functionality 
     ## what books will you need over the next 3 months?
     ## time to start a book
     ## time to finish a book
     ## time to post a book
     ## write tests
-## 14 FAQ/Documentation
+## 16 FAQ/Documentation
     ## flesh out documentation section
         ## create documentation for sending in emails
         ## create documentation for creating challenges
     ## figure out how to run tests on render
         ## python tests
         ## javascript tests
-## 13 Create an architecture diagram
-## 12 Small Screen Styling
+## 15 Create an architecture diagram
+## 14 Sorting refinements
+    ## take out the, an, a
+    ## author by last name
+## 13 Small Screen Styling
     ## also zoomed screen styling
-## 11 Implement upload user image and book cover image
+## 12 Implement upload user image and book cover image
     ## write tests
-## 10 Implement book covers on homepage are links that take you to a book form where you can add them to your list
+## 11 Implement book covers on homepage are links that take you to a book form where you can add them to your list
     ## increase the number of book covers displayed? 
     ## Do I make it its own home page once logged in, because you need to be logged in to do that
     ## write tests
-## 9 Implement importation functionality
+## 10 Implement importation functionality
     ## write tests
-## 8 Implement OpenAI connection 
+## 9 Implement OpenAI connection 
     ## write tests
-## 7 Implement friendship & challenging functionality 
+## 8 Implement friendship & challenging functionality 
     ## write tests
-## 6 Implement challenge categories
+## 7 Implement challenge categories
     ## include a way to search what books other people have assigned to what categories and add them to your lists
     ## a checklist of categories that users can check off
     ## hover over a book cover shows what category it is fulfilling
     ## write tests
-## 5 Implement bookstore connection
+## 6 Implement bookstore connection
     ## write tests
-## 4 Implement library connection
+## 5 Implement library connection
     ## write tests
-## 3 Refactor and take out all the print & console.logs
-## 2 Fully population database with 100 challenges and 500 books
+## 4 Refactor and take out all the print & console.logs
+## 3 Speed it up
+    ## add loading screens/visuals anywhere it is slow
+## 2 Fully populate database with 100 challenges and 500 books
 ## 1 Test with actual users and add functionality as needed
 
 
@@ -126,7 +149,6 @@ TO DO LIST:
     code example on site
 
 # 3rd Party Tools & Python Libraries
-    - calendar
     - flask-mail
     - flask
     - flask_debugtoolbar

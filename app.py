@@ -6,7 +6,7 @@ from models import db, connect_db, User, Book, List, User_Book, Challenge, User_
 from forms import UserAddForm, LoginForm, UserProfileForm, EmailForm, UpdatePasswordForm, BookEditForm, ChallengeForm, UserChallengeForm, PostDaysForm
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_mail import Mail, Message
-from local_settings import MAIL_PASSWORD, SECRET_KEY
+from local_settings import MAIL_PASSWORD, SECRET_KEY, CLIENT_SECRETS_FILE
 import requests
 from io import StringIO
 from html.parser import HTMLParser
@@ -19,12 +19,11 @@ from google.oauth2.credentials import Credentials
 from datetime import date
 
 CURR_USER_KEY = "curr_user"
-CLIENT_SECRETS_FILE = "client_secret_962453248563-u7b22jm1ekb7hellta4vcp05t24firg4.apps.googleusercontent.com.json"
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
-app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
+app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///tbread'))
+# app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', "postgresql:///tbread-test"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
