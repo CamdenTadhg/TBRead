@@ -36,7 +36,7 @@ textarea{
 
 .logo {
     width: 100%;
-    max-width: 7vw;
+    max-width: 7vh;
     height: auto;
 }
 
@@ -173,11 +173,8 @@ td {
     cursor: pointer;
 }
 
-.cover{
-    cursor: default;
-}
 
-.cover{
+#cover{
     width: 5%;
     cursor: default;
 }
