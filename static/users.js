@@ -166,11 +166,9 @@ $sendreminderButton.on('click', async function(event){
 
 //send email via axios to send username reminder
 async function usernameReminderViaAxios(){
-    console.log('entering usernameReminderViaAxios');
     const email = $email.val();
     const data = {email: email};
     const response = await axios.post('/forgotusername', data);
-    console.log(response);
     return response.data;
 }
 
@@ -192,26 +190,23 @@ $sendResetButton.on('click', async function(event){
 //send email via axios to send password reset
 async function passwordResetViaAxios(){
     const email = $email.val()
-    console.log(email);
     const data = {email: email};
     const response = await axios.post('/forgotpassword', data);
-    console.log(response);
     return response.data;
 }
 
 //update password event handler
 $updatePasswordButton.on('click', async function(event){
-    console.log('update password button clicked')
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    //validate that passwords match
     if ($updatePassword.val() !== $updatePassword2.val()){
-        console.log('passwords not matching if');
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Passwords do not match.</div>');
         $modalBody.append($errorDiv);
     }
+    //validate that password is secure
     else if  (!passwordRegex.test($updatePassword.val())){
-        console.log('passwords not secure if')
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Password must be at least 8 characters and contain one uppercase letter, one lowercase letter, one number, and one special character</div>');
         $modalBody.append($errorDiv);
     }
@@ -268,7 +263,7 @@ $closeButton.on('click', function(event){
     $userImage.val('');
 });
 
-
+//remove previous error message when link for forgotten username/password is clicked
 $forgotLink.on('click', function(event){
     $modalBody.find('.error-div').remove();
 });

@@ -322,7 +322,7 @@ def return_tbr_list(user_id):
 
 @app.route('/users/<user_id>/lists/dnf', methods=['GET'])
 def display_dnf_list(user_id):
-    """Display user's tbr list. Also functions as homepage for logged in user."""
+    """Display user's dnf list."""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -344,7 +344,7 @@ def return_dnf_list(user_id):
 
 @app.route('/users/<user_id>/lists/complete', methods=['GET'])
 def display_complete_list(user_id):
-    """Display user's tbr list. Also functions as homepage for logged in user."""
+    """Display user's complete list."""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -354,7 +354,7 @@ def display_complete_list(user_id):
 
 @app.route('/api/<user_id>/lists/complete', methods=['GET'])
 def return_complete_list(user_id):
-    """Returns contents of dnf list to axios request"""
+    """Returns contents of complete list to axios request"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -388,6 +388,7 @@ def delete_user():
 # Book Routes
 
 class MLStripper(HTMLParser):
+    """Used to strip html tags from google description field"""
     with app.app_context():
         def __init__(self):
             super().__init__()
@@ -401,12 +402,14 @@ class MLStripper(HTMLParser):
             return self.text.getvalue()
     
 def strip_tags(html):
+    """Used to strip html tags from google description field"""
     with app.app_context():
         s = MLStripper()
         s.feed(html)
         return s.get_data()
     
 def add_book_to_database(google_id):
+    """Parses google data into appropriate format and adds book to database"""
     with app.app_context():
         title=authors=publisher=description=thumbnail=''
         isbn=page_count=0
@@ -419,6 +422,7 @@ def add_book_to_database(google_id):
             title = f"{data['volumeInfo']['title']}: {data['volumeInfo']['subtitle']}"
         else: 
             title = data['volumeInfo']['title']
+        # handle various combinations of authors
         if data['volumeInfo'].get('authors'):
             if len(data['volumeInfo']['authors']) == 1:
                 authors = data['volumeInfo']['authors'][0]
@@ -450,6 +454,7 @@ def add_book_to_database(google_id):
         return new_book.book_id
 
 def add_book_to_tbr(userbook_id):
+    """Adds newly parsed book data to userbook table and user's tbr list"""
     with app.app_context():
         if CURR_USER_KEY in session:
             g.user = db.session.execute(db.select(User).where(User.user_id == session[CURR_USER_KEY])).scalar()
@@ -485,6 +490,7 @@ def edit_new_book(google_id):
     book = db.session.execute(db.select(Book).where(Book.google_id == google_id)).scalar()
     if book:
         if book.description: 
+            ## strip tags code duplicated due to early incorrect data entry
             description = strip_tags(book.description)
         else: 
             description = ''
@@ -518,6 +524,7 @@ def edit_new_book(google_id):
         ## check if user has already added this book
         check_book = db.session.execute(db.select(User_Book).where(User_Book.user_id == g.user.user_id).where(User_Book.book_id == adding_book.book_id)).scalar()
         if not check_book:
+            ## if book is not already on user's book list, add to user's book list
             new_user_book = User_Book(user_id=g.user.user_id, book_id=adding_book.book_id, title=title, authors=authors, publisher=publisher, pub_date=pub_date, description=description, isbn=isbn, page_count=page_count, age_category=age_category, thumbnail=thumbnail, notes=notes, script=script) 
             db.session.add(new_user_book)
             try: 
@@ -528,13 +535,14 @@ def edit_new_book(google_id):
             add_book_to_tbr(new_user_book.userbook_id)
             return redirect(f'/users/{g.user.user_id}/lists/tbr')
         else:
+            ## if book is already on user's book list, notify user. 
             flash('This book is already on your lists', 'danger')
     
     return render_template('books/editnewbook.html', form=form)
 
 @app.route('/books/manual', methods=['GET', 'POST'])
 def add_book_manually():
-    """Add a custom book, not found in GoogleAPI to your TBR list"""
+    """Add a custom book, not found in GoogleAPI to TBR list"""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -601,6 +609,7 @@ def edit_book(userbook_id):
         userbook.description = form.description.data
         userbook.isbn = form.isbn.data
         userbook.page_count = form.page_count.data
+        ## AgeCategory is an ENUM field
         userbook.age_category = AgeCategory(form.age_category.data)
         userbook.thumbnail = form.thumbnail.data
         userbook.notes = form.notes.data
@@ -641,7 +650,7 @@ def delete_book(userbook_id):
 
 @app.route('/users_books/<userbook_id>/transfer/<list_type>', methods=["POST"])
 def transfer_between_lists(userbook_id, list_type):
-    """Transfer a book between lists"""
+    """Transfer a book between lists. Books can only be on one list at a time."""
 
     if not g.user:
         flash('Please log in', 'danger')
@@ -665,6 +674,7 @@ def transfer_between_lists(userbook_id, list_type):
     else:
         flash('Book not found. Please try again')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
+    ## If transfering a book to the Complete list, change the complete boolean value in the userbook_challenge table so it will appear appropriately in the challenge listing
     if list_type == 'Complete':
         userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
         for userbook_challenge in userbook_challenges:
@@ -675,6 +685,7 @@ def transfer_between_lists(userbook_id, list_type):
             except: 
                 db.session.rollback()
                 flash('Something went wrong. Please try again.', 'danger')
+    # If transfering book to TBR or DNF, ensure the complete boolean value in the userbook_challenge table is set to false
     else: 
         userbook_challenges = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id)).scalars()
         for userbook_challenge in userbook_challenges:
@@ -696,16 +707,16 @@ def assign_book(userbook_id):
         flash('Please log in', 'danger')
         return redirect('/')
     
+    ## find book being assigned
     userbook = db.session.execute(db.select(User_Book).where(User_Book.userbook_id == userbook_id)).scalar()
     if userbook.user_id != g.user.user_id:
         flash('You do not have permission to do that', 'danger')
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
     data = request.json
     challenge_id = data.get('challenge_id')
-    print('*****************')
-    print('challenge_id = ', challenge_id)
-    print(type(challenge_id))
+    ## find challenge book is being assigned to
     challenge = db.session.execute(db.select(Challenge).where(Challenge.challenge_id == challenge_id)).scalar()
+    ## create connection between book and challenge 
     if userbook:
         userbook.challenges.append(challenge)
         try: 
@@ -718,6 +729,7 @@ def assign_book(userbook_id):
             db.session.rollback()
             flash('Something went wrong. Please try again.', 'danger')
         userbook_challenge = db.session.execute(db.select(User_Book_Challenge).where(User_Book_Challenge.userbook_id == userbook.userbook_id).where(User_Book_Challenge.challenge_id == challenge.challenge_id)).scalar()
+        ## if book is completed, ensure userbook_challenge complete field is set to true so book will appear correctly in challenge listing
         if userbook.lists[0].list_type == 'Complete':
             userbook_challenge.complete = True
         else: 
@@ -761,13 +773,16 @@ def remove_book(userbook_id):
 
 @app.route('/email', methods=["POST"])
 def receive_email():
+    """Parses an incoming email to notes@tb-read.com to append the email body to the notes field of the appropriate book"""
 
     envelope = json.loads(request.form['envelope'].replace("'", '"'))
     email = envelope['from']
     subject = request.form['subject']
     body = str(request.form['text'])
 
+    ## find user based on from email
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+    ## find book based on email subject
     userbook = db.session.execute(db.select(User_Book).where(User_Book.title == subject).where(User_Book.user_id == user.user_id)).scalar()
 
     try: 
@@ -784,7 +799,7 @@ def receive_email():
 
 @app.route('/users/<user_id>/calendar')
 def show_calendar(user_id):
-    """Show user's calendar"""
+    """Show user's embedded google calendar"""
 
     if not g.user: 
         flash ('Please log in', 'danger')
@@ -797,6 +812,7 @@ def show_calendar(user_id):
 
 @app.route('/users/<user_id>/oauth/create')
 def connect_to_google_create_calendar(user_id):
+    """Connect to google via oauth to create new calendar on user's google account"""
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=['https://www.googleapis.com/auth/calendar.app.created'])
     flow.redirect_uri = 'https://tb-read.com/createcalendar'
@@ -822,12 +838,14 @@ def create_calendar():
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
 
+    ## create new calendar on user's google account
     service = build('calendar', 'v3', credentials=credentials)
     calendar = {
         'summary': 'TB Read Calendar'
     }
     created_calendar = service.calendars().insert(body=calendar).execute()
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
+    ## update user's record with necessary data to display and interact with calendar in the future
     user.calendar_id = created_calendar['id']
     user.token = credentials.token
     user.refresh_token = credentials.refresh_token
@@ -892,6 +910,7 @@ def return_your_challenges():
     user = db.session.execute(db.select(User).where(User.user_id == g.user.user_id)).scalar()
     list = user.challenges
     serialized_challenges = [challenge.serialize_challenges() for challenge in list]
+    ##Add additional user_challenge field to serialized challenges
     for challenge in serialized_challenges:
         challenge_id = int(challenge['id'])
         user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
@@ -978,6 +997,7 @@ def join_challenge(challenge_id):
         db.session.add(user)
         db.session.commit()
         flash(f'You joined the {challenge.name}', 'success')
+    ## deal with situation when user has already signed up for a challenge. 
     except IntegrityError: 
         db.session.rollback()
         flash('You are already signed up for this challenge.', 'danger')
@@ -1018,6 +1038,7 @@ def edit_user_challenge(user_id, challenge_id):
         return redirect('/')
     
     user_challenge = db.session.execute(db.select(User_Challenge).where(User_Challenge.user_id == g.user.user_id).where(User_Challenge.challenge_id == challenge_id)).scalar()
+    ## find completed books currently assigned to this challenge
     books = db.session.execute(db.select(User_Book).join(User_Book_Challenge, User_Book.userbook_id == User_Book_Challenge.userbook_id).where(User_Book_Challenge.complete == True).where(User_Book_Challenge.challenge_id == challenge_id)).scalars()
     form = UserChallengeForm(name = user_challenge.challenge.name, num_books = user_challenge.challenge.num_books, description = user_challenge.challenge.description, start_date = 
                              user_challenge.start_date, end_date = user_challenge.end_date)
@@ -1047,15 +1068,18 @@ def homepage():
         return redirect(f'/users/{g.user.user_id}/lists/tbr')
 
     else: 
+        ## all three forms display as modals. 
         form = UserAddForm()
         form2 = LoginForm()
         form3 = EmailForm()
+        ## Homepage for anonymous users shows most recent 12 books added to the database
         display_books = db.session.query(Book).where(Book.thumbnail != None).where(Book.thumbnail != '').order_by(Book.added.desc()).limit(12).all()
         return render_template('home-anon.html', display_books=display_books, form=form, form2=form2, form3=form3)
 
 @app.route('/about')
 def about():
     """Show about page"""
+    ## all three forms display as modals
     form = UserAddForm()
     form2 = LoginForm()
     form3 = EmailForm()

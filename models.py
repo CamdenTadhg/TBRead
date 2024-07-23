@@ -93,10 +93,11 @@ class User(db.Model):
         return False
     
     def get_password_reset_token(self):
-        """creates a pssword reset token"""
+        """creates a password reset token"""
         return secrets.token_hex(16)
     
     def update_password(self, pwd, email):
+        """updates password on user record"""
         hashed = bcrypt.generate_password_hash(pwd)
         hashed_utf8 = hashed.decode('utf8')
         return update(User).where(User.email == email).values(password=hashed_utf8)

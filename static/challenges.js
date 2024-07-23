@@ -28,14 +28,17 @@ function displayChallenges(array){
     currentURL = getCurrentURL();
     for (let item of array){
         let $challengeTr = $('<tr></tr>');
+        //if user is on the main challenges page and they are the creator of the challenge, display link to edit challenge
         if (!currentURL.includes('user') && user_id == item.creator_id){
             let $name = $(`<td data-sortvalue="${item.name}"><a href="/challenges/${item.id}">${item.name}</a></td>`);
             $challengeTr.append($name);
         }
+        //if user is on the user challenge page, display link to edit user challenge
         else if (currentURL.includes('user')){
             let $name = $(`<td data-sortvalue="${item.name}"><a href="/users/${user_id}/challenges/${item.id}">${item.name}</a></td>`);
             $challengeTr.append($name);
         }
+        //if user is on the main challenge page and they are not the creator of the challenge, display challenge as plain text
         else {
             let $name = $(`<td data-sortvalue="${item.name}">${item.name}</td>`);
             $challengeTr.append($name);
@@ -44,10 +47,12 @@ function displayChallenges(array){
         let $description = $(`<td>${item.description}</td>`);
         $challengeTr.append($num_books);
         $challengeTr.append($description);
+        //if user is on the main challenge page, display a button to join a challenge
         if (!currentURL.includes('user')){
             let $joinButton = $(`<td><form method="POST" action="/challenges/join/${item.id}"><button class="btn btn-primary join">Join Challenge</button></form></td>`);
             $challengeTr.append($joinButton);
         }
+        //if user is on the user challenge page, display data and a button to leave the challenge
         if (currentURL.includes('user')){
             if (item.start_date === undefined){
                 var $start_date = $('<td></td>')
@@ -85,17 +90,14 @@ function displayChallenges(array){
     })
 }
 
+//function to highlight the active tab in tab display
 function activeTab(){
     currentURL = getCurrentURL();
-    console.log('$yourTab = ', $yourTab);
-    console.log('$allTab = ', $allTab);
     let currentList, inactiveList;
     currentURL.includes('users') ? currentList = $yourTab : currentList = $allTab
     currentList === $allTab ? inactiveList = $yourTab : inactiveList = $allTab
     let currentListClassList = currentList.attr('class');
-    console.log('currentListClassList = ', currentListClassList);
     let inactiveListClassList = inactiveList.attr('class');
-    console.log('inactiveListClassList = ', inactiveListClassList);
     if (currentListClassList.includes('btn-secondary')){
         currentList.removeClass('btn-secondary');
         currentList.addClass('btn-primary');

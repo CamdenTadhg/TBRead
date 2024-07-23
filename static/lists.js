@@ -35,15 +35,18 @@ function displayUserBooks(array){
         $bookTr.append($publisher);
         $bookTr.append($pub_date);
         $bookTr.append($pages);
-        $bookTr.append($delete)
+        $bookTr.append($delete);
+        //if not on DNF list, display button to transfer book to DNF list. 
         if (!currentURL.includes('dnf')){
             let $DNF = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/DNF"><button class="btn btn-info transfer">Move to DNF</button></form></td>`);
             $bookTr.append($DNF);
         }
+        //if not on Complete list, display button to transfer book to Complete list. 
         if (!currentURL.includes('complete')){
             let $complete = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/Complete"><button class="btn btn-info transfer">Move to Complete</button></form></td>`);
             $bookTr.append($complete);
         }
+        //if not on TBR list, display button to transfer book to TBR list
         if (!currentURL.includes('lists/tbr')){
             let $TBR = $(`<td><form method="POST" action="/users_books/${book.id}/transfer/TBR"><button class="btn btn-info transfer">Move to TBR</button></form></td>`);
             $bookTr.append($TBR);
@@ -67,6 +70,7 @@ function displayUserBooks(array){
     });
 }
 
+//function to highlight the active tab in tab display
 function activeTab(){
     currentURL = getCurrentURL();
     const currentList = eval(`$${currentURL.substring(currentURL.lastIndexOf('/') + 1)}Tab`);

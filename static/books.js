@@ -83,6 +83,7 @@ $assignChallengeButton.on('click', async function(event){
     //send the data
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/assign`, data);
+    //handle response
     if (response.data['success']){
         $errorSpan = $('<span class="text-sm text-success error-span">Book assigned to challenge</span>');
         $assignToChallengeForm.append($errorSpan);
@@ -97,11 +98,15 @@ $assignChallengeButton.on('click', async function(event){
 $removeChallengeButton.on('click', async function(event){
     event.preventDefault();
     $assignToChallengeForm.find('.error-span').remove();
+    //get the challenge being removed from 
     const challenge_id = $challengesField.val();
     currentURL = window.location.href;
+    //get the userbook id
     const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
+    //send the data to the API
     const data = {'challenge_id': challenge_id};
     const response = await axios.post(`/api/users_books/${userbook_id}/remove`, data);
+    //handle response
     if (response.data['success']){
         $errorSpan = $('<span class="text-sm text-success error-span">Book removed from challenge</span>');
         $assignToChallengeForm.append($errorSpan);

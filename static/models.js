@@ -17,7 +17,7 @@ class UserBookList {
         this.userBooks = userBooks
     }
 
-    //pulls full list of books from the api and returns them as a new instance of UserBookList
+    //pulls full list of userbooks from the api and returns them as a new instance of UserBookList
 
     static async getUserBooks(user_id, list_type) {
         try{

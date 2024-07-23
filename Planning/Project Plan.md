@@ -1,6 +1,5 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
-    - add strategic comments throughout the code to further enhance readability
     - sidebar font and size responsive
     - basic small screen styling
     - reconsider use of var
