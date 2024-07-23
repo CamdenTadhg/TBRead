@@ -15,6 +15,7 @@
 
 .navbar-button {
     color: white;
+    margin: auto;
 }
 
 .form-control{
@@ -23,7 +24,7 @@
 
 .user_image {
     width: 100%;
-    max-width: 4vw;
+    max-width: 3vw;
     height: auto;
 }
 
