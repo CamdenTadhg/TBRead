@@ -48,13 +48,13 @@ textarea{
     left: 0;
     background-color: #81CDC6;
     overflow-x: hidden;
-    padding-top: 5vh;
+    padding-top: 3vh;
 }
 
 .sidebar-item {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 1em;
+    font-size: 10vw;
     color: black;
     display: block;
 }

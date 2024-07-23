@@ -3,16 +3,21 @@ TO DO LIST:
     - sidebar font and size responsive
     - basic small screen styling
         - fix buttons
+        - fix logo
+        - fix default user image
     - reconsider use of var
+        - can I make the variables global somehow without var? 
     - fix sort
         - undo the removal of cover from the sorting and see if that fixes it
         - use css to make it not have the right cursor for clicking, as a temporary fix
     - increase modularization of app.py
-        - move code out of the routes to helper functions. 
+        - move code out of the routes to helper functions
+            - try just one and see if the context messes everything up
         - identify functionality which can be separated out
         - make a helpers.py to deal with helpers
     - better response to axios errors than stupid little alerts
-    - write any necessary tests
+        - look at what I'm doing to say welcome to the site
+    - write any necessary tests for the modularization
     - run tests
     - switch let for testing to const
     - commit to regular branch
