@@ -1,12 +1,17 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
+        - fix logo
         - fix default user image
         - get logout link back and in the right place
     - reconsider use of var
         - can I make the variables global somehow without var? 
     - fix sort
         - use css to make it not have the right cursor for clicking, as a temporary fix
+    - switch let for testing to const
+    - commit to regular branch
+    - commit to hatchways branch
+    - resubmit
     - increase modularization of app.py
         - move code out of the routes to helper functions
             - try just one and see if the context messes everything up
@@ -14,12 +19,9 @@ TO DO LIST:
         - make a helpers.py to deal with helpers
     - better response to axios errors than stupid little alerts
         - look at what I'm doing to say welcome to the site
+    - switch const back to let for testing
     - write any necessary tests for the modularization
     - run tests
-    - switch let for testing to const
-    - commit to regular branch
-    - commit to hatchways branch
-    - resubmit
 ## 22 Styling Well
     ## alerts (success & error)
     ## edit books (and manual add page) page
