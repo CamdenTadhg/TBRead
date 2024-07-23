@@ -19,6 +19,10 @@
     position: absolute;
 }
 
+#logout-link {
+    align-self: center;
+}
+
 .form-control{
     margin: 10px;
 }
