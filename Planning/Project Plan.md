@@ -2,6 +2,7 @@ TO DO LIST:
 ## 23 Refactor based on feedback from hatchways and resubmit
     - sidebar font and size responsive
     - basic small screen styling
+        - fix buttons
     - reconsider use of var
     - fix sort
         - undo the removal of cover from the sorting and see if that fixes it
@@ -84,6 +85,7 @@ TO DO LIST:
     ## author by last name
 ## 13 Small Screen Styling
     ## also zoomed screen styling
+    ## make sidebar a drop-down
 ## 12 Implement upload user image and book cover image
     ## write tests
 ## 11 Implement book covers on homepage are links that take you to a book form where you can add them to your list
