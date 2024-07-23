@@ -1,23 +1,23 @@
 TO DO LIST: 
-## 23 Refactor based on feedback from mentor and hatchways and resubmit
-    - ensure that sensitive information like CLIENT_SECRETS_FILE are handled securely
-    - move commented code into another file
+## 23 Refactor based on feedback from hatchways and resubmit
     - add install directions and prereqs to README
     - add strategic comments throughout the code to further enhance readability
     - sidebar font and size responsive
     - basic small screen styling
     - reconsider use of var
+    - fix sort
+        - undo the removal of cover from the sorting and see if that fixes it
+        - use css to make it not have the right cursor for clicking, as a temporary fix
     - increase modularization of app.py
         - move code out of the routes to helper functions. 
         - identify functionality which can be separated out
         - make a helpers.py to deal with helpers
     - better response to axios errors than stupid little alerts
-    - fix sort
-        - undo the removal of cover from the sorting and see if that fixes it
-        - use css to make it not have the right cursor for clicking, as a temporary fix
     - write any necessary tests
     - run tests
     - switch let for testing to const
+    - commit to regular branch
+    - commit to hatchways branch
     - resubmit
 ## 22 Styling Well
     ## alerts (success & error)
