@@ -3,8 +3,8 @@ TO DO LIST:
     - basic small screen styling
         - get logout link in the right place
     - run tests
-    - switch let for testing to const
     - commit to regular branch
+    - switch let for testing to const
     - commit to hatchways branch
     - resubmit
     - increase modularization of app.py
