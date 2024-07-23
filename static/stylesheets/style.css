@@ -22,7 +22,7 @@
 }
 
 .user_image {
-    width: 10px;
+    width: 10%;
 }
 
 textarea{
@@ -30,7 +30,7 @@ textarea{
 }
 
 .logo {
-    width: 15%;
+    height: 10vh;
 }
 
 .logged-in-content {

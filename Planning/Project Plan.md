@@ -1,10 +1,9 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
-    - sidebar font and size responsive
     - basic small screen styling
-        - fix buttons
         - fix logo
         - fix default user image
+        - fix buttons
     - reconsider use of var
         - can I make the variables global somehow without var? 
     - fix sort
