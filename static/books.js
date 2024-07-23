@@ -19,15 +19,16 @@ $bookSearchButton.on('click', async function(event) {
 
 //send book search query to GoogleBooks
 async function searchGoogleBooks(field, term){
+    let url;
     if (field === 'isbn'){
-        var url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${term}`
+        url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${term}`
     }
     else if (field === 'title'){
         term = term.replace(/ /g, '%20')
-        var url = `https://www.googleapis.com/books/v1/volumes?q=intitle%3A%22${term}%22`
+        url = `https://www.googleapis.com/books/v1/volumes?q=intitle%3A%22${term}%22`
     } else {
         term = term.replace(/ /g, '%20');
-        var url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
+        url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
     }
     let response = await axios.get(url)
     console.log(response.data.items);
@@ -37,29 +38,29 @@ async function searchGoogleBooks(field, term){
 //display book search results
 function displaySearchResults(response){
     const index = Math.min(response.length - 1, 14);
-    console.log(index);
+    let $cover, $displayTitle, $displayAuthor, $publication;
     for (let i = 0; i <= index; i++){
         let $bookDiv = $(`<div class="row my-1"></div>`);
         if (response[i].volumeInfo.imageLinks){
-            var $cover = $(`<div class="col-2"><img src="${response[i].volumeInfo.imageLinks.smallThumbnail}"></div>`);
+            $cover = $(`<div class="col-2"><img src="${response[i].volumeInfo.imageLinks.smallThumbnail}"></div>`);
         } else {
-            var $cover = $('<div class="col-2"></div>');
+            $cover = $('<div class="col-2"></div>');
         }
         $textDiv = $('<div class="col"></div>');
         if (response[i].volumeInfo.subtitle){
-            var $displayTitle = $(`<div><a href="/books/${response[i].id}">${response[i].volumeInfo.title}: ${response[i].volumeInfo.subtitle}</a></div>`);
+            $displayTitle = $(`<div><a href="/books/${response[i].id}">${response[i].volumeInfo.title}: ${response[i].volumeInfo.subtitle}</a></div>`);
         } else {
-           var $displayTitle = $(`<div><a href="/books/${response[i].id}">${response[i].volumeInfo.title}</a></div>`)
+           $displayTitle = $(`<div><a href="/books/${response[i].id}">${response[i].volumeInfo.title}</a></div>`)
         }
         if (response[i].volumeInfo.authors){
-            var $displayAuthor = $(`<div>${response[i].volumeInfo.authors[0]}</div>`);
+            $displayAuthor = $(`<div>${response[i].volumeInfo.authors[0]}</div>`);
         }
         if (response[i].volumeInfo.publisher && response[i].volumeInfo.publishedDate){
-            var $publication = $(`<div>${response[i].volumeInfo.publisher}, ${response[i].volumeInfo.publishedDate}</div>`);
+            $publication = $(`<div>${response[i].volumeInfo.publisher}, ${response[i].volumeInfo.publishedDate}</div>`);
         } else if (response[i].volumeInfo.publisher){
-            var $publication = $(`<div>${response[i].volumeInfo.publisher}</div>`);
+            $publication = $(`<div>${response[i].volumeInfo.publisher}</div>`);
         } else if (response[i].volumeInfo.publishedDate) {
-            var $publication = $(`<div>${response[i].volumeInfo.publishedDate}</div>`);
+            $publication = $(`<div>${response[i].volumeInfo.publishedDate}</div>`);
         }
         $textDiv.append($displayTitle);
         $textDiv.append($displayAuthor);

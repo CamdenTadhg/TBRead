@@ -22,8 +22,8 @@
             </div>
             <ul class="nav navbar-nav navbar-right">
                 {% if not g.user %}
-                <li><button type="button" class="btn text-decoration-none navbar-button" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button></li>
-                <li><button type="button" class="btn text-decoration-none navbar-button" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button></li>
+                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button></li>
+                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button></li>
                 {% else %}
                 <li>
                     <a id="current-user-link" href="/users/{{g.user.user_id}}">

@@ -1,13 +1,13 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
-        - fix logo
-        - fix default user image
+        - fix sidebar so it doesn't overlap 
         - get logout link back and in the right place
-    - reconsider use of var
-        - can I make the variables global somehow without var? 
+    - reconsider use of var (books.js, challenges.js)
+        - check google search (both searching and displaying)
     - fix sort
         - use css to make it not have the right cursor for clicking, as a temporary fix
+    - run tests
     - switch let for testing to const
     - commit to regular branch
     - commit to hatchways branch

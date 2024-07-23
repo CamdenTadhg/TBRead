@@ -58,6 +58,12 @@ textarea{
     padding-top: 1vh;
 }
 
+@media only screen and (max-height: 500px){
+    .sidebar {
+        top: 100px;
+    }
+}
+
 .sidebar-item {
     padding: .3vw .5vh .3vw .5vh;
     text-decoration: none;
