@@ -6,6 +6,13 @@ let $assignChallengeButton = $('.assign-challenge-button');
 let $challengesField = $('#challenges');
 let $assignToChallengeForm = $('.assign-to-challenge-form');
 let $removeChallengeButton = $('.remove-challenge-button');
+let $coverColumn = $('#cover');
+
+//disables sort feature on cover column
+$coverColumn.click(function(event) {
+    event.preventDefault();
+    return false;
+});
 
 //book search click event handler
 $bookSearchButton.on('click', async function(event) {

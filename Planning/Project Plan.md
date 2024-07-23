@@ -2,9 +2,6 @@ TO DO LIST:
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
         - get logout link back and in the right place
-        - get login and signup back
-    - fix sort
-        - try disabling the click with javascript
     - run tests
     - switch let for testing to const
     - commit to regular branch
