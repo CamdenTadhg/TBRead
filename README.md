@@ -121,18 +121,18 @@ TB-Read is built using the following technologies:
 
 To start your own instance of TBRead, you will need to:  
 
-    Step 1: Clone the repository.  
-        For directions, please see https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository  
-    Step 2: Add secret values  
-        The code uses three secret values that are not included in the repository. You will need a local_settings.py file containing:   
-            SECRET_KEY: any sequence will work.   
-            MAIL_PASSWORD: Your mail app password to run flask_mail. The code will run without this but the username and password reminder features will not work.   
-            CLIENT_SECRETS_FILE: The path to your client secrets file from Google.  
-            You will also need a Client Secrets File from Google. The code will run without this but the calendar feature will not work.   
-    Step 3: Install the dependencies  
+Step 1: Clone the repository.  
+For directions, please see https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository  
+Step 2: Add secret values  
+The code uses three secret values that are not included in the repository. You will need a local_settings.py file containing:   
+SECRET_KEY: any sequence will work.   
+MAIL_PASSWORD: Your mail app password to run flask_mail. The code will run without this but the username and password reminder features will not work.   
+CLIENT_SECRETS_FILE: The path to your client secrets file from Google.  
+You will also need a Client Secrets File from Google. The code will run without this but the calendar feature will not work.   
+Step 3: Install the dependencies  
         pip3 install -r requirements.txt  
-        All requirements can be seen in the requirements.txt file.   
-    Step 4: Run the code  
+All requirements can be seen in the requirements.txt file.   
+Step 4: Run the code  
         flask run  
  
 ## Who am I?: 
