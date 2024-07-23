@@ -2,7 +2,7 @@ TO DO LIST:
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
         - fix default user image
-        - get logout link back
+        - get logout link back and in the right place
     - reconsider use of var
         - can I make the variables global somehow without var? 
     - fix sort
