@@ -58,15 +58,6 @@ textarea{
     padding-top: 1vh;
 }
 
-@media only screen and (max-height: 400px){
-    .sidebar {
-        top: 38px;
-    }
-    .logged-in-content {
-        grid-template-rows: [top] 40px [content] 400px [bottom];
-    }
-}
-
 .sidebar-item {
     padding: .3vw .5vh .3vw .5vh;
     text-decoration: none;
@@ -92,6 +83,22 @@ textarea{
     z-index: 100;
     top: 0;
     left: 0;
+}
+
+/* special styling for when the navbar stops shrinking with height */
+@media only screen and (max-height: 400px){
+    .sidebar {
+        top: 38px;
+    }
+    .logged-in-content {
+        grid-template-rows: [top] 40px [content] 400px [bottom];
+    }
+    .logo {
+        max-width: 5px;
+    }
+    .user-image{
+        max-width: 5px;
+    }
 }
 
 /* HOMEPAGE */

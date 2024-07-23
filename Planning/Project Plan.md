@@ -1,7 +1,7 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
-        - fix sidebar and main content so it doesn't overlap 
+        - fix images so they don't keep shrinking
         - get logout link back and in the right place
         - get login and signup back
     - fix sort
