@@ -55,13 +55,13 @@ function displayChallenges(array){
         //if user is on the user challenge page, display data and a button to leave the challenge
         if (currentURL.includes('user')){
             let $start_date, $end_date;
-            if (item.start_date === undefined){
+            if (!item.start_date){
                 $start_date = $('<td></td>')
             }
             else {
                 $start_date = $(`<td>${item.start_date}</td>`);
             }
-            if (item.end_date === undefined){
+            if (!item.end_date){
                 $end_date = $('<td></td>')
             }
             else{
