@@ -21,15 +21,19 @@
                 <a class="navbar-brand dark" href="/"><img class="logo" src="/static/images/logo.png"></a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                {% if not g.user %}
-                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button></li>
-                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button></li>
-                {% else %}
+                {% if g.user %}
                 <li>
                     <a id="current-user-link" href="/users/{{g.user.user_id}}">
                         <img class="user_image nav-link" src="{{g.user.user_image}}" alt="{{g.user.username}}">
                     </a>
                 </li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if not g.user %}
+                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button></li>
+                <li><button type="button" class="btn text-decoration-none nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button></li>
+                {% else %}
                 <li>
                     <form method="POST" action="/logout">
                         <button class="btn text-decoration-none nav-link" id="logout-link">Log out</button>
