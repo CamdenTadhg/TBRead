@@ -60,10 +60,10 @@ textarea{
 
 @media only screen and (max-height: 400px){
     .sidebar {
-        top: 30px;
+        top: 40px;
     }
     .logged-in-content {
-        grid-template-rows: [top] 35px [content] 400px [bottom];
+        grid-template-rows: [top] 40px [content] 400px [bottom];
     }
 }
 
@@ -178,9 +178,9 @@ td {
     width:50px;
 }
 
-/* .title, .author, .publisher, .pub-date, .pages{
+.title, .author, .publisher, .pub-date, .pages{
     cursor: pointer;
-} */
+}
 
 
 #cover{
