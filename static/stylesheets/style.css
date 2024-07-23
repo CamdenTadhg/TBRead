@@ -20,7 +20,7 @@
 }
 
 #logout-link {
-    padding-top: 4vh;
+    padding: 3.5vh 0vw;
 }
 
 .form-control{
@@ -101,6 +101,9 @@ textarea{
     }
     .user_image{
         max-width: 45px;
+    }
+    #logout-link{
+        padding: 10px 0px;
     }
 }
 
