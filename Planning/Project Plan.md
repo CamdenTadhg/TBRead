@@ -1,7 +1,6 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
     - basic small screen styling
-        - fix logo
         - fix default user image
         - fix buttons
     - reconsider use of var
