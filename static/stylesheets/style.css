@@ -48,8 +48,8 @@ textarea{
     left: 0;
     background-color: #81CDC6;
     overflow-x: hidden;
-    padding-top: 3vh;
-    padding-left: 1vh;
+    padding-top: 1vh;
+    padding-left: 1vw;
 }
 
 .sidebar-item {
