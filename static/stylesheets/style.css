@@ -94,10 +94,10 @@ textarea{
         grid-template-rows: [top] 40px [content] 400px [bottom];
     }
     .logo {
-        max-width: 5px;
+        max-width: 15px;
     }
     .user-image{
-        max-width: 5px;
+        max-width: 15px;
     }
 }
 
