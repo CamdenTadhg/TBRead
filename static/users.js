@@ -23,7 +23,6 @@ let $mainContent = $('.main-content');
 //on page load, display welcome message if they have just logged in
 $(document).ready(function(){
     if (localStorage.getItem('welcome')){
-        console.log(localStorage['welcome']);
         let username = localStorage.getItem('welcome');
         let $welcomeDiv = $(`<div class="alert alert-success welcome-div">Welcome ${username}</div>`);
         $mainContent.prepend($welcomeDiv);
@@ -33,7 +32,6 @@ $(document).ready(function(){
 
 // validation of signup form
 $signupButton.on('click', async function(event){
-    console.log('signup button clicked');
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -90,12 +88,10 @@ async function signupViaAxios(){
 //deal with signup returned error
 function signupReturnedErrorHandler(response){
     if (response['error'] === 'Email already taken'){
-        console.log('email already taken if');
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Email already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Username already taken'){
-        console.log('username already taken if');
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Username already registered. Please try logging in.</div>');
         $modalBody.append($errorDiv);
     }
@@ -124,25 +120,20 @@ $loginButton.on('click', async function(event){
 
 //send login data via axios
 async function loginViaAxios(){
-    console.log('running loginViaAxios');
     const username = $loginUsername.val();
     const password = $loginPassword.val();
     const userData = {username: username, password: password};
     const response = await axios.post('/login', userData);
-    console.log(response);
     return response.data;
 }
 
 //deal with login returned error
 function loginReturnedErrorHandler(response){
-    console.log('running loginReturnedErrorHandler function');
     if (response['error'] === 'Invalid username'){
-        console.log('invalid username if');
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Invalid username</div>');
         $modalBody.append($errorDiv);
     }
     else if (response['error'] === 'Invalid password'){
-        console.log('invalid password if');
         let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Invalid password</div>');
         $modalBody.append($errorDiv);
     }
@@ -150,7 +141,6 @@ function loginReturnedErrorHandler(response){
 
 //send username reminder event handler
 $sendreminderButton.on('click', async function(event){
-    console.log('send reminder button clicked')
     event.preventDefault();
     $modalBody.find('.error-div').remove();
     let response = await usernameReminderViaAxios();
@@ -213,12 +203,10 @@ $updatePasswordButton.on('click', async function(event){
     else {
         let response = await updatePasswordViaAxios();
         if (response['error']){
-            console.log('entering error if')
             let $errorDiv = $('<div id="edit-css" class="alert alert-danger error-div">Something went wrong. Please try again</div>')
             $modalBody.append($errorDiv);
         }
         if (response['success']){
-            console.log('entering success if')
             let $errorDiv = $('<div id="edit-css" class="alert alert-success error-div">Password updated</div>');
             $modalBody.append($errorDiv);
         }

@@ -72,17 +72,19 @@ function displayUserBooks(array){
 
 //function to highlight the active tab in tab display
 function activeTab(){
-    currentURL = getCurrentURL();
-    const currentList = eval(`$${currentURL.substring(currentURL.lastIndexOf('/') + 1)}Tab`);
+    let currentURL = getCurrentURL();
+    const currentListName = `$${currentURL.substring(currentURL.lastIndexOf('/') + 1)}Tab`;
+    const currentList = eval(currentListName);
     listArray = [$tbrTab, $dnfTab, $completeTab]
     tempListArray = listArray.filter((list) => list != currentList);
     currentListClassList = currentList.attr('class');
+    console.log('currentListClassList is ', currentListClassList);
     if (currentListClassList.includes('btn-secondary')){
         currentList.removeClass('btn-secondary');
         currentList.addClass('btn-primary');
     }
     for (let list of tempListArray){
-        listClassList = list.attr('class');
+        let listClassList = list.attr('class');
         if (listClassList.includes('btn-primary')){
             list.removeClass('btn-primary');
             list.addClass('btn-secondary');

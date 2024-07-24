@@ -38,7 +38,6 @@ async function searchGoogleBooks(field, term){
         url = `https://www.googleapis.com/books/v1/volumes?q=inauthor%3A%22${term}%22`;
     }
     let response = await axios.get(url)
-    console.log(response.data.items);
     return response.data.items;
 }
 
@@ -84,7 +83,6 @@ $assignChallengeButton.on('click', async function(event){
     $assignToChallengeForm.find('.error-span').remove();
     //get the challenge being assigned to
     const challenge_id = $challengesField.val();
-    console.log('challenge_id = ', challenge_id);
     //get the userbook_id
     currentURL = window.location.href;
     const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));

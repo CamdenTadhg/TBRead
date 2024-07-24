@@ -72,7 +72,6 @@ describe('displaySearchResults', () => {
         ];
 
         displaySearchResults(response);
-        console.log($apiSearchResults);
         expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"><img src="http://www.google.com"></div><div class="col"><div><a href="/books/1234">A Night of Wings and Starlight</a></div><div>Alexis L. Menard</div><div>2022</div></div>`);
         expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"></div><div class="col"><div><a href="/books/5678">Black AF History: The Un-Whitewashed Story of America</a></div><div>Michael Harriot</div><div>HarperCollins, 2025</div></div></div>`);
         expect($apiSearchResults.html()).toContain(`<div class="row my-1"><div class="col-2"><img src="http://books.google.com/books/publisher/content?id=at_gEAAAQBAJ"></div><div class="col"><div><a href="/books/91011">Stolen</a></div><div>Ann-Helen Laestadius</div><div>Bloomsbury</div></div></div>`);
@@ -96,8 +95,6 @@ describe('assign to challenge event handler', () => {
             $assignToChallengeForm.find('.error-span').remove();
             //get the challenge being assigned to
             const challenge_id = $challengesField.val();
-            console.log('challenge id test = ', challenge_id);
-            console.log(typeof challenge_id);
             //get the userbook_id
             currentURL = "http://127.0.0.1:5000/users_books/64";
             const userbook_id = parseInt(currentURL.substring(currentURL.lastIndexOf('/') + 1));
@@ -124,7 +121,6 @@ describe('assign to challenge event handler', () => {
 
     it('collects the correct data and sends it via axios', async () => {
         $challengesField.val(1);
-        console.log(typeof $challengesField.val());
         axiosPostSpy.and.returnValue(Promise.resolve({data: {success: true}}));
 
         const event = $.Event('click');
@@ -132,7 +128,6 @@ describe('assign to challenge event handler', () => {
 
         expect(event.isDefaultPrevented()).toBe(true);
         expect(axiosPostSpy).toHaveBeenCalledWith('/api/users_books/64/assign', {'challenge_id': '1'});
-        console.log($assignToChallengeForm);
         expect($assignToChallengeForm.find('.error-span').length).toEqual(1);
         expect($assignToChallengeForm.find('.error-span').text()).toEqual('Book assigned to challenge');
     });

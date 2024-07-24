@@ -198,7 +198,7 @@ class BookViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Search Field', html)
+            self.assertIn("Can't find your book", html)
 
     def test_edit_new_book_loggedout(self):
         """Does the site respond correctly when an anonymous user tries to access the edit new book page?"""

@@ -30,8 +30,8 @@ describe('displayChallenges', () => {
 
             displayChallenges(challengeListData);
 
-            expect($challengesList.html()).toContain('<tr><td data-sortvalue="Marginalized Authors"><a href="/challenges/1">Marginalized Authors</a></td><td>100</td><td>test description</td><td><form method="POST" action="/challenges/join/1"><button class="btn btn-primary">Join Challenge</button></form></td></tr>');
-            expect($challengesList.html()).toContain('<tr><td data-sortvalue="50 Books">50 Books</td><td>50</td><td>test description 2</td><td><form method="POST" action="/challenges/join/2"><button class="btn btn-primary">Join Challenge</button></form></td></tr>');
+            expect($challengesList.html()).toContain('<tr><td data-sortvalue="Marginalized Authors"><a href="/challenges/1">Marginalized Authors</a></td><td>100</td><td>test description</td><td><form method="POST" action="/challenges/join/1"><button class="btn btn-primary join">Join Challenge</button></form></td></tr>');
+            expect($challengesList.html()).toContain('<tr><td data-sortvalue="50 Books">50 Books</td><td>50</td><td>test description 2</td><td><form method="POST" action="/challenges/join/2"><button class="btn btn-primary join">Join Challenge</button></form></td></tr>');
         });
     }
     if (currentURL.includes('user')){

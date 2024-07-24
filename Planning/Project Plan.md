@@ -1,10 +1,5 @@
 TO DO LIST: 
 ## 23 Refactor based on feedback from hatchways and resubmit
-    - basic small screen styling
-        - get logout link in the right place
-    - run tests
-        - python tests
-        - jasmine tests
     - commit to regular branch
     - switch let for testing to const
     - commit to hatchways branch
@@ -19,6 +14,8 @@ TO DO LIST:
     - switch const back to let for testing
     - write any necessary tests for the modularization
     - run tests
+        - python tests
+        - jasmine tests
 ## 22 Styling Well
     ## alerts (success & error)
     ## edit books (and manual add page) page

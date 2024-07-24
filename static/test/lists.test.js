@@ -38,18 +38,18 @@ describe('displayUserBooks', () => {
 
         expect(fancyTableSpy).toHaveBeenCalled();
         expect($userBookList.children('tr').length).toEqual(2);
-        expect($userBookList.html()).toContain(`<tr><td><img class="list-cover" src="http://books.google.com/books/publisher/content?id=5k13EAAAQBAJ"></td><td data-sortvalue="Chlorine: A Novel"><a href="/users_books/5">Chlorine: A Novel</a></td><td>Jade Song</td><td>HarperCollins</td><td>2023</td><td>256</td><td><form method="POST" action="/users_books/5/delete"><button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button></form></td>`);
+        expect($userBookList.html()).toContain(`<tr><td><img class="list-cover" src="http://books.google.com/books/publisher/content?id=5k13EAAAQBAJ"></td><td data-sortvalue="Chlorine: A Novel"><a href="/users_books/5">Chlorine: A Novel</a></td><td>Jade Song</td><td>HarperCollins</td><td>2023</td><td>256</td><td><form method="POST" action="/users_books/5/delete"><button class="btn btn-danger delete"><i class="fa-solid fa-trash-can"></i></button></form></td>`);
         if (currentURL.includes('dnf')){
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>');
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>');
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/TBR"><button class="btn-responsive btn-info transfer">Move to TBR</button></form></td>');
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/Complete"><button class="btn-responsive btn-info transfer">Move to Complete</button></form></td>');
         }
         if (currentURL.includes('complete')){
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/DNF"><button class="btn btn-info">DNF</button></form></td>`');
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/TBR"><button class="btn btn-info">TBR</button></form></td>')
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/DNF"><button class="btn-responsive btn-info transfer">Move to DNF</button></form></td>');
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/TBR"><button class="btn-responsive btn-info transfer">Move to TBR</button></form></td>')
         }
         if (currentURL.includes('tbr')){
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/DNF"><button class="btn btn-info">DNF</button></form></td>');
-            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/Complete"><button class="btn btn-info">Complete</button></form></td>');
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/DNF"><button class="btn-responsive btn-info transfer">Move to DNF</button></form></td>');
+            expect($userBookList.html()).toContain('<td><form method="POST" action="/users_books/5/transfer/Complete"><button class="btn-responsive btn-info transfer">Move to Complete</button></form></td>');
         }
     });
 });
@@ -83,9 +83,9 @@ describe('activeTab lists', () => {
         getCurrentURLSpy = jasmine.createSpy('getCurrentURL').and.returnValue('http://tb-read.com/users/1/lists/complete');
         window.getCurrentURL = getCurrentURLSpy;
         //set up DOM
-        $tbrTab = $('<a href="/users/1/lists/tbr" class="btn btn-secondary mt-1 tab tbr-tab>TBR</a>').appendTo('body');
-        $dnfTab = $('<a href="/users/1/lists/dnf" class="btn btn-primary mt-1 tab dnf-tab>Did Not Finish</a>').appendTo('body');
-        $completeTab = $('<a href="/userse/1/lists/complete" class="btn btn-secondary mt-1 tab complete-tab>Complete</a>').appendTo('body');
+        $tbrTab = $('<a href="/users/1/lists/tbr" class="btn btn-secondary mt-1 tab tbr-tab">TBR</a>').appendTo('body');
+        $dnfTab = $('<a href="/users/1/lists/dnf" class="btn btn-primary mt-1 tab dnf-tab">Did Not Finish</a>').appendTo('body');
+        $completeTab = $('<a href="/users/1/lists/complete" class="btn btn-secondary mt-1 tab complete-tab">Complete</a>').appendTo('body');
     });
 
     afterEach(() => {
@@ -105,7 +105,7 @@ describe('activeTab lists', () => {
         expect(getCurrentURLSpy).toHaveBeenCalled();
         expect(tbrClassList).toContain('btn-secondary');
         newTbrClassList = tbrClassList.replace('btn-secondary', '');
-        expect(tbrClassList).not.toContain('btn-secondary');
+        expect(newTbrClassList).not.toContain('btn-secondary');
         expect(dnfClassList).toContain('btn-secondary');
         expect(dnfClassList).not.toContain('btn-primary');
         expect(completeClassList).toContain('btn-primary');

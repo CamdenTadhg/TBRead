@@ -112,27 +112,13 @@ class AuthViewTestCase(TestCase):
 
         with self.client as c:
             resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'userImage': ''})
-            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
-
-            self.assertEqual(resp.status_code, 302)
-            self.assertEqual(resp.location, f'/users/{user_id}/lists/tbr')
-
-    def test_signup_correct_redirect(self):
-        """Does signup route sign a user up for the site?"""
-
-        with self.client as c:
-            resp = c.post('/signup', json={'username': 'testuser3', 'password': 'password', 'email': 'testuser3@test.com', 'userImage': ''}, follow_redirects=True)
-            user_id = db.session.execute(db.select(User.user_id).where(User.username =='testuser3')).scalar()
-            user_image = db.session.execute(db.select(User.user_image).where(User.username == 'testuser3')).scalar()
-            html = resp.get_data(as_text=True)
+            user = db.session.execute(db.select(User).where(User.username =='testuser3')).scalar()
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Add Books', html)
-            self.assertIn('Log out', html)
-            self.assertIn('Welcome', html)
-            self.assertEqual(user_id, session[CURR_USER_KEY])
-            self.assertEqual(user_image, '/static/images/image.png')
-    
+            self.assertEqual(resp.json, {'success': 'true'})
+            self.assertEqual(user.user_id, session[CURR_USER_KEY])
+            self.assertEqual(user.user_image, '/static/images/image.png')
+
     def test_signup_duplicate_email(self):
         """Does a duplicate email return the correct json error response?"""
 
@@ -184,21 +170,9 @@ class AuthViewTestCase(TestCase):
         with self.client as c:
             resp = c.post('/login', json={'username': 'testuser', 'password': 'testuser'})
 
-            self.assertEqual(resp.status_code, 302)
-            self.assertEqual(resp.location, f'/users/{self.testuser.user_id}/lists/tbr' )
-    
-    def test_login_correct_redirect(self):
-        """Does the site redirect appropriately upon login?"""
-
-        with self.client as c:
-            resp = c.post('/login', json={'username': 'testuser', 'password': 'testuser'}, follow_redirects=True)
-            html = resp.get_data(as_text=True)
-
             self.assertEqual(resp.status_code, 200)
+            self.assertEqual(resp.json, {'success': 'true'})
             self.assertEqual(self.testuser.user_id, session[CURR_USER_KEY])
-            self.assertEqual(self.testuser, g.user)
-            self.assertIn('Add Books', html)
-            self.assertIn('Welcome', html)
 
     def test_login_incorrect_username(self):
         """Does the site send the appropriate json error message if the wrong username is given?"""

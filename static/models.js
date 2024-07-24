@@ -21,9 +21,7 @@ class UserBookList {
 
     static async getUserBooks(user_id, list_type) {
         try{
-            console.log('starting getUserBooks');
             const response = await axios.get(`/api/${user_id}/lists/${list_type}`);
-            console.log(response);
             return response.data;
         } catch (error) {
             alert('Something went wrong. Please try again.')
@@ -50,9 +48,7 @@ class ChallengeList {
     //pulls list of all challenges and returns them as a new instance of ChallengeList
     static async getChallenges(){
         try{
-            console.log('starting getChallenges');
             const response = await axios.get('/api/challenges');
-            console.log(response);
             return response.data;
         } catch (error) {
             alert('Something went wrong. Please try again.')
@@ -62,9 +58,7 @@ class ChallengeList {
     //pulls list of challenges the user has joined and returns them as a new instance of ChallengeList
     static async getYourChallenges(){
         try{
-            console.log('starting getYourChallenges');
             const response = await axios.get('/api/yourchallenges')
-            console.log(response);
             return response.data
         } catch (error){
             alert('Something went wrong. Please try again.')
